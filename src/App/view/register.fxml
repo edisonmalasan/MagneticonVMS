@@ -18,7 +18,7 @@
                <children>
                   <Label alignment="CENTER" prefHeight="42.0" prefWidth="600.0" text="MAGNETICON VMS" textAlignment="CENTER" textFill="WHITE">
                      <font>
-                        <Font name="Segoe UI Black" size="21.0" />
+                        <Font name="Monospaced Regular" size="25.0" />
                      </font>
                   </Label>
                </children>
