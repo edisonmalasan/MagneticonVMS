@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;">
@@ -41,9 +40,8 @@
                      </font>
                   </Label>
                   <PasswordField layoutX="186.0" layoutY="180.0" prefHeight="25.0" prefWidth="215.0" />
-                  <Label layoutX="236.0" layoutY="235.0" prefHeight="17.0" prefWidth="128.0" text="Don't have an account?" textFill="WHITE" />
-                  <Hyperlink layoutX="240.0" layoutY="252.0" text="Register as Volunteer" />
-                  <Hyperlink layoutX="248.0" layoutY="275.0" text="Register as Admin" />
+                  <Label layoutX="237.0" layoutY="250.0" prefHeight="17.0" prefWidth="128.0" text="Don't have an account?" textFill="WHITE" />
+                  <Hyperlink layoutX="261.0" layoutY="274.0" text="Register Here" />
                </children>
             </Pane>
          </children>
