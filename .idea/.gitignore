@@ -2,7 +2,3 @@
 /shelf/
 /workspace.xml
 /java
-
-# Ignore javafx sdk
-lib/javafx-sdk/
-lib/javafx-sdk*/
