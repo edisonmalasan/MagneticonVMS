@@ -7,7 +7,7 @@ import javafx.scene.control.ComboBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RegisterController implements Initializable {
+public class RegisterController {
 
     @FXML
     private ComboBox<String> sexComboBox;
@@ -15,8 +15,7 @@ public class RegisterController implements Initializable {
     @FXML
     private ComboBox<String> roleComboBox;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize() {
         initializeComboBox();
     }
 

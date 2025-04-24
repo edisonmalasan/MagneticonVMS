@@ -35,12 +35,14 @@
       </HBox>
    </top>
    <center>
-      <TabPane fx:id="adminTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" tabMinWidth="120.0" BorderPane.alignment="CENTER">
+      <TabPane fx:id="adminTabPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 3;" tabClosingPolicy="UNAVAILABLE" tabMinWidth="120.0" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Volunteers">
               <fx:include source="VolunteerTab.fxml" />
           </Tab>
-          <Tab text="Services" />
+            <Tab text="Services">
+                <fx:include source="ServiceTab.fxml" />
+            </Tab>
             <Tab text="Tasks" />
             <Tab text="Teams" />
             <Tab text="Beneficiaries" />

@@ -2,15 +2,12 @@
 
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.effect.Light.Distant?>
-<?import javafx.scene.effect.Lighting?>
-<?import javafx.scene.effect.Shadow?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 
 
-<AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="465.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.VolunteerTabController">
-   <children>
-      <TableView fx:id="volunteerTable" prefHeight="465.0" prefWidth="994.0" style="-fx-border-width: 4; -fx-border-color: #000000;">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.VolunteerTabController">
+   <center>
+      <TableView fx:id="volunteerTable" prefHeight="465.0" prefWidth="994.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn prefWidth="75.0" text="volid" />
           <TableColumn prefWidth="90.0" text="First Name" />
@@ -22,16 +19,9 @@
             <TableColumn prefWidth="81.0" text="Sex" />
             <TableColumn prefWidth="131.0" text="Volunteer Status" />
         </columns>
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
-   </children>
-</AnchorPane>
+   </center>
+</BorderPane>
