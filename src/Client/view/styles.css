@@ -1,0 +1,9 @@
+@font-face {
+    -fx-font-family: "Space Nova";
+    src: url("/fonts/RobotoMono-Bold.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Roboto Mono";
+    src: url("/fonts/RobotoMono-Bold.ttf");
+}
