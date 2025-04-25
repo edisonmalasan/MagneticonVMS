@@ -15,9 +15,9 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="1258.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TableView fx:id="serviceTableView" prefHeight="338.0" prefWidth="1081.0" style="-fx-border-color: #000000; -fx-border-width: 2;" BorderPane.alignment="CENTER">
+      <TableView fx:id="serviceTable" prefHeight="338.0" prefWidth="1081.0" style="-fx-border-color: #000000; -fx-border-width: 2;" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="98.0" text="Service ID" />
+          <TableColumn fx:id="serviceIdColumn" prefWidth="98.0" text="Service ID" />
           <TableColumn fx:id="serviceNameColumn" prefWidth="277.0" text="Service Name" />
             <TableColumn fx:id="descriptionColumn" prefWidth="355.0" text="Description" />
             <TableColumn fx:id="scheduleColumn" prefWidth="210.0" text="Shedule" />

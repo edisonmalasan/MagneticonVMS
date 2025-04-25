@@ -4,20 +4,19 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.VolunteerTabController">
    <center>
       <TableView fx:id="volunteerTable" prefHeight="465.0" prefWidth="994.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="volid" />
-          <TableColumn prefWidth="90.0" text="First Name" />
-            <TableColumn prefWidth="111.0" text="Last Name" />
-            <TableColumn prefWidth="157.0" text="Address" />
-            <TableColumn prefWidth="121.0" text="Phone" />
-            <TableColumn prefWidth="139.0" text="Email" />
-            <TableColumn prefWidth="89.0" text="Birthday" />
-            <TableColumn prefWidth="81.0" text="Sex" />
-            <TableColumn prefWidth="131.0" text="Volunteer Status" />
+          <TableColumn fx:id="volidColumn" prefWidth="75.0" text="volid" />
+          <TableColumn fx:id="firstNameColumn" prefWidth="90.0" text="First Name" />
+            <TableColumn fx:id="lastNameColumn" prefWidth="111.0" text="Last Name" />
+            <TableColumn fx:id="addressColumn" prefWidth="157.0" text="Address" />
+            <TableColumn fx:id="phoneColumn" prefWidth="121.0" text="Phone" />
+            <TableColumn fx:id="emailColumn" prefWidth="139.0" text="Email" />
+            <TableColumn fx:id="birthdateColumn" prefWidth="89.0" text="Birthdate" />
+            <TableColumn fx:id="sexColumn" prefWidth="81.0" text="Sex" />
+            <TableColumn fx:id="statusColumn" prefWidth="131.0" text="Volunteer Status" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -8,17 +8,7 @@ import java.util.ResourceBundle;
 
 public class ServiceTabController {
     @FXML
-    private TableView<String> serviceIdColumn;
-    @FXML
-    private TableView<String> serviceNameColumn;
-    @FXML
-    private TableView<String> descriptionColumn;
-    @FXML
-    private TableView<String> scheduleColumn;
-    @FXML
-    private TableView<String> statusColumn;
-    @FXML
-    private TableView<String> assignedTeam;
+    private TableView<String> serviceTable;
     @FXML
     private TextField nameField;
     @FXML
