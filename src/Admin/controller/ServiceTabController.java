@@ -1,15 +1,36 @@
 package Admin.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ServiceTabController {
-
+    @FXML
+    private TableView<String> serviceIdColumn;
+    @FXML
+    private TableView<String> serviceNameColumn;
+    @FXML
+    private TableView<String> descriptionColumn;
+    @FXML
+    private TableView<String> scheduleColumn;
+    @FXML
+    private TableView<String> statusColumn;
+    @FXML
+    private TableView<String> assignedTeam;
+    @FXML
+    private TextField nameField;
     @FXML
     private ComboBox<String> statusComboBox;
+    @FXML
+    private TextArea descriptionArea;
+    @FXML
+    private ComboBox<String> teamComboBox;
+    @FXML
+    private Button serviceSaveButton;
+    @FXML
+    private Button serviceClearButton;
 
     public void initialize() {
         setStatusComboBox();
