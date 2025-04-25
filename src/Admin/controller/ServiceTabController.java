@@ -30,6 +30,10 @@ public class ServiceTabController {
         statusComboBox.getItems().addAll("Assigned", "Completed", "Ongoing");
     }
 
+    private void setTeamComboBox() {
+        // get team from db
+    }
+
     private void handleSave() {
 
     }

@@ -12,10 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane prefHeight="612.0" prefWidth="1258.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.TaskTabController">
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="taskTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="serviceColumn" prefWidth="332.0" text="Service" />
           <TableColumn fx:id="volunteerColumn" prefWidth="212.0" text="Volunteer" />
@@ -52,13 +51,13 @@
             <HBox alignment="CENTER" prefHeight="85.0" prefWidth="1232.0" spacing="10.0">
                <children>
                   <Label text="Description:" />
-                  <TextArea prefHeight="74.0" prefRowCount="3" prefWidth="623.0" />
+                  <TextArea fx:id="descriptionArea" prefHeight="74.0" prefRowCount="3" prefWidth="623.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="67.0" prefWidth="1232.0" spacing="50.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleClear" prefHeight="31.0" prefWidth="132.0" text="Save" />
-                  <Button layoutX="560.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="31.0" prefWidth="132.0" text="Clear" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleClear" prefHeight="31.0" prefWidth="132.0" text="Save" />
+                  <Button fx:id="clearButton" layoutX="560.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="31.0" prefWidth="132.0" text="Clear" />
                </children>
             </HBox>
          </children>
