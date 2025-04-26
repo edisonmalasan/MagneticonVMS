@@ -23,7 +23,7 @@
       </TableView>
    </center>
    <bottom>
-      <VBox prefHeight="139.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="174.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="31.0" prefWidth="1258.0" spacing="10.0">
                <padding>
