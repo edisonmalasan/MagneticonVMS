@@ -16,11 +16,11 @@
 
 <BorderPane prefHeight="612.0" prefWidth="1258.0" style="-fx-border-color: #000000;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.BeneficiaryTabController">
    <center>
-      <TableView prefHeight="269.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="beneficiaryTable" prefHeight="269.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="128.0" text="Id" />
-          <TableColumn prefWidth="374.0" text="Group Name" />
-            <TableColumn prefWidth="753.0" text="Description" />
+          <TableColumn fx:id="idColumn" prefWidth="128.0" text="Id" />
+          <TableColumn fx:id="groupNameColumn" prefWidth="374.0" text="Group Name" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="753.0" text="Description" />
         </columns>
       </TableView>
    </center>
@@ -41,13 +41,13 @@
                               <HBox alignment="CENTER" prefHeight="113.0" prefWidth="601.0" spacing="10.0">
                                  <children>
                                     <Label text="Group Name:" />
-                                    <TextField />
+                                    <TextField fx:id="groupNameField" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="95.0" prefWidth="601.0" spacing="10.0">
                                  <children>
                                     <Label text="Description:" />
-                                    <TextArea prefHeight="88.0" prefWidth="328.0" />
+                                    <TextArea fx:id="descriptionArea" prefHeight="88.0" prefWidth="328.0" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" top="10.0" />
@@ -55,8 +55,8 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="121.0" prefWidth="601.0" spacing="50.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Save" />
-                                    <Button layoutX="269.0" layoutY="39.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Clear" />
+                                    <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSaveGroup" prefHeight="25.0" prefWidth="84.0" text="Save" />
+                                    <Button fx:id="clearButton" layoutX="269.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleClearGroup" prefHeight="25.0" prefWidth="84.0" text="Clear" />
                                  </children>
                               </HBox>
                            </children>
@@ -73,7 +73,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
                <children>
-                  <Label contentDisplay="CENTER" prefHeight="35.0" prefWidth="219.0" text="Assign Beneficiary To A Service">
+                  <Label contentDisplay="CENTER" prefHeight="34.0" prefWidth="265.0" text="Assign Beneficiary Group To A Service">
                      <font>
                         <Font name="Segoe UI Black" size="14.0" />
                      </font>
@@ -85,7 +85,7 @@
                               <HBox alignment="CENTER" prefHeight="96.0" prefWidth="591.0" spacing="10.0">
                                  <children>
                                     <Label text="Service:" />
-                                    <ComboBox prefWidth="150.0" />
+                                    <ComboBox fx:id="serviceComboBox" prefHeight="25.0" prefWidth="181.0" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="104.0" prefWidth="601.0" spacing="10.0">
@@ -94,13 +94,13 @@
                                  </padding>
                                  <children>
                                     <Label text="Beneficiary Group:" />
-                                    <ComboBox prefWidth="150.0" />
+                                    <ComboBox fx:id="beneficiaryGroupComboBox" prefWidth="150.0" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="60.0" prefWidth="591.0" spacing="50.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Save" />
-                                    <Button layoutX="269.0" layoutY="39.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Clear" />
+                                    <Button fx:id="assignButton" mnemonicParsing="false" onAction="#handleAssignBeneficiary" prefHeight="25.0" prefWidth="84.0" text="Assign" />
+                                    <Button layoutX="269.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleRemoveBeneficiary" prefHeight="25.0" prefWidth="84.0" text="Remove" />
                                  </children>
                               </HBox>
                            </children>
