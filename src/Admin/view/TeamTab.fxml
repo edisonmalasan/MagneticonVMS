@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Admin.controller.TeamTabController"
-            prefHeight="612.0" prefWidth="1258.0">
 
+<BorderPane prefHeight="612.0" prefWidth="1258.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.TeamTabController">
+   <center>
+      <TableView prefHeight="343.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn prefWidth="211.0" text="TeamID" />
+          <TableColumn minWidth="0.0" prefWidth="447.0" text="Team Name" />
+            <TableColumn minWidth="0.0" prefWidth="599.0" text="Team Description" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <VBox prefHeight="290.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="76.0" prefWidth="1258.0" />
+         </children>
+      </VBox>
+   </bottom>
 </BorderPane>
