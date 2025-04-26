@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #FFF7EF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane id="header" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #474747;">
+         <children>
+            <Label id="headerText" prefHeight="40.0" prefWidth="600.0" text="VOLUNTEER DASHBOARD" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+         </children></Pane>
+      <Separator layoutY="44.0" prefHeight="5.0" prefWidth="600.0" />
+      <HBox id="body" layoutY="52.0" prefHeight="290.0" prefWidth="600.0">
+         <children>
+            <Pane id="volDeets" prefHeight="200.0" prefWidth="196.0">
+               <children>
+                  <Label id="volDeets" prefHeight="18.0" prefWidth="196.0" text="VOLUNTEER DETAILS" underline="true">
+                     <font>
+                        <Font name="Century Gothic Bold Italic" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volId" layoutY="26.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volName" layoutY="75.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="125.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Pane id="volTask" prefHeight="290.0" prefWidth="402.0">
+               <children>
+                  <Button id="myTasksBttn" layoutX="140.0" layoutY="24.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #474747; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 1.5;" text="My Tasks">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button id="servicesBttn" layoutX="140.0" layoutY="73.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #474747; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 1.5;" text="Services">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button id="myTeamsBttn" layoutX="140.0" layoutY="121.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #474747; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 1.5;" text="My Teams">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button id="beneficiariesBttn" layoutX="140.0" layoutY="169.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #474747; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 1.5;" text="Beneficiaries">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button id="attendanceBttn" layoutX="140.0" layoutY="216.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #474747; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 1.5;" text="Attendance">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <Separator layoutY="340.0" prefHeight="5.0" prefWidth="600.0" />
+      <Pane layoutY="348.0" prefHeight="53.0" prefWidth="600.0">
+         <children>
+            <Button id="logoutBttn" layoutX="515.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="Century Gothic Bold" size="12.0" />
+               </font></Button>
+         </children></Pane>
+   </children>
+</AnchorPane>
