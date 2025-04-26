@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="612.0" prefWidth="1258.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.VolunteerTabController">
    <center>
-      <TableView fx:id="volunteerTable" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+      <TableView fx:id="volunteerTable" prefHeight="368.0" prefWidth="1258.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="volidColumn" prefWidth="75.0" text="volid" />
           <TableColumn fx:id="firstNameColumn" prefWidth="90.0" text="First Name" />
@@ -25,6 +33,56 @@
       </TableView>
    </center>
    <bottom>
-      <VBox prefHeight="196.0" prefWidth="1258.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 2;" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="174.0" prefWidth="1258.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 2;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="39.0" prefWidth="1254.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="118.0" text="Volunteer Details">
+                     <font>
+                        <Font name="Segoe UI Black" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="29.0" prefWidth="1254.0" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="76.0" text="Volunteer ID:" />
+                  <TextField fx:id="volunteerField" />
+                  <Label alignment="CENTER" layoutX="525.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="First Name:" />
+                  <TextField fx:id="firstNameField" layoutX="563.0" layoutY="12.0" />
+                  <Label alignment="CENTER" layoutX="642.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="Last Name:" />
+                  <TextField fx:id="lastNameField" layoutX="685.0" layoutY="12.0" />
+                  <Label alignment="CENTER" layoutX="765.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="Address:" />
+                  <TextField fx:id="addressField" layoutX="808.0" layoutY="12.0" />
+                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="76.0" text="Phone:" />
+                  <TextField fx:id="phoneField" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="51.0" prefHeight="29.0" prefWidth="1254.0" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER" layoutX="525.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="Email:" />
+                  <TextField fx:id="emailField" layoutX="563.0" layoutY="12.0" />
+                  <Label alignment="CENTER" layoutX="642.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="Birthdate:" />
+                  <DatePicker fx:id="birthdateField" />
+                  <Label alignment="CENTER" layoutX="765.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="Sex:" />
+                  <ComboBox fx:id="sexComboBox" prefWidth="150.0" />
+                  <Label alignment="CENTER" layoutX="777.0" layoutY="20.0" prefHeight="43.0" prefWidth="76.0" text="Status:" />
+                  <ComboBox fx:id="statusComboBox" layoutX="820.0" layoutY="20.0" prefWidth="150.0" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="55.0" prefWidth="1254.0" spacing="50.0">
+               <children>
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="25.0" prefWidth="68.0" text="Save" />
+                  <Button fx:id="clearButton" layoutX="603.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="25.0" prefWidth="68.0" text="Clear" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </bottom>
 </BorderPane>
