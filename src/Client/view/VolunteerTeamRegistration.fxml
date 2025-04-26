@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #FFF7EF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane id="header" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #474747;">
          <children>
@@ -57,7 +57,7 @@
                <children>
                   <Pane prefHeight="30.0" prefWidth="398.0">
                      <children>
-                        <ComboBox id="teamChoice" layoutX="14.0" layoutY="4.0" prefHeight="25.0" prefWidth="180.0" promptText="Choose Team No." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                        <ComboBox id="choiceDD" layoutX="14.0" layoutY="4.0" prefHeight="25.0" prefWidth="180.0" promptText="Choose Team No." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
                      </children>
                   </Pane>
                   <Pane layoutY="40.0" prefHeight="250.0" prefWidth="398.0">
