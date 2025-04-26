@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #FFF7EF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane id="header" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #474747;">
+         <children>
+            <Label id="headerText" prefHeight="40.0" prefWidth="600.0" text="MY TASKS" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+         </children></Pane>
+      <Separator layoutY="44.0" prefHeight="5.0" prefWidth="600.0" />
+      <HBox id="body" layoutY="52.0" prefHeight="290.0" prefWidth="600.0">
+         <children>
+            <Pane id="volDeets" prefHeight="200.0" prefWidth="196.0">
+               <children>
+                  <Label id="volDeets" prefHeight="18.0" prefWidth="196.0" text="VOLUNTEER DETAILS" underline="true">
+                     <font>
+                        <Font name="Century Gothic Bold Italic" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volId" layoutY="26.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volName" layoutY="75.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="125.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Pane prefHeight="290.0" prefWidth="394.0">
+               <children>
+                  <Pane id="service" prefHeight="47.0" prefWidth="394.0">
+                     <children>
+                        <Label layoutX="3.0" layoutY="4.0" prefHeight="27.0" prefWidth="86.0" text="Service:">
+                           <font>
+                              <Font name="Century Gothic Bold" size="12.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding></Label>
+                        <ComboBox id="serviceDD" layoutX="109.0" layoutY="4.0" prefHeight="25.0" prefWidth="196.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                        <Separator layoutX="2.0" layoutY="37.0" prefHeight="5.0" prefWidth="385.0" />
+                     </children></Pane>
+                  <Pane id="task" layoutY="47.0" prefHeight="87.0" prefWidth="394.0">
+                     <children>
+                        <Label layoutX="3.0" layoutY="4.0" prefHeight="27.0" prefWidth="106.0" text="Task Assigned:">
+                           <font>
+                              <Font name="Century Gothic Bold" size="12.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <ComboBox id="taskStat" layoutX="109.0" layoutY="38.0" prefHeight="27.0" prefWidth="147.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                        <Label id="taskDesc" layoutX="109.0" layoutY="9.0" prefHeight="17.0" prefWidth="277.0" text="Label">
+                           <font>
+                              <Font name="Century Gothic" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <Separator layoutY="340.0" prefHeight="5.0" prefWidth="600.0" />
+      <Pane layoutY="348.0" prefHeight="53.0" prefWidth="600.0">
+         <children>
+            <Button id="backBttn" layoutX="515.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Back" textFill="WHITE">
+               <font>
+                  <Font name="Century Gothic Bold" size="12.0" />
+               </font></Button>
+         </children></Pane>
+   </children>
+</AnchorPane>
