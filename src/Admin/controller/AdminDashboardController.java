@@ -6,6 +6,7 @@ import javafx.scene.control.TableView;
 
 public class AdminDashboardController {
 
+    @FXML
     private Button logoutButton;
 
     @FXML

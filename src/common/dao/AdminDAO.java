@@ -1,8 +1,8 @@
 package common.dao;
 
-import exceptions.VolunteerNotFoundException;
-import models.Admin;
-import utils.DatabaseConnection;
+import common.exceptions.VolunteerNotFoundException;
+import common.models.Admin;
+import common.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

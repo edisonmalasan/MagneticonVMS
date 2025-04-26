@@ -1,7 +1,7 @@
 package common.dao;
 
-import models.Volunteer;
-import utils.DatabaseConnection;
+import common.models.Volunteer;
+import common.utils.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
