@@ -1,52 +1,46 @@
 package Admin.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import org.w3c.dom.Text;
 
 public class TaskTabController {
-
-    @FXML
-    private TableView<String> taskTable;
-    @FXML
-    private ComboBox<String> serviceComboBox;
-    @FXML
-    private ComboBox<String> volunteerComboBox;
-    @FXML
-    private ComboBox<String> statusComboBox;
-    @FXML
-    private TextArea descriptionArea;
-    @FXML
-    private Button saveButton;
     @FXML
     private Button clearButton;
 
+    @FXML
+    private TextArea descriptionArea;
 
-    private void setComboBox() {
+    @FXML
+    private TableColumn<?, ?> descriptionColumn;
 
-    }
+    @FXML
+    private Button saveButton;
 
+    @FXML
+    private TableColumn<?, ?> serviceColumn;
 
-    private void handleSave() {
+    @FXML
+    private ComboBox<?> serviceComboBox;
 
-    }
+    @FXML
+    private TableColumn<?, ?> statusColumn;
 
-    private void handleClear() {
+    @FXML
+    private ComboBox<?> statusComboBox;
 
-    }
+    @FXML
+    private TableView<?> taskTable;
 
-    private void setServiceComboBox() {
+    @FXML
+    private TableColumn<?, ?> volunteerColumn;
 
-    }
+    @FXML
+    private ComboBox<?> volunteerComboBox;
 
-    private void setVolunteerComboBox() {
-
-    }
-
-    private void setStatusComboBox() {
+    @FXML
+    void handleClear(ActionEvent event) {
 
     }
 }
