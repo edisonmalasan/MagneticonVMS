@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #FFF7EF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" style="-fx-background-color: #FFF7EF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane id="header" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #474747;">
+      <Pane id="header" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #474747;">
          <children>
             <Label id="headerText" prefHeight="40.0" prefWidth="600.0" text="VOLUNTEER REGISTRATION" textFill="WHITE">
                <font>
@@ -18,30 +18,30 @@
                </padding>
             </Label>
          </children></Pane>
-      <Separator layoutY="44.0" prefHeight="5.0" prefWidth="600.0" />
-      <HBox id="body" layoutY="52.0" prefHeight="290.0" prefWidth="600.0">
+      <Separator layoutY="44.0" prefHeight="5.0" prefWidth="1000.0" />
+      <HBox id="body" layoutY="52.0" prefHeight="290.0" prefWidth="1000.0">
          <children>
             <Pane id="volDeets" prefHeight="200.0" prefWidth="196.0">
                <children>
                   <Label id="volDeets" prefHeight="18.0" prefWidth="196.0" text="VOLUNTEER DETAILS" underline="true">
                      <font>
-                        <Font name="Century Gothic Bold Italic" size="14.0" />
+                        <Font name="Montserrat Bold" size="14.0" />
                      </font>
                      <padding>
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volId" layoutY="26.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                  <Label id="volId" layoutY="25.0" prefHeight="27.0" prefWidth="196.0" text="Label">
                      <font>
-                        <Font name="Century Gothic" size="12.0" />
+                        <Font name="Century Gothic Bold Italic" size="12.0" />
                      </font>
                      <padding>
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volName" layoutY="75.0" prefHeight="40.0" prefWidth="196.0" text="Label">
+                  <Label id="volName" layoutY="55.0" prefHeight="27.0" prefWidth="196.0" text="Label">
                      <font>
-                        <Font name="Century Gothic" size="12.0" />
+                        <Font name="Century Gothic Bold Italic" size="12.0" />
                      </font>
                      <padding>
                         <Insets left="15.0" right="10.0" />
@@ -53,24 +53,24 @@
                </opaqueInsets>
             </Pane>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Pane id="volTask" prefHeight="290.0" prefWidth="402.0">
+            <Pane id="volTask" prefHeight="290.0" prefWidth="793.0">
                <children>
                   <Pane prefHeight="30.0" prefWidth="398.0">
                      <children>
                         <ComboBox id="choiceDD" layoutX="14.0" layoutY="4.0" prefHeight="25.0" prefWidth="180.0" promptText="Choose Team No." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
                      </children>
                   </Pane>
-                  <Pane layoutY="40.0" prefHeight="250.0" prefWidth="398.0">
+                  <Pane layoutY="40.0" prefHeight="250.0" prefWidth="791.0">
                      <children>
-                        <Label id="displayTeamNo" prefHeight="30.0" prefWidth="398.0" text="Label">
+                        <Label id="displayTeamNo" prefHeight="30.0" prefWidth="791.0" text="Label" underline="true">
                            <font>
-                              <Font name="Century Gothic Bold" size="12.0" />
+                              <Font name="Century Gothic Bold" size="14.0" />
                            </font>
                            <padding>
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <Label id="displayTeamDesc" layoutX="18.0" layoutY="30.0" prefHeight="213.0" prefWidth="366.0" text="Label">
+                        <Label id="displayTeamDesc" layoutX="18.0" layoutY="30.0" prefHeight="75.0" prefWidth="768.0" text="Label">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
@@ -84,14 +84,14 @@
             </Pane>
          </children>
       </HBox>
-      <Separator layoutY="340.0" prefHeight="5.0" prefWidth="600.0" />
-      <Pane layoutY="348.0" prefHeight="53.0" prefWidth="600.0">
+      <Separator layoutY="340.0" prefHeight="5.0" prefWidth="1000.0" />
+      <Pane layoutY="348.0" prefHeight="53.0" prefWidth="1000.0">
          <children>
-            <Button layoutX="430.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Cancel" textFill="WHITE">
+            <Button layoutX="815.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Cancel" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font></Button>
-            <Button layoutX="515.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Join" textFill="WHITE">
+            <Button layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Join" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font></Button>
