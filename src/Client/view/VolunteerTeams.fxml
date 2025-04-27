@@ -91,15 +91,15 @@
                      <children>
                         <TableView id="table" prefHeight="238.0" prefWidth="723.0">
                           <columns>
-                            <TableColumn prefWidth="54.0" text="ID" />
-                            <TableColumn prefWidth="96.0" text="LAST NAME" />
-                              <TableColumn prefWidth="82.0" text="FIRST NAME" />
-                              <TableColumn prefWidth="114.0" text="ADDRESS" />
-                              <TableColumn prefWidth="97.0" text="PHONE NO." />
+                            <TableColumn id="col-volId" prefWidth="54.0" text="ID" />
+                            <TableColumn id="col-lName" prefWidth="96.0" text="LAST NAME" />
+                              <TableColumn id="col-fName" prefWidth="82.0" text="FIRST NAME" />
+                              <TableColumn id="col-address" prefWidth="114.0" text="ADDRESS" />
+                              <TableColumn id="col-phone" prefWidth="97.0" text="PHONE NO." />
                               <TableColumn prefWidth="95.0" text="EMAIL" />
-                              <TableColumn prefWidth="82.0" text="BIRTHDATE" />
-                              <TableColumn prefWidth="46.0" text="SEX" />
-                              <TableColumn prefWidth="56.0" text="STATUS" />
+                              <TableColumn id="col-bday" prefWidth="82.0" text="BIRTHDATE" />
+                              <TableColumn id="col-sex" prefWidth="46.0" text="SEX" />
+                              <TableColumn id="col-stat" prefWidth="56.0" text="STATUS" />
                           </columns>
                         </TableView>
                      </children></Pane>
