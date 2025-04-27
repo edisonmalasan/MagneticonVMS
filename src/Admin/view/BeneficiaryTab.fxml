@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane prefHeight="612.0" prefWidth="1258.0" style="-fx-border-color: #000000;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.BeneficiaryTabController">
    <center>
       <TableView fx:id="beneficiaryTable" prefHeight="269.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
@@ -25,7 +24,7 @@
       </TableView>
    </center>
    <bottom>
-      <HBox prefHeight="350.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="350.0" prefWidth="1258.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="381.0" prefWidth="1144.0" spacing="10.0" style="-fx-border-color: #000000;">
                <children>
