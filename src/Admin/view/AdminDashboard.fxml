@@ -47,7 +47,9 @@
             <Tab text="Beneficiaries">
                 <fx:include source="BeneficiaryTab.fxml" />
             </Tab>
-            <Tab text="Schedule" />
+            <Tab text="Schedule">
+                <fx:include source="ScheduleTab.fxml" />
+            </Tab>
         </tabs>
       </TabPane>
    </center>
