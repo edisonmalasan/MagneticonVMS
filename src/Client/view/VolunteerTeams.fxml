@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" style="-fx-background-color: #FFF7EF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane id="header" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #474747;">
+         <children>
+            <Label id="headerText" prefHeight="40.0" prefWidth="600.0" text="MY TEAMS" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+         </children></Pane>
+      <Separator layoutY="44.0" prefHeight="5.0" prefWidth="1000.0" />
+      <HBox id="body" layoutY="52.0" prefHeight="290.0" prefWidth="1000.0">
+         <children>
+            <Pane id="volDeets" prefHeight="200.0" prefWidth="196.0">
+               <children>
+                  <Label id="volDeets" prefHeight="18.0" prefWidth="196.0" text="VOLUNTEER DETAILS" underline="true">
+                     <font>
+                        <Font name="Montserrat Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-radius: 10; -fx-background-color: #F0F0F0;" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="28.0" prefHeight="18.0" prefWidth="178.0" text="VOLUNTEER ID:">
+                     <font>
+                        <Font name="Century Gothic Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="79.0" prefHeight="18.0" prefWidth="178.0" text="VOLUNTEER NAME:">
+                     <font>
+                        <Font name="Century Gothic Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="131.0" prefHeight="18.0" prefWidth="178.0" text="TEAM/S:">
+                     <font>
+                        <Font name="Century Gothic Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Pane id="volTask" prefHeight="349.0" prefWidth="793.0">
+               <children>
+                  <Pane layoutX="18.0" layoutY="7.0" prefHeight="46.0" prefWidth="762.0" style="-fx-background-color: #474747; -fx-background-radius: 40;">
+                     <children>
+                        <Label layoutX="17.0" layoutY="10.0" prefHeight="27.0" prefWidth="77.0" text="TEAM:" textFill="WHITE" underline="true">
+                           <font>
+                              <Font name="Montserrat Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox id="choiceDD" layoutX="94.0" layoutY="10.0" prefHeight="27.0" prefWidth="196.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                     </children>
+                  </Pane>
+                  <Pane layoutX="37.0" layoutY="53.0" prefHeight="238.0" prefWidth="723.0">
+                     <children>
+                        <TableView id="table" prefHeight="238.0" prefWidth="723.0">
+                          <columns>
+                            <TableColumn prefWidth="54.0" text="ID" />
+                            <TableColumn prefWidth="96.0" text="LAST NAME" />
+                              <TableColumn prefWidth="82.0" text="FIRST NAME" />
+                              <TableColumn prefWidth="114.0" text="ADDRESS" />
+                              <TableColumn prefWidth="97.0" text="PHONE NO." />
+                              <TableColumn prefWidth="95.0" text="EMAIL" />
+                              <TableColumn prefWidth="82.0" text="BIRTHDATE" />
+                              <TableColumn prefWidth="46.0" text="SEX" />
+                              <TableColumn prefWidth="56.0" text="STATUS" />
+                          </columns>
+                        </TableView>
+                     </children></Pane>
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <Separator layoutY="340.0" prefHeight="5.0" prefWidth="1000.0" />
+      <Pane layoutY="348.0" prefHeight="53.0" prefWidth="1000.0">
+         <children>
+            <Button id="backBttn" layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Back" textFill="WHITE">
+               <font>
+                  <Font name="Century Gothic Bold" size="12.0" />
+               </font></Button>
+         </children></Pane>
+   </children>
+</AnchorPane>
