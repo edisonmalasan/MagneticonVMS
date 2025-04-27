@@ -1,11 +1,12 @@
 package common.dao;
 
+import common.models.Service;
 import common.models.TaskAssignment;
 import common.utils.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskAssignmentDAO {
 
@@ -41,6 +42,25 @@ public class TaskAssignmentDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<TaskAssignment> getAllTaskAssignments() {
+        List<TaskAssignment> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM TASK_ASSIGNMENT";
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            while (rs.next()) {
+                tasks.add(new TaskAssignment(rs.getString("servid"),
+                        rs.getString("volid"),
+                        rs.getString("tadesc"),
+                        rs.getString("taskstat")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
     }
 
 }
