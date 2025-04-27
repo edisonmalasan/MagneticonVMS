@@ -31,20 +31,36 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volId" layoutY="25.0" prefHeight="27.0" prefWidth="196.0" text="Label">
+                  <Label layoutX="10.0" layoutY="28.0" prefHeight="18.0" prefWidth="178.0" text="VOLUNTEER ID:">
                      <font>
-                        <Font name="Century Gothic Bold Italic" size="12.0" />
+                        <Font name="Century Gothic Bold" size="12.0" />
                      </font>
                      <padding>
-                        <Insets left="15.0" right="10.0" />
+                        <Insets left="5.0" />
                      </padding>
                   </Label>
-                  <Label id="volName" layoutY="55.0" prefHeight="27.0" prefWidth="196.0" text="Label">
+                  <Label id="volID" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
-                        <Font name="Century Gothic Bold Italic" size="12.0" />
+                        <Font name="Century Gothic" size="12.0" />
                      </font>
                      <padding>
-                        <Insets left="15.0" right="10.0" />
+                        <Insets left="8.0" right="5.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="79.0" prefHeight="18.0" prefWidth="178.0" text="VOLUNTEER NAME:">
+                     <font>
+                        <Font name="Century Gothic Bold" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Label>
+                  <Label id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                     <font>
+                        <Font name="Century Gothic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="8.0" right="5.0" />
                      </padding>
                   </Label>
                </children>
@@ -55,22 +71,27 @@
             <Separator orientation="VERTICAL" prefHeight="200.0" />
             <Pane id="volTask" prefHeight="290.0" prefWidth="793.0">
                <children>
-                  <Pane prefHeight="30.0" prefWidth="398.0">
+                  <Pane layoutX="18.0" layoutY="7.0" prefHeight="46.0" prefWidth="762.0" style="-fx-background-color: #474747; -fx-background-radius: 40;">
                      <children>
-                        <ComboBox id="choiceDD" layoutX="14.0" layoutY="4.0" prefHeight="25.0" prefWidth="180.0" promptText="Choose Team No." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                        <Label layoutX="17.0" layoutY="10.0" prefHeight="27.0" prefWidth="77.0" text="TEAM:" textFill="WHITE" underline="true">
+                           <font>
+                              <Font name="Montserrat Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox id="choiceDD" layoutX="94.0" layoutY="10.0" prefHeight="27.0" prefWidth="196.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
                      </children>
                   </Pane>
-                  <Pane layoutY="40.0" prefHeight="250.0" prefWidth="791.0">
+                  <Pane id="teamDescPane" layoutX="37.0" layoutY="53.0" prefHeight="113.0" prefWidth="723.0">
                      <children>
-                        <Label id="displayTeamNo" prefHeight="30.0" prefWidth="791.0" text="Label" underline="true">
+                        <Label id="displayTeamNo" layoutY="14.0" prefHeight="30.0" prefWidth="196.0" text="Label" underline="true">
                            <font>
                               <Font name="Century Gothic Bold" size="14.0" />
                            </font>
                            <padding>
-                              <Insets left="15.0" />
+                              <Insets left="8.0" />
                            </padding>
                         </Label>
-                        <Label id="displayTeamDesc" layoutX="18.0" layoutY="30.0" prefHeight="75.0" prefWidth="768.0" text="Label">
+                        <Label id="displayTeamDesc" layoutX="-1.0" layoutY="42.0" prefHeight="71.0" prefWidth="723.0" text="Label">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
@@ -85,13 +106,13 @@
          </children>
       </HBox>
       <Separator layoutY="340.0" prefHeight="5.0" prefWidth="1000.0" />
-      <Pane layoutY="348.0" prefHeight="53.0" prefWidth="1000.0">
+      <Pane id="buttons" layoutY="348.0" prefHeight="53.0" prefWidth="1000.0">
          <children>
-            <Button layoutX="815.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Cancel" textFill="WHITE">
+            <Button id="cancelBttn" layoutX="815.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Cancel" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font></Button>
-            <Button layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Join" textFill="WHITE">
+            <Button id="joinBttn" layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Join" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font></Button>
