@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="612.0" prefWidth="1258.0" style="-fx-border-color: #000000;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.BeneficiaryTabController">
+   <center>
+      <TableView fx:id="beneficiaryTable" prefHeight="269.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="idColumn" prefWidth="128.0" text="Id" />
+          <TableColumn fx:id="groupNameColumn" prefWidth="374.0" text="Group Name" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="753.0" text="Description" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <HBox prefHeight="350.0" prefWidth="1258.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="381.0" prefWidth="1144.0" spacing="10.0" style="-fx-border-color: #000000;">
+               <children>
+                  <Label prefHeight="40.0" prefWidth="191.0" text="Manage Beneficiary Groups">
+                     <font>
+                        <Font name="Segoe UI Black" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="TOP_CENTER" prefHeight="289.0" prefWidth="601.0" spacing="10.0">
+                     <children>
+                        <VBox prefHeight="232.0" prefWidth="601.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="113.0" prefWidth="601.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Group Name:" />
+                                    <TextField fx:id="groupNameField" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="95.0" prefWidth="601.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Description:" />
+                                    <TextArea fx:id="descriptionArea" prefHeight="88.0" prefWidth="328.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="121.0" prefWidth="601.0" spacing="50.0">
+                                 <children>
+                                    <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSaveGroup" prefHeight="25.0" prefWidth="84.0" text="Save" />
+                                    <Button fx:id="clearButton" layoutX="269.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleClearGroup" prefHeight="25.0" prefWidth="84.0" text="Clear" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="381.0" prefWidth="1153.0" spacing="10.0" style="-fx-border-color: #000000;">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Label contentDisplay="CENTER" prefHeight="34.0" prefWidth="265.0" text="Assign Beneficiary Group To A Service">
+                     <font>
+                        <Font name="Segoe UI Black" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="284.0" prefWidth="611.0">
+                     <children>
+                        <VBox prefHeight="284.0" prefWidth="641.0" spacing="10.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="96.0" prefWidth="591.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Service:" />
+                                    <ComboBox fx:id="serviceComboBox" prefHeight="25.0" prefWidth="181.0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="104.0" prefWidth="601.0" spacing="10.0">
+                                 <padding>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </padding>
+                                 <children>
+                                    <Label text="Beneficiary Group:" />
+                                    <ComboBox fx:id="beneficiaryGroupComboBox" prefWidth="150.0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="60.0" prefWidth="591.0" spacing="50.0">
+                                 <children>
+                                    <Button fx:id="assignButton" mnemonicParsing="false" onAction="#handleAssignBeneficiary" prefHeight="25.0" prefWidth="84.0" text="Assign" />
+                                    <Button layoutX="269.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleRemoveBeneficiary" prefHeight="25.0" prefWidth="84.0" text="Remove" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

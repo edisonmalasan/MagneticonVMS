@@ -1,5 +1,6 @@
 package common.models;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -35,7 +36,7 @@ public class Attendance {
     public void setDate(LocalDate date) { this.date = date; }
     public LocalTime getTimein() { return timein; }
     public void setTimein(LocalTime timein) { this.timein = timein; }
-    public LocalTime getTimeout() { return timeout; }
+    public Time getTimeout() { return timeout; }
     public void setTimeout(LocalTime timeout) { this.timeout = timeout; }
     public String getAttendstat() { return attendstat; }
     public void setAttendstat(String attendstat) { this.attendstat = attendstat; }
