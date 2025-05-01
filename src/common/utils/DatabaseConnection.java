@@ -12,13 +12,13 @@ public class DatabaseConnection {
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                Class.forName(DatabaseConfig.DB_DRIVER);
+//                Class.forName(DatabaseConfig.DB_DRIVER);
                 connection = DriverManager.getConnection(
                         DatabaseConfig.DB_URL,
                         DatabaseConfig.DB_USER,
                         DatabaseConfig.DB_PASSWORD
                 );
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
