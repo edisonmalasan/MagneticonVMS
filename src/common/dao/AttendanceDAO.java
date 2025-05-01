@@ -41,7 +41,7 @@ public class AttendanceDAO {
             statement.setString(3, attendance.getAttendid());
             statement.setDate(4, Date.valueOf(attendance.getDate()));
             statement.setTime(5, Time.valueOf(attendance.getTimein()));
-            statement.setTime(6, attendance.getTimeout());
+            statement.setTime(6, Time.valueOf(attendance.getTimeout()));
             statement.setString(7, attendance.getAttendstat());
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
