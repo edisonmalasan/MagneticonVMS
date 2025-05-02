@@ -74,14 +74,4 @@ public class VolunteerTabController {
     @FXML
     private TableView<?> volunteerTable;
 
-    @FXML
-    void handleClear(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSave(ActionEvent event) {
-
-    }
-
 }

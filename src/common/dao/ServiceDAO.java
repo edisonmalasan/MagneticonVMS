@@ -41,12 +41,31 @@ public class ServiceDAO {
             statement.setString(1, service.getTeamid());
             statement.setString(2, service.getSname());
             statement.setString(3, service.getSdesc());
-            statement.setString(3, service.getSstat());
+            statement.setString(4, service.getSstat());
+            statement.setString(5, service.getServid());
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
 
+        }
+    }
+
+    public boolean createService(Service service) {
+        String sql = "INSERT INTO SERVICE (servid, sname, sdesc, sstat, teamid) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, service.getServid());
+            statement.setString(2, service.getSname());
+            statement.setString(3, service.getSdesc());
+            statement.setString(4, service.getSstat());
+            statement.setString(5, service.getTeamid());
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error creating service: " + e.getMessage(), e);
         }
     }
 }

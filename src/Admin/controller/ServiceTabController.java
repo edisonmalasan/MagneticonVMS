@@ -50,19 +50,5 @@ public class ServiceTabController {
     @FXML
     private ComboBox<String> teamComboBox;
 
-    @FXML
-    void handle(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleClear(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSave(ActionEvent event) {
-
-    }
 
 }

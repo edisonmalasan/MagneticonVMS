@@ -88,4 +88,49 @@ public class VolunteerDAO {
 
         return volunteers;
     }
+
+    public boolean updateVolunteer(Volunteer volunteer) {
+        String sql = "UPDATE VOLUNTEER SET fname = ?, lname = ?, address = ?, phone = ?, " +
+                "email = ?, password = ?, birthday = ?, sex = ?, volstat = ?, role = ? " +
+                "WHERE volid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, volunteer.getFname());
+            statement.setString(2, volunteer.getLname());
+            statement.setString(3, volunteer.getAddress());
+            statement.setString(4, volunteer.getPhone());
+            statement.setString(5, volunteer.getEmail());
+            statement.setString(6, volunteer.getPassword());
+            statement.setDate(8, Date.valueOf(volunteer.getBirthday()));
+            statement.setString(8, volunteer.getSex());
+            statement.setString(9, volunteer.getVolstat());
+            statement.setString(10, volunteer.getRole());
+            statement.setString(11, volunteer.getVolid());
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating volunteer: " + e.getMessage(), e);
+        }
+    }
+
+
+    public boolean emailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM VOLUNTEER WHERE email = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email: " + e.getMessage(), e);
+        }
+        return false;
+    }
 }

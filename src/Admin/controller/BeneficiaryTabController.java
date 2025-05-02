@@ -43,25 +43,4 @@ public class BeneficiaryTabController {
 
     @FXML
     private ComboBox<?> serviceComboBox;
-
-    @FXML
-    void handleAssignBeneficiary(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleClearGroup(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRemoveBeneficiary(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSaveGroup(ActionEvent event) {
-
-    }
-
 }

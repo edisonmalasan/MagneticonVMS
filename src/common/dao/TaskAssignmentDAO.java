@@ -11,56 +11,98 @@ import java.util.List;
 public class TaskAssignmentDAO {
 
     public boolean createTaskAssignment(TaskAssignment task) {
-        String sql = "INSERT INTO TASK_ASSIGNMENT (servid, volid, taskstat) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO TASK_ASSIGNMENT (servid, volid, tadesc, taskstat) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, task.getServid());
             statement.setString(2, task.getVolid());
-            statement.setString(3, task.getTaskstat());
+            statement.setString(3, task.getTadesc());
+            statement.setString(4, task.getTaskstat());
 
-            int rowsInserted = statement.executeUpdate();
-            return rowsInserted > 0;
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error creating task assignment: " + e.getMessage(), e);
         }
     }
 
-    public boolean updateTaskAssignment(String servid, String volid, String taskstat) {
-        String sql = "UPDATE TASK_ASSIGNMENT SET taskstat = ? WHERE servid = ? AND volid = ?";
+    public boolean updateTaskAssignment(TaskAssignment task) {
+        String sql = "UPDATE TASK_ASSIGNMENT SET tadesc = ?, taskstat = ? WHERE servid = ? AND volid = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, taskstat);
-            statement.setString(2, servid);
-            statement.setString(3, volid);
+            statement.setString(1, task.getTadesc());
+            statement.setString(2, task.getTaskstat());
+            statement.setString(3, task.getServid());
+            statement.setString(4, task.getVolid());
 
-            int rowsUpdated = statement.executeUpdate();
-            return rowsUpdated > 0;
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating task assignment: " + e.getMessage(), e);
         }
     }
 
-    private List<TaskAssignment> getAllTaskAssignments() {
+    public List<TaskAssignment> getAllTasks(String servid) {
         List<TaskAssignment> tasks = new ArrayList<>();
         String sql = "SELECT * FROM TASK_ASSIGNMENT";
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery(sql)) {
 
-            while (rs.next()) {
-                tasks.add(new TaskAssignment(rs.getString("servid"),
-                        rs.getString("volid"),
-                        rs.getString("tadesc"),
-                        rs.getString("taskstat")));
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, servid);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    TaskAssignment task = new TaskAssignment();
+                    task.setServid(rs.getString("servid"));
+                    task.setVolid(rs.getString("volid"));
+                    task.setTadesc(rs.getString("tadesc"));
+                    task.setTaskstat(rs.getString("taskstat"));
+                    tasks.add(task);
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error retrieving tasks for service: " + e.getMessage(), e);
         }
         return tasks;
+    }
+
+    public boolean isVolunteerAvailable(String volid) {
+        String sql = "SELECT availability FROM MEMBER WHERE volid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, volid);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return "Available".equalsIgnoreCase(rs.getString("availability"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking volunteer availability: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public boolean isVolunteerAssignedToService(String volid, String servid) {
+        String sql = "SELECT COUNT(*) FROM TASK_ASSIGNMENT WHERE volid = ? AND servid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, volid);
+            statement.setString(2, servid);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking volunteer assignment: " + e.getMessage(), e);
+        }
+        return false;
     }
 
 }

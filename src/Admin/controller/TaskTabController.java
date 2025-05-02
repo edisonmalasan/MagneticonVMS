@@ -38,9 +38,4 @@ public class TaskTabController {
 
     @FXML
     private ComboBox<?> volunteerComboBox;
-
-    @FXML
-    void handleClear(ActionEvent event) {
-
-    }
 }
