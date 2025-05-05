@@ -77,13 +77,14 @@ public class VolunteerAttendance {
     }
 
     private void loadAttendanceRecords() {
-        try {
-            List<Attendance> records = AttendanceDAO.getAttendance(currentVolunteerId);
-            table.getItems().setAll(FXCollections.observableArrayList(records));
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error Loading Database");
-        }
+//        try {
+//            List<Attendance> records = AttendanceDAO.getAttendance(currentVolunteerId);
+//            table.getItems().setAll(FXCollections.observableArrayList(records));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Error Loading Database");
+//        }
+//    }
     }
 
     private void handleBack() {
@@ -92,11 +93,9 @@ public class VolunteerAttendance {
             Stage currentStage = (Stage) backBttn.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
-
             Scene scene = new Scene(root);
 
             currentStage.setScene(scene);
-            currentStage.setTitle("Dashboard");
             currentStage.show();
 
         } catch (IOException e) {
