@@ -14,6 +14,10 @@ public class AdminDashboardController {
 
     @FXML
     private Button logoutButton;
+    private Stage stage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     @FXML
     private void handleLogout() {
