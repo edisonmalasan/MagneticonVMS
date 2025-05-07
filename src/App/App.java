@@ -23,9 +23,7 @@ public class App extends Application {
         // Set up the main stage
         primaryStage.setTitle("Volunteer Management System");
 
-        primaryStage.setScene(new Scene(root, 1000, 600));
-        primaryStage.setMinWidth(1000);
-        primaryStage.setMinHeight(600);
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
