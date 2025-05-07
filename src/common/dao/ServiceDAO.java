@@ -12,6 +12,10 @@ public class ServiceDAO {
     public ServiceDAO(String servname, String servdesc, String bengroupname, String bengroupdesc) {
     }
 
+    public ServiceDAO() {
+
+    }
+
     public List<Service> getAllServices() {
         List<Service> services = new ArrayList<>();
         String sql = "SELECT * FROM Service";

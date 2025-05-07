@@ -23,4 +23,8 @@ public class TaskAssignment {
     public void setTadesc(String tadesc) { this.tadesc = tadesc; }
     public String getTaskstat() { return taskstat; }
     public void setTaskstat(String taskstat) { this.taskstat = taskstat; }
+
+    public boolean isEmpty() {return false;}
+
+    public int get(int i) {return i;}
 }

@@ -3,6 +3,7 @@ package common.dao;
 import common.models.Service;
 import common.models.TaskAssignment;
 import common.utils.DatabaseConnection;
+import javafx.concurrent.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -84,6 +85,46 @@ public class TaskAssignmentDAO {
             throw new RuntimeException("Error checking volunteer availability: " + e.getMessage(), e);
         }
         return false;
+    }
+
+    public static List<TaskAssignment> getTasksForVolunteerService(String volunteerId, String serviceName) throws SQLException {
+        List<TaskAssignment> tasks = new ArrayList<>();
+        String sql = "SELECT t.taskid, t.description, t.status " +
+                "FROM Task t " +
+                "JOIN VolunteerService vs ON t.servid = vs.servid " +
+                "JOIN Service s ON vs.servid = s.servid " +
+                "WHERE vs.volid = ? AND s.sname = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, volunteerId);
+            stmt.setString(2, serviceName);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    TaskAssignment task = new TaskAssignment();
+                    task.setServid(rs.getString("taskid"));
+                    task.setTadesc(rs.getString("description"));
+                    task.setTaskstat(rs.getString("status"));
+                    tasks.add(task);
+                }
+            }
+        }
+        return tasks;
+    }
+
+    public boolean updateTaskStatus(TaskAssignment task) throws SQLException {
+        String sql = "UPDATE Task SET status = ? WHERE taskid = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, task.getTaskstat());
+            stmt.setString(2, task.getServid());
+
+            return stmt.executeUpdate() > 0;
+        }
     }
 
     public boolean isVolunteerAssignedToService(String volid, String servid) {
