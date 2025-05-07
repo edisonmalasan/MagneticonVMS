@@ -32,7 +32,7 @@ public class VolunteerDashboard {
     @FXML
     private Button attendanceBttn;
     @FXML
-    private Button logoutBttn;
+    private Button logoutButton;
 
     private String currentVolunteerId;
     private Stage currentStage;
@@ -47,7 +47,7 @@ public class VolunteerDashboard {
         myTeamBttn.setOnAction(e -> navigateTo("Client/view/VolunteerTeams.fxml", VolunteerTeams.class));
         beneficiariesBttn.setOnAction(e -> navigateTo("Client/view/VolunteerServiceBeneficiary.fxml", VolunteerServiceBeneficiary.class));
         attendanceBttn.setOnAction(e -> navigateTo("Client/view/VolunteerAttendance.fxml", VolunteerAttendance.class));
-        logoutBttn.setOnAction(e -> navigateTo("App/view/Login.fxml", LoginController.class));
+        logoutButton.setOnAction(e -> navigateTo("App/view/Login.fxml", LoginController.class));
     }
 
     private <T> void navigateTo(String fxmlPath, Class<T> controllerClass) {
