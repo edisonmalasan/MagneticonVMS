@@ -15,15 +15,24 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class VolunteerDashboard {
-    @FXML private Label volId;
-    @FXML private Label volName;
-    @FXML private Label volTeam;
-    @FXML private Button myTasksBttn;
-    @FXML private Button servicesBttn;
-    @FXML private Button myTeamBttn;
-    @FXML private Button beneficiariesBttn;
-    @FXML private Button attendanceBttn;
-    @FXML private Button logoutBttn;
+    @FXML
+    private Label volId;
+    @FXML
+    private Label volName;
+    @FXML
+    private Label volTeam;
+    @FXML
+    private Button myTasksBttn;
+    @FXML
+    private Button servicesBttn;
+    @FXML
+    private Button myTeamBttn;
+    @FXML
+    private Button beneficiariesBttn;
+    @FXML
+    private Button attendanceBttn;
+    @FXML
+    private Button logoutBttn;
 
     private String currentVolunteerId;
     private Stage currentStage;

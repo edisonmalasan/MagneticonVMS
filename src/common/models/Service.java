@@ -67,4 +67,6 @@ public class Service {
                 ", teamid='" + teamid + '\'' +
                 '}';
     }
+
+    public boolean isEmpty() {return false;}
 }

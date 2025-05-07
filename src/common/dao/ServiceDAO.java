@@ -95,6 +95,36 @@ public class ServiceDAO {
         return null;
     }
 
+    public List<Service> getAllServicesForVolunteer(String volunteerId) throws SQLException {
+        if (volunteerId == null || volunteerId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
+        }
+
+        List<Service> services = new ArrayList<>();
+        String sql = "SELECT s.servid, s.sname, s.sdesc, s.sstat, s.teamid " +
+                "FROM Service s " +
+                "JOIN VolunteerService vs ON s.servid = vs.servid " +
+                "WHERE vs.volid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, volunteerId);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    Service service = new Service();
+                    service.setServid(rs.getString("servid"));
+                    service.setSname(rs.getString("sname"));
+                    service.setSdesc(rs.getString("sdesc"));
+                    service.setSstat(rs.getString("sstat"));
+                    service.setTeamid(rs.getString("teamid"));
+                    services.add(service);
+                }
+            }
+        }
+        return services;
+    }
 
     public boolean updateService(Service service) {
         String sql = "UPDATE SERVICE SET teamid = ?, sname = ? sdesc = ?, sstat = ? WHERE servid = ?";
