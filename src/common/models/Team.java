@@ -16,7 +16,7 @@ public class Team {
     public String getTeamid() { return teamid; }
     public void setTeamid(String teamid) { this.teamid = teamid; }
     public String getTname() { return tname; }
-    public void setTname(String tname) { this.tname = tname; }
+    public void setTname(String teamname) { this.tname = tname; }
     public String getTdesc() { return tdesc; }
     public void setTdesc(String tdesc) { this.tdesc = tdesc; }
 }
