@@ -131,7 +131,7 @@ public class ServiceDAO {
     }
 
     public boolean updateService(Service service) {
-        String sql = "UPDATE SERVICE SET teamid = ?, sname = ? sdesc = ?, sstat = ? WHERE servid = ?";
+        String sql = "UPDATE SERVICE SET teamid = ?, sname = ?, sdesc = ?, sstat = ? WHERE servid = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

@@ -86,7 +86,7 @@ public class VolunteerDAO {
             statement.setDate(8, Date.valueOf(volunteer.getBirthday()));
             statement.setString(9, volunteer.getSex());
             statement.setString(10, volunteer.getVolstat());
-            statement.setString(11, volunteer.getRole());
+            statement.setString(11, "Member");
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -129,7 +129,7 @@ public class VolunteerDAO {
 
     public boolean updateVolunteer(Volunteer volunteer) {
         String sql = "UPDATE VOLUNTEER SET fname = ?, lname = ?, address = ?, phone = ?, " +
-                "email = ?, password = ?, birthday = ?, sex = ?, volstat = ?, role = ? " +
+                "email = ?, password = ?, bday = ?, sex = ?, volstat = ?, role = ? " +
                 "WHERE volid = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -141,10 +141,10 @@ public class VolunteerDAO {
             statement.setString(4, volunteer.getPhone());
             statement.setString(5, volunteer.getEmail());
             statement.setString(6, volunteer.getPassword());
-            statement.setDate(8, Date.valueOf(volunteer.getBirthday()));
+            statement.setDate(7, Date.valueOf(volunteer.getBirthday()));
             statement.setString(8, volunteer.getSex());
             statement.setString(9, volunteer.getVolstat());
-            statement.setString(10, volunteer.getRole());
+            statement.setString(10, "Member");
             statement.setString(11, volunteer.getVolid());
 
             return statement.executeUpdate() > 0;
