@@ -16,17 +16,13 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class VolunteerAttendance {
     @FXML
     private Label volId;
     @FXML
     private Label volName;
-    @FXML
-    private Label volTeam;
 
     @FXML
     private TableView<Attendance> table;
@@ -46,50 +42,45 @@ public class VolunteerAttendance {
     private String currentVolunteerId;
     private String currentVolunteerName;
 
-    public void initialize(){
+    public void initialize() {
+        setupTableColumns();
+        backBttn.setOnAction(event -> handleBack());
+    }
+
+    private void setupTableColumns() {
         colService.setCellValueFactory(new PropertyValueFactory<>("servid"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colOut.setCellValueFactory(new PropertyValueFactory<>("timein"));
         colIn.setCellValueFactory(new PropertyValueFactory<>("timeout"));
         colStat.setCellValueFactory(new PropertyValueFactory<>("attendstat"));
-
-        backBttn.setOnAction(event -> handleBack());
     }
-
 
     public void setVolunteerData(String volunteerId, String volunteerName) {
         this.currentVolunteerId = volunteerId;
         this.currentVolunteerName = volunteerName;
 
-        // Update UI
-        volId.setText(volunteerId);
-        volName.setText(volunteerName);
-
-        loadDataFromDatabase();
+        updateVolunteerInfo();
+        loadAttendanceRecords();
     }
 
-    private void loadDataFromDatabase() {
-
-    }
-
-    private void loadVolunteerTeams(){
-
+    private void updateVolunteerInfo() {
+        volId.setText(currentVolunteerId);
+        volName.setText(currentVolunteerName);
     }
 
     private void loadAttendanceRecords() {
-//        try {
-//            List<Attendance> records = AttendanceDAO.getAttendance(currentVolunteerId);
-//            table.getItems().setAll(FXCollections.observableArrayList(records));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("Error Loading Database");
-//        }
-//    }
+        try {
+            List<Attendance> records = AttendanceDAO.getAttendanceForVolunteer(currentVolunteerId);
+            ObservableList<Attendance> observableRecords = FXCollections.observableArrayList(records);
+            table.setItems(observableRecords);
+        } catch (Exception e) {
+            showErrorAlert("Failed to load attendance records", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handleBack() {
         try {
-
             Stage currentStage = (Stage) backBttn.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
@@ -102,8 +93,13 @@ public class VolunteerAttendance {
             e.printStackTrace();
             System.out.println("Failed to load");
         }
-
     }
 
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
-

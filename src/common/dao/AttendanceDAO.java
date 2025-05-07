@@ -4,6 +4,8 @@ import common.models.Attendance;
 import common.utils.DatabaseConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttendanceDAO {
 
@@ -31,6 +33,49 @@ public class AttendanceDAO {
         }
         return null;
     }
+
+    public static List<Attendance> getAttendanceForVolunteer(String volid) throws SQLException {
+        if (volid == null) {
+            throw new IllegalArgumentException("Volunteer ID cannot be null");
+        }
+
+        List<Attendance> attendances = new ArrayList<>();
+        String sql = "SELECT * FROM Attendance WHERE volid = ? ORDER BY date DESC";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, volid);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    attendances.add(mapResultSetToAttendance(rs));
+                }
+            }
+        }
+        return attendances;
+    }
+
+    private static Attendance mapResultSetToAttendance(ResultSet rs) throws SQLException {
+        Attendance attendance = new Attendance();
+        attendance.setServid(rs.getString("servid"));
+        attendance.setVolid(rs.getString("volid"));
+        attendance.setAttendid(rs.getString("attendid"));
+
+        Date date = rs.getDate("date");
+        attendance.setDate(date != null ? date.toLocalDate() : null);
+
+        Time timein = rs.getTime("timein");
+        attendance.setTimein(timein != null ? timein.toLocalTime() : null);
+
+        Time timeout = rs.getTime("timeout");
+        attendance.setTimeout(timeout != null ? timeout.toLocalTime() : null);
+
+        attendance.setAttendstat(rs.getString("attendstat"));
+        return attendance;
+    }
+
+
 
     public boolean createAttendance(Attendance attendance) {
         String sql = "INSERT INTO Attendance (servid, volid, attendid, date, timein, timeout, attendstat) VALUES (?, ?, ?, ?, ?, ?, ?)";
