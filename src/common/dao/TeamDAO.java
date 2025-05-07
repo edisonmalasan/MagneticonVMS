@@ -143,7 +143,7 @@ public class TeamDAO {
             while (rs.next()) {
                 Team team = new Team();
                 team.setTeamid(rs.getString("teamid"));
-                team.setTname(rs.getString("teamname"));
+                team.setTname(rs.getString("tname"));
                 team.setTdesc(rs.getString("tdesc"));
                 teams.add(team);
             }
