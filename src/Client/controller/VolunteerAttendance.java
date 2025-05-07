@@ -103,5 +103,6 @@ public class VolunteerAttendance {
     }
 
     public void setStage(Stage currentStage) {
+
     }
 }

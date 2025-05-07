@@ -67,5 +67,6 @@ public class VolunteerServiceBeneficiary {
     }
 
     public void setStage(Stage currentStage) {
+
     }
 }

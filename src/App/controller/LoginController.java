@@ -18,5 +18,6 @@ public class LoginController {
     private Hyperlink registerLink;
 
     public void setStage(Stage currentStage) {
+
     }
 }
