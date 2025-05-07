@@ -58,6 +58,7 @@ public class TaskAssignmentDAO {
                     task.setServid(rs.getString("servid"));
                     task.setVolid(rs.getString("volid"));
                     task.setTaskstat(rs.getString("taskstat"));
+                    task.setTadesc(rs.getString("tadesc"));
                     tasks.add(task);
                 }
 
