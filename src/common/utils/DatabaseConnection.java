@@ -9,8 +9,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static Connection connection;
 
-    public static Connection getConnection() {
-        if (connection == null) {
+    public static Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
             try {
 //                Class.forName(DatabaseConfig.DB_DRIVER);
                 connection = DriverManager.getConnection(
