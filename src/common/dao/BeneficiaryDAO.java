@@ -36,6 +36,4 @@ public class BeneficiaryDAO {
             throw new RuntimeException("Error removing beneficiary from service: " + e.getMessage(), e);
         }
     }
-
-
 }

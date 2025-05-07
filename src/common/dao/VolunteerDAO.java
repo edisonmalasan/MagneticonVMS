@@ -95,7 +95,7 @@ public class VolunteerDAO {
         }
     }
 
-    public static List<Volunteer> getAllVolunteers() {
+    public List<Volunteer> getAllVolunteers() {
         List<Volunteer> volunteers = new ArrayList<>();
         String sql = "SELECT * FROM Volunteer";
 
@@ -165,5 +165,24 @@ public class VolunteerDAO {
             throw new RuntimeException("Error checking email: " + e.getMessage(), e);
         }
         return false;
+    }
+
+    public String generateNewVolunteerID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM SERVICE";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+
+                //for up to 999 entries
+                return String.format("V%03d", maxId + 1);
+            }
+            return "V01"; //default if no records exist
+        } catch (SQLException e) {
+            throw new RuntimeException("Error generating service ID", e);
+        }
     }
 }

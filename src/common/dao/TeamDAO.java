@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeamDAO {
-    // TODO: Query
     public boolean createTeam(Team team) {
         String sql = "INSERT INTO TEAM (teamid, tname, tdesc) VALUES (?, ?, ?)";
 
@@ -172,7 +171,24 @@ public class TeamDAO {
         return false;
     }
 
+    public String generateNewTeamID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(teamid, 2) AS UNSIGNED)) FROM SERVICE";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+
+                //for up to 999 entries
+                return String.format("T%03d", maxId + 1);
+            }
+            return "T001"; //default if no records exist
+        } catch (SQLException e) {
+            throw new RuntimeException("Error generating service ID", e);
+        }
+    }
 
 
 }
