@@ -84,4 +84,24 @@ public class BeneficiaryGroupDAO {
         }
         return groups;
     }
+
+
+    public String generateNewBeneficiaryID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(benid, 2) AS UNSIGNED)) FROM SERVICE";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+
+                //for up to 999 entries
+                return String.format("V%03d", maxId + 1);
+            }
+            return "V01"; //default if no records exist
+        } catch (SQLException e) {
+            throw new RuntimeException("Error generating service ID", e);
+        }
+    }
 }

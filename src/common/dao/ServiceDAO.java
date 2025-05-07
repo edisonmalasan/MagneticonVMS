@@ -166,4 +166,23 @@ public class ServiceDAO {
             throw new RuntimeException("Error creating service: " + e.getMessage(), e);
         }
     }
+
+    public String generateNewServiceId() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(servid, 2) AS UNSIGNED)) FROM SERVICE";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+
+                //for up to 999 entries
+                return String.format("S%03d", maxId + 1);
+            }
+            return "S001"; //default if no records exist
+        } catch (SQLException e) {
+            throw new RuntimeException("Error generating service ID", e);
+        }
+    }
 }

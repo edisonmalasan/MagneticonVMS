@@ -45,15 +45,14 @@ public class TaskAssignmentDAO {
         }
     }
 
-    public List<TaskAssignment> getAllTasks(String servid) {
+    public List<TaskAssignment> getAllTasks() {
         List<TaskAssignment> tasks = new ArrayList<>();
         String sql = "SELECT * FROM TASK_ASSIGNMENT";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery(sql)) {
 
-            statement.setString(1, servid);
-            try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     TaskAssignment task = new TaskAssignment();
                     task.setServid(rs.getString("servid"));
@@ -62,7 +61,7 @@ public class TaskAssignmentDAO {
                     task.setTaskstat(rs.getString("taskstat"));
                     tasks.add(task);
                 }
-            }
+
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving tasks for service: " + e.getMessage(), e);
         }

@@ -1,34 +1,151 @@
 package Admin.controller;
 
+import common.dao.TeamDAO;
+import common.models.Team;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.util.List;
+import java.util.UUID;
 
 public class TeamTabController {
-    @FXML
-    private Button clearButton;
+    @FXML private TableView<Team> teamTable;
+    @FXML private TableColumn<Team, String> teamIDColumn;
+    @FXML private TableColumn<Team, String> teamNameColumn;
+    @FXML private TableColumn<Team, String> teamDescriptionColumn;
+
+    @FXML private TextField teamNameArea;
+    @FXML private TextArea teamDescriptionArea;
+
+    @FXML private Button saveButton;
+    @FXML private Button clearButton;
+
+    private final TeamDAO teamDAO = new TeamDAO();
+    private ObservableList<Team> teams;
 
     @FXML
-    private Button saveButton;
+    public void initialize() {
+        setupTableColumns();
+        setupEventHandlers();
+        loadTeamData();
+    }
+
+    private void setupTableColumns() {
+        teamIDColumn.setCellValueFactory(new PropertyValueFactory<>("teamid"));
+        teamNameColumn.setCellValueFactory(new PropertyValueFactory<>("tname"));
+        teamDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("tdesc"));
+    }
+
+    private void setupEventHandlers() {
+        teamTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                populateForm(newVal);
+                saveButton.setText("Update");
+            } else {
+                clearForm();
+                saveButton.setText("Save");
+            }
+        });
+
+        saveButton.setOnAction(this::handleSave);
+        clearButton.setOnAction(this::handleClear);
+    }
+
+    private void loadTeamData() {
+        List<Team> teamList = teamDAO.getAllTeams();
+        teams = FXCollections.observableArrayList(teamList);
+        teamTable.setItems(teams);
+    }
+
+    private void populateForm(Team team) {
+        teamNameArea.setText(team.getTname());
+        teamDescriptionArea.setText(team.getTdesc());
+    }
 
     @FXML
-    private TextArea teamDescriptionArea;
+    private void handleSave(ActionEvent event) {
+        if (!validateInputs()) {
+            showAlert("Validation Error", "Team name is required");
+            return;
+        }
+
+        String teamName = teamNameArea.getText().trim();
+        String teamDesc = teamDescriptionArea.getText().trim();
+
+        if (teamTable.getSelectionModel().isEmpty()) {
+            createNewTeam(teamName, teamDesc);
+        } else {
+            updateExistingTeam(teamName, teamDesc);
+        }
+    }
+
+    private void createNewTeam(String teamName, String teamDesc) {
+        if (teamDAO.teamNameExists(teamName)) {
+            showAlert("Error", "Team name already exists");
+            return;
+        }
+
+        Team newTeam = new Team(
+                UUID.randomUUID().toString(),
+                teamName,
+                teamDesc
+        );
+
+        if (teamDAO.createTeam(newTeam)) {
+            showAlert("Success", "Team created successfully");
+            loadTeamData();
+            clearForm();
+        } else {
+            showAlert("Error", "Failed to create team");
+        }
+    }
+
+    private void updateExistingTeam(String teamName, String teamDesc) {
+        Team selectedTeam = teamTable.getSelectionModel().getSelectedItem();
+        selectedTeam.setTname(teamName);
+        selectedTeam.setTdesc(teamDesc);
+
+        if (teamDAO.updateTeam(selectedTeam)) {
+            showAlert("Success", "Team updated successfully");
+            teamTable.refresh();
+            clearForm();
+        } else {
+            showAlert("Error", "Failed to update team");
+        }
+    }
 
     @FXML
-    private TableColumn<?, ?> teamDescriptionColumn;
+    private void handleClear(ActionEvent event) {
+        teamTable.getSelectionModel().clearSelection();
+        clearForm();
+    }
 
-    @FXML
-    private TableColumn<?, ?> teamIDColumn;
+    private void clearForm() {
+        teamNameArea.clear();
+        teamDescriptionArea.clear();
+        resetValidationStyles();
+    }
 
-    @FXML
-    private TextField teamNameArea;
+    private boolean validateInputs() {
+        boolean isValid = !teamNameArea.getText().trim().isEmpty();
 
-    @FXML
-    private TableColumn<?, ?> teamNameColumn;
+        teamNameArea.setStyle(isValid ? "" : "-fx-border-color: red;");
+        return isValid;
+    }
 
-    @FXML
-    private TableView<?> teamTable;
+    private void resetValidationStyles() {
+        teamNameArea.setStyle("");
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

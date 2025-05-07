@@ -1,93 +1,69 @@
 package Admin.controller;
 
-import common.dao.BeneficiaryDAO;
-import common.dao.BeneficiaryGroupDAO;
-import common.dao.ServiceDAO;
-import common.models.BeneficiaryGroup;
-import common.models.Service;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import common.dao.*;
+import common.models.*;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BeneficiaryTabController {
+    @FXML private TableView<BeneficiaryGroup> beneficiaryTable;
+    @FXML private TableColumn<BeneficiaryGroup, String> idColumn;
+    @FXML private TableColumn<BeneficiaryGroup, String> groupNameColumn;
+    @FXML private TableColumn<BeneficiaryGroup, String> descriptionColumn;
+    @FXML private TextField groupNameField;
+    @FXML private TextArea descriptionArea;
+    @FXML private ComboBox<String> beneficiaryGroupComboBox;
+    @FXML private ComboBox<String> serviceComboBox;
+    @FXML private Button saveButton;
+    @FXML private Button clearButton;
+    @FXML private Button assignButton;
 
-    @FXML
-    private Button assignButton;
-
-    @FXML
-    private ComboBox<String> beneficiaryGroupComboBox;
-
-    @FXML
-    private TableView<BeneficiaryGroup> beneficiaryTable;
-
-    @FXML
-    private Button clearButton;
-
-    @FXML
-    private TextArea descriptionArea;
-
-    @FXML
-    private TableColumn<?, ?> descriptionColumn;
-
-    @FXML
-    private TableColumn<?, ?> groupNameColumn;
-
-    @FXML
-    private TextField groupNameField;
-
-    @FXML
-    private TableColumn<?, ?> idColumn;
-
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private ComboBox<String> serviceComboBox;
-
-    private BeneficiaryGroupDAO beneficiaryGroupDAO;
-    private BeneficiaryDAO beneficiaryDAO;
-    private ServiceDAO serviceDAO;
+    private final BeneficiaryGroupDAO beneficiaryGroupDAO = new BeneficiaryGroupDAO();
+    private final BeneficiaryDAO beneficiaryDAO = new BeneficiaryDAO();
+    private final ServiceDAO serviceDAO = new ServiceDAO();
     private ObservableList<BeneficiaryGroup> beneficiaryGroups;
 
     @FXML
     public void initialize() {
-        beneficiaryGroupDAO = new BeneficiaryGroupDAO();
-        beneficiaryDAO = new BeneficiaryDAO();
-        serviceDAO = new ServiceDAO();
+        setupTableColumns();
+        setupSelectionHandlers();
+        setupValidation();
+        loadInitialData();
+    }
 
+    private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("benid"));
         groupNameColumn.setCellValueFactory(new PropertyValueFactory<>("bengroup"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("bendesc"));
+    }
 
-        //loads selected details into txt field
-        beneficiaryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                groupNameField.setText(newSelection.getBengroup());
-                descriptionArea.setText(newSelection.getBendesc());
+    private void setupSelectionHandlers() {
+        beneficiaryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                populateForm(newVal);
+                saveButton.setText("Update");
+            } else {
+                clearForm();
+                saveButton.setText("Create");
             }
         });
+    }
 
-        //change btn based on mode
-        beneficiaryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            saveButton.setText(newVal != null ? "Update" : "Save");
-        });
-
-        clearButton.setOnAction(e -> {
-            beneficiaryTable.getSelectionModel().clearSelection();
-            handleClearGroup(e);
-        });
-
+    private void setupValidation() {
         groupNameField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        descriptionArea.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
 
         groupNameField.setTooltip(new Tooltip("Group name is required"));
         descriptionArea.setTooltip(new Tooltip("Description is required"));
+    }
 
+    private void loadInitialData() {
         loadBeneficiaryGroups();
         loadServices();
     }
@@ -97,129 +73,159 @@ public class BeneficiaryTabController {
         beneficiaryGroups = FXCollections.observableArrayList(groups);
         beneficiaryTable.setItems(beneficiaryGroups);
 
-        beneficiaryGroupComboBox.getItems().clear();
-        for (BeneficiaryGroup group : groups) {
-            beneficiaryGroupComboBox.getItems().add(group.getBengroup());
-        }
+        //get unique bengroups
+        beneficiaryGroupComboBox.getItems().setAll(
+                groups.stream()
+                        .map(BeneficiaryGroup::getBengroup)
+                        .distinct()
+                        .collect(Collectors.toList())
+        );
     }
 
     private void loadServices() {
-        List<Service> services = serviceDAO.getAllServices();
-        serviceComboBox.getItems().clear();
-        for (Service service : services) {
-            serviceComboBox.getItems().add(service.getSname());
-        }
+        serviceComboBox.getItems().setAll(
+                serviceDAO.getAllServices().stream()
+                        .map(Service::getSname)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private void populateForm(BeneficiaryGroup group) {
+        groupNameField.setText(group.getBengroup());
+        descriptionArea.setText(group.getBendesc());
     }
 
     @FXML
     private void handleSaveGroup(ActionEvent event) {
         if (!validateInputs()) {
-            showAlert("Validation Error", "Please fill in all required fields");
+            showAlert("Validation error", "Please fill in all required fields");
             return;
         }
 
         String groupName = groupNameField.getText().trim();
         String description = descriptionArea.getText().trim();
 
-        if (groupName.isEmpty() || description.isEmpty()) {
-            showAlert("Validation Error", "Group name and description cannot be empty");
-            return;
-        }
-
-        //check if updating an existing record
-        if (beneficiaryTable.getSelectionModel().getSelectedItem() != null) {
-            BeneficiaryGroup selected = beneficiaryTable.getSelectionModel().getSelectedItem();
-            selected.setBengroup(groupName);
-            selected.setBendesc(description);
-
-            if (beneficiaryGroupDAO.updateBeneficiaryGroup(selected)) {
-                showAlert("Success", "Beneficiary group updated successfully");
-                beneficiaryTable.refresh(); //refresh table view
-                handleClearGroup(null);
-            } else {
-                showAlert("Error", "Failed to update beneficiary group");
-            }
+        if (beneficiaryTable.getSelectionModel().isEmpty()) {
+            createNewGroup(groupName, description);
         } else {
-            BeneficiaryGroup newGroup = new BeneficiaryGroup();
-            newGroup.setBenid(UUID.randomUUID().toString());
-            newGroup.setBengroup(groupName);
-            newGroup.setBendesc(description);
+            updateExistingGroup(groupName, description);
+        }
+    }
 
-            if (beneficiaryGroupDAO.createBeneficiaryGroup(newGroup)) {
-                showAlert("Success", "New beneficiary group created successfully");
-                loadBeneficiaryGroups(); //reload data
-                handleClearGroup(null);
-            } else {
-                showAlert("Error", "Failed to create beneficiary group");
-            }
+    private void createNewGroup(String groupName, String description) {
+        String newID = beneficiaryGroupDAO.generateNewBeneficiaryID();
+
+        BeneficiaryGroup newGroup = new BeneficiaryGroup(
+                newID,
+                groupName,
+                description
+        );
+
+        if (beneficiaryGroupDAO.createBeneficiaryGroup(newGroup)) {
+            showAlert("Success", "New beneficiary group created successfully");
+            loadBeneficiaryGroups();
+            clearForm();
+        } else {
+            showAlert("Error", "Failed to create beneficiary group");
+        }
+    }
+
+    private void updateExistingGroup(String groupName, String description) {
+        BeneficiaryGroup selected = beneficiaryTable.getSelectionModel().getSelectedItem();
+        selected.setBengroup(groupName);
+        selected.setBendesc(description);
+
+        if (beneficiaryGroupDAO.updateBeneficiaryGroup(selected)) {
+            showAlert("Success", "Beneficiary group updated successfully");
+            beneficiaryTable.refresh();
+            clearForm();
+        } else {
+            showAlert("Error", "Failed to update beneficiary group");
         }
     }
 
     @FXML
     private void handleAssignBeneficiary(ActionEvent event) {
-        String serviceName = serviceComboBox.getValue();
-        String groupName = beneficiaryGroupComboBox.getValue();
-
-        if (serviceName == null || groupName == null) {
+        if (!validateAssignmentInputs()) {
             showAlert("Validation Error", "Please select both service and beneficiary group");
             return;
         }
 
-        Service selectedService = serviceDAO.getAllServices().stream()
-                .filter(s -> s.getSname().equals(serviceName))
-                .findFirst()
-                .orElse(null);
+        Optional<Service> service = findSelectedService();
+        Optional<BeneficiaryGroup> group = findSelectedGroup();
 
-        BeneficiaryGroup selectedGroup = beneficiaryGroups.stream()
-                .filter(g -> g.getBengroup().equals(groupName))
-                .findFirst()
-                .orElse(null);
-
-        if (selectedService != null && selectedGroup != null) {
-            if (beneficiaryDAO.assignBeneficiaryToService(selectedService.getServid(), selectedGroup.getBenid())) {
-                showAlert("Success", "Beneficiary group assigned to service successfully");
+        if (service.isPresent() && group.isPresent()) {
+            if (beneficiaryDAO.assignBeneficiaryToService(
+                    service.get().getServid(),
+                    group.get().getBenid())) {
+                showAlert("Success", "Assignment successful");
             } else {
-                showAlert("Error", "Failed to assign beneficiary group to service");
+                showAlert("Error", "Assignment failed");
             }
         }
     }
 
     @FXML
     private void handleRemoveBeneficiary(ActionEvent event) {
-        String serviceName = serviceComboBox.getValue();
-        String groupName = beneficiaryGroupComboBox.getValue();
-
-        if (serviceName == null || groupName == null) {
+        if (!validateAssignmentInputs()) {
             showAlert("Validation Error", "Please select both service and beneficiary group");
             return;
         }
 
-        // Get the selected service and group
-        Service selectedService = serviceDAO.getAllServices().stream()
-                .filter(s -> s.getSname().equals(serviceName))
-                .findFirst()
-                .orElse(null);
+        Optional<Service> service = findSelectedService();
+        Optional<BeneficiaryGroup> group = findSelectedGroup();
 
-        BeneficiaryGroup selectedGroup = beneficiaryGroups.stream()
-                .filter(g -> g.getBengroup().equals(groupName))
-                .findFirst()
-                .orElse(null);
-
-        if (selectedService != null && selectedGroup != null) {
-            if (beneficiaryDAO.removeBeneficiaryFromService(selectedService.getServid(), selectedGroup.getBenid())) {
-                showAlert("Success", "Beneficiary group removed from service successfully");
+        if (service.isPresent() && group.isPresent()) {
+            if (beneficiaryDAO.removeBeneficiaryFromService(
+                    service.get().getServid(),
+                    group.get().getBenid())) {
+                showAlert("Success", "Removal successful");
             } else {
-                showAlert("Error", "Failed to remove beneficiary group from service");
+                showAlert("Error", "Removal failed");
             }
         }
+    }
+
+    private Optional<Service> findSelectedService() {
+        return serviceDAO.getAllServices().stream()
+                .filter(s -> s.getSname().equals(serviceComboBox.getValue()))
+                .findFirst();
+    }
+
+    private Optional<BeneficiaryGroup> findSelectedGroup() {
+        return beneficiaryGroups.stream()
+                .filter(g -> g.getBengroup().equals(beneficiaryGroupComboBox.getValue()))
+                .findFirst();
+    }
+
+    private boolean validateAssignmentInputs() {
+        return serviceComboBox.getValue() != null &&
+                beneficiaryGroupComboBox.getValue() != null;
     }
 
     @FXML
     private void handleClearGroup(ActionEvent event) {
         beneficiaryTable.getSelectionModel().clearSelection();
+        clearForm();
+    }
+
+    private void clearForm() {
         groupNameField.clear();
         descriptionArea.clear();
+        resetValidationStyles();
+    }
 
+    private boolean validateInputs() {
+        boolean isValid = !groupNameField.getText().trim().isEmpty() &&
+                !descriptionArea.getText().trim().isEmpty();
+
+        groupNameField.setStyle(isValid ? "" : "-fx-border-color: red; -fx-border-width: 1px;");
+        descriptionArea.setStyle(isValid ? "" : "-fx-border-color: red; -fx-border-width: 1px;");
+
+        return isValid;
+    }
+
+    private void resetValidationStyles() {
         groupNameField.setStyle("");
         descriptionArea.setStyle("");
     }
@@ -231,25 +237,4 @@ public class BeneficiaryTabController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    private boolean validateInputs() {
-        boolean isValid = true;
-
-        if (groupNameField.getText().trim().isEmpty()) {
-            groupNameField.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            groupNameField.setStyle("");
-        }
-
-        if (descriptionArea.getText().trim().isEmpty()) {
-            descriptionArea.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            descriptionArea.setStyle("");
-        }
-
-        return isValid;
-    }
-
 }
