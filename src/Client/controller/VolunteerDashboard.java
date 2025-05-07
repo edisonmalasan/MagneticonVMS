@@ -46,15 +46,6 @@ public class VolunteerDashboard {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(fxmlPath));
             Parent root = loader.load();
 
-
-            Object controller = loader.getController();
-            if (controller instanceof VolunteerDataReceiver) {
-                ((VolunteerDataReceiver) controller).setVolunteerData(currentVolunteerId);
-            }
-            if (controller instanceof StageAwareController) {
-                ((StageAwareController) controller).setStage(currentStage);
-            }
-
             currentStage.setScene(new Scene(root));
             currentStage.show();
         } catch (IOException e) {
