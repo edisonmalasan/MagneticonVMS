@@ -4,6 +4,7 @@ import common.models.ServiceSchedule;
 import common.utils.DatabaseConnection;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class ServiceScheduleDAO {
     public List<ServiceSchedule> getAllServiceSchedule() {
         List<ServiceSchedule> schedules = new ArrayList<>();
         String sql = "SELECT * FROM SERVICE_SCHEDULE ORDER BY sstart";
+        String dateFormat = "yyyy-MM-dd";
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
@@ -20,8 +22,29 @@ public class ServiceScheduleDAO {
                 ServiceSchedule schedule = new ServiceSchedule();
                 schedule.setServid(rs.getString("servid"));
                 schedule.setSchedid(rs.getString("schedid"));
-                schedule.setStart(rs.getDate("sstart").toLocalDate());
-                schedule.setEnd(rs.getDate("send").toLocalDate());
+                String startString = rs.getString("sstart");
+
+                if (startString.equals("0000-00-00")) {
+                    schedule.setStart(null);
+                } else {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+                    LocalDate date = LocalDate.parse(startString, formatter);
+                    schedule.setStart(date);
+                }
+
+                // schedule.setStart(rs.getDate("sstart").toLocalDate());
+                // schedule.setEnd(rs.getDate("send").toLocalDate());
+
+                String endString = rs.getString("send");
+
+                if (endString.equals("0000-00-00")) {
+                    schedule.setEnd(null);
+                } else {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+                    LocalDate date = LocalDate.parse(endString, formatter);
+                    schedule.setEnd(date);
+                }
+
                 schedules.add(schedule);
             }
         } catch (SQLException e) {

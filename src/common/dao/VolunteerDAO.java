@@ -108,8 +108,13 @@ public class VolunteerDAO {
                 volunteer.setVolid(rs.getString("volid"));
                 volunteer.setFname(rs.getString("fname"));
                 volunteer.setLname(rs.getString("lname"));
+                volunteer.setAddress(rs.getString("address"));
+                volunteer.setPhone(rs.getString("phone"));
                 volunteer.setEmail(rs.getString("email"));
                 volunteer.setPassword(rs.getString("password"));
+                volunteer.setBirthday(rs.getDate("bday").toLocalDate());
+                volunteer.setSex(rs.getString("sex"));
+                volunteer.setVolstat(rs.getString("volstat"));
                 volunteer.setRole(rs.getString("role"));
 
                 volunteers.add(volunteer);
