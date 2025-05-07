@@ -36,6 +36,39 @@ public class VolunteerDAO {
         return null;
     }
 
+    public static Volunteer getVolunteerById(String volunteerId) throws SQLException {
+        if (volunteerId == null || volunteerId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
+        }
+
+        String sql = "SELECT v.volid, v.firstname, v.lastname, v.email, t.teamname " +
+                "FROM Volunteer v " +
+                "LEFT JOIN Team t ON v.teamid = t.teamid " +
+                "WHERE v.volid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, volunteerId);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToVolunteer(rs);
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Volunteer mapResultSetToVolunteer(ResultSet rs) throws SQLException {
+        Volunteer volunteer = new Volunteer();
+        volunteer.setVolid(rs.getString("volid"));
+        volunteer.setFname(rs.getString("firstname"));
+        volunteer.setLname(rs.getString("lastname"));
+        volunteer.setEmail(rs.getString("email"));
+        return volunteer;
+    }
+
     public static boolean createVolunteer(Volunteer volunteer) {
         String sql = "INSERT INTO Volunteer (volid, lname, fname, address, phone, email, password, bday, sex, volstat, role) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

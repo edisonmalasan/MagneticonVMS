@@ -84,10 +84,9 @@ public class VolunteerAttendance {
             Stage currentStage = (Stage) backBttn.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            currentStage.setScene(scene);
-            currentStage.show();
+            VolunteerDashboard mainMenuController = loader.getController();
+            mainMenuController.setStage(currentStage);
+            currentStage.setScene(new Scene(root));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,5 +100,8 @@ public class VolunteerAttendance {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void setStage(Stage currentStage) {
     }
 }

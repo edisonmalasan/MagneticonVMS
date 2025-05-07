@@ -1,75 +1,95 @@
 package Client.controller;
 
-import common.dao.AttendanceDAO;
-import common.models.Attendance;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import App.controller.LoginController;
+import common.dao.VolunteerDAO;
+import common.models.Volunteer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class VolunteerDashboard {
-    @FXML
-    private Label headerText;
-    @FXML
-    private Label volDeets;
-    @FXML
-    private Label volId;
-    @FXML
-    private Label volName;
-    @FXML
-    private Label volTeam;
-    @FXML
-    private Button myTasksBttn;
-    @FXML
-    private Button servicesBttn;
-    @FXML
-    private Button myTeamBttn;
-    @FXML
-    private Button beneficiariesBttn;
-    @FXML
-    private Button attendanceBttn;
-    @FXML
-    private Button logoutBttn;
+    @FXML private Label volId;
+    @FXML private Label volName;
+    @FXML private Label volTeam;
+    @FXML private Button myTasksBttn;
+    @FXML private Button servicesBttn;
+    @FXML private Button myTeamBttn;
+    @FXML private Button beneficiariesBttn;
+    @FXML private Button attendanceBttn;
+    @FXML private Button logoutBttn;
 
-    private void loadVolunteer(){
+    private String currentVolunteerId;
+    private Stage currentStage;
 
+    public void initialize() {
+        setupButtonActions();
     }
 
-    private void handleTask(){
-
-    }
-    private void handleService(){
-
-    }
-
-    private void handleTeam(){
-
+    private void setupButtonActions() {
+        myTasksBttn.setOnAction(e -> navigateTo("Client/view/VolunteerTaskList.fxml", VolunteerTaskList.class));
+        servicesBttn.setOnAction(e -> navigateTo("Client/view/VolunteerServices.fxml", VolunteerServices.class));
+        myTeamBttn.setOnAction(e -> navigateTo("Client/view/VolunteerTeams.fxml", VolunteerTeams.class));
+        beneficiariesBttn.setOnAction(e -> navigateTo("Client/view/VolunteerServiceBeneficiary.fxml", VolunteerServiceBeneficiary.class));
+        attendanceBttn.setOnAction(e -> navigateTo("Client/view/VolunteerAttendance.fxml", VolunteerAttendance.class));
+        logoutBttn.setOnAction(e -> navigateTo("App/view/Login.fxml", LoginController.class));
     }
 
-    private void handleBeneficiaries(){
+    private <T> void navigateTo(String fxmlPath, Class<T> controllerClass) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(fxmlPath));
+            Parent root = loader.load();
 
+
+            Object controller = loader.getController();
+            if (controller instanceof VolunteerDataReceiver) {
+                ((VolunteerDataReceiver) controller).setVolunteerData(currentVolunteerId);
+            }
+            if (controller instanceof StageAwareController) {
+                ((StageAwareController) controller).setStage(currentStage);
+            }
+
+            currentStage.setScene(new Scene(root));
+            currentStage.show();
+        } catch (IOException e) {
+            showError("Navigation Error", "Failed to load view: " + fxmlPath);
+            e.printStackTrace();
+        }
     }
 
-    private void handleAttendance(){
-
+    public void setVolunteerData(String volunteerId) {
+        this.currentVolunteerId = volunteerId;
+        loadVolunteerDetails();
     }
 
-    private void handleLogout(){
-
+    public void setStage(Stage stage) {
+        this.currentStage = stage;
     }
 
+    private void loadVolunteerDetails() {
+        try {
+            Volunteer volunteer = VolunteerDAO.getVolunteerById(currentVolunteerId);
+            if (volunteer != null) {
+                volId.setText(volunteer.getVolid());
+                volName.setText(volunteer.getFname() + " " + volunteer.getLname());
+            }
+        } catch (Exception e) {
+            showError("Data Error", "Failed to load volunteer details");
+            e.printStackTrace();
+        }
+    }
+
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

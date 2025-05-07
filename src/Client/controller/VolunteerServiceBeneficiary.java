@@ -65,4 +65,7 @@ public class VolunteerServiceBeneficiary {
             System.out.println("Failed to load");
         }
     }
+
+    public void setStage(Stage currentStage) {
+    }
 }

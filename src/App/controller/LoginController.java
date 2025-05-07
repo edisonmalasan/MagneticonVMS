@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class LoginController {
 
@@ -15,4 +16,7 @@ public class LoginController {
 
     @FXML
     private Hyperlink registerLink;
+
+    public void setStage(Stage currentStage) {
+    }
 }
