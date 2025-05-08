@@ -23,6 +23,8 @@ public class LoginController {
     @FXML
     private Hyperlink registerLink;
 
+    @FXML Hyperlink registerAdminHyperlink;
+
     public void initialize(){
         registerLink.setOnAction(event -> handleRegister());
     }
@@ -41,6 +43,23 @@ public class LoginController {
             System.out.println("Failed to load");
         }
     }
+
+    @FXML
+    public void handleRegisterAdminLink() {
+        try {
+            Stage currentStage = (Stage) registerLink.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/view/registerAsAdmin.fxml"));
+            Parent root = loader.load();
+            RegisterController registerController = loader.getController();
+            registerController.setStage(currentStage);
+            currentStage.setScene(new Scene(root));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load");
+        }
+    }
+
     public void setStage(Stage currentStage) {
     }
 }

@@ -41,7 +41,8 @@
                   </Label>
                   <PasswordField fx:id="loginPassword" layoutX="186.0" layoutY="180.0" prefHeight="25.0" prefWidth="215.0" />
                   <Label layoutX="237.0" layoutY="250.0" prefHeight="17.0" prefWidth="128.0" text="Don't have an account?" textFill="WHITE" />
-                  <Hyperlink fx:id="registerLink" layoutX="261.0" layoutY="274.0" text="Register Here" />
+                  <Hyperlink fx:id="registerLink" layoutX="240.0" layoutY="267.0" text="Register As Volunteer" />
+                  <Hyperlink fx:id="registerAdminHyperLink" layoutX="247.0" layoutY="290.0" onAction="#handleRegisterAdminLink" text="Register As Admin" />
                </children>
             </Pane>
          </children>
