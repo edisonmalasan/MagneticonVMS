@@ -58,7 +58,7 @@
           <TableColumn fx:id="serviceColumn" prefWidth="393.0" text="Service" />
           <TableColumn fx:id="scheduleIdColumn" prefWidth="258.0" text="Schedule ID" />
             <TableColumn fx:id="startDateColumn" prefWidth="340.0" text="Start Date" />
-            <TableColumn fx:id="scheduleStatusColumn" prefWidth="266.0" text="Status" />
+            <TableColumn fx:id="statusColumn" prefWidth="266.0" text="Status" />
             <TableColumn fx:id="endDateColumn1" prefWidth="266.0" text="End Date" />
         </columns>
       </TableView>
