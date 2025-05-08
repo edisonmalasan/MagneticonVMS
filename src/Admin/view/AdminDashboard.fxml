@@ -50,6 +50,9 @@
             <Tab text="Schedule">
                 <fx:include source="ScheduleTab.fxml" />
             </Tab>
+            <Tab text="Attendance">
+                <fx:include source="AttendanceTab.fxml" />
+            </Tab>
         </tabs>
       </TabPane>
    </center>
