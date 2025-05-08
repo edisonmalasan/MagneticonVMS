@@ -45,6 +45,6 @@ public class Team {
         if (members == null || members.isEmpty()) {
             return "No members";
         }
-        return String.join(", ", members); // join strings
+        return String.join("\n", members); // join strings
     }
 }

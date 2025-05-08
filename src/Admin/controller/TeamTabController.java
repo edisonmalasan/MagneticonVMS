@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -60,7 +61,6 @@ public class TeamTabController {
 
     // TODO: check if working
     private void loadTeamData() throws SQLException {
-        // load with members
         List<Team> teamList = teamDAO.getAllTeamsWithMembers();
         teams = FXCollections.observableArrayList(teamList);
 
@@ -68,10 +68,30 @@ public class TeamTabController {
         teamNameColumn.setCellValueFactory(new PropertyValueFactory<>("tname"));
         teamDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("tdesc"));
 
-        // for members column displaying using the helper method in team model
         membersColumn.setCellValueFactory(cellData ->
                 new ReadOnlyStringWrapper(cellData.getValue().getMemberNames())
         );
+
+        // multiline render
+        membersColumn.setCellFactory(tc -> new TableCell<Team, String>() {
+            private final Text text = new Text();
+            {
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setGraphic(text);
+                setPrefHeight(Control.USE_COMPUTED_SIZE);
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    text.setText("");
+                } else {
+                    text.setText(item);
+                    text.setWrappingWidth(membersColumn.getWidth() - 10);
+                }
+            }
+        });
 
         teamTable.setItems(teams);
     }

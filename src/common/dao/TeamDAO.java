@@ -87,7 +87,7 @@ public class TeamDAO {
     // get only the first name and lastname
     public List<String> getTeamMembersName(String teamId) {
         List<String> members = new ArrayList<>();
-        String sql = "SELECT fname, lname FROM Volunteer v " +
+        String sql = "SELECT v.volid, v.fname, v.lname FROM Volunteer v " +
                 "JOIN Volunteer_Team vt ON v.volid = vt.volid " +
                 "WHERE vt.teamid = ?";
 
@@ -97,15 +97,15 @@ public class TeamDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Volunteer volunteer = new Volunteer();
-                volunteer.setFname(rs.getString("fname"));
-                volunteer.setLname(rs.getString("lname"));
-                members.add(String.valueOf(volunteer));
+                String memberInfo = String.format("%s: %s %s",
+                        rs.getString("volid"),
+                        rs.getString("fname"),
+                        rs.getString("lname"));
+                members.add(memberInfo);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return members;
     }
 
