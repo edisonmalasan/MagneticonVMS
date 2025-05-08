@@ -1,5 +1,6 @@
 package Admin.controller;
 
+import common.models.Volunteer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +12,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class AdminDashboardController {
-
+    private Volunteer currentAdmin;
     @FXML
     private Button logoutButton;
     private Stage stage;
@@ -36,6 +37,10 @@ public class AdminDashboardController {
             e.printStackTrace();
             System.err.println("Failed to load the login screen: " + e.getMessage());
         }
+    }
+
+    public void setCurrentAdmin(Volunteer admin) {
+        this.currentAdmin = admin;
     }
 
 

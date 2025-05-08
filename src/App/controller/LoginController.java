@@ -1,5 +1,9 @@
 package App.controller;
 
+import Admin.controller.AdminDashboardController;
+import Client.controller.VolunteerDashboard;
+import common.dao.VolunteerDAO;
+import common.models.Volunteer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -72,7 +76,56 @@ public class LoginController {
 
     @FXML
     void handleLogin(ActionEvent event) {
+        String email = loginEmail.getText();
+        String password = loginPassword.getText();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            showAlert("Missing Fields", "Please enter both email and password.");
+            return;
+        }
+
+        VolunteerDAO volunteerDAO = new VolunteerDAO();
+        Volunteer user = volunteerDAO.authenticate(email, password);
+
+        if (user != null) {
+            try {
+                Stage stage = (Stage) loginButton.getScene().getWindow();
+                FXMLLoader loader;
+                Parent root;
+
+
+                if ("Admin".equalsIgnoreCase(user.getRole())) {
+                    loader = new FXMLLoader(getClass().getResource("/App/view/AdminDashboard.fxml"));
+                    root = loader.load();
+
+                    AdminDashboardController adminDashboardController = loader.getController();
+                    adminDashboardController.setCurrentAdmin(user);
+                } else {
+                    loader = new FXMLLoader(getClass().getResource("/App/view/VolunteerDashboard.fxml"));
+                    root = loader.load();
+
+                    VolunteerDashboard volunteerDashboard = loader.getController();
+                    volunteerDashboard.setCurrentVolunteer(user);
+                }
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            showAlert("Login Failed", "Invalid email or password.");
+        }
+
+    }
+
+    private void showAlert(String title, String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class VolunteerDashboard {
+    private Volunteer currentVolunteer;
     @FXML
     private Label volId;
     @FXML
@@ -91,5 +92,9 @@ public class VolunteerDashboard {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void setCurrentVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
     }
 }
