@@ -26,6 +26,9 @@ public class ScheduleTabController {
     @FXML private ComboBox<String> serviceComboBox;
     @FXML private TableColumn<ServiceSchedule, LocalDate> startDateColumn;
     @FXML private DatePicker startDatePicker;
+    @FXML private ComboBox<String> statusComboBox;
+    @FXML private TableColumn<?, ?> statusColumn;
+
 
     private final ServiceScheduleDAO serviceScheduleDAO = new ServiceScheduleDAO();
     private final ServiceDAO serviceDAO = new ServiceDAO();
