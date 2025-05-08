@@ -2,6 +2,7 @@ package Admin.controller;
 
 import common.dao.TeamDAO;
 import common.models.Team;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public class TeamTabController {
     @FXML private TableColumn<Team, String> teamIDColumn;
     @FXML private TableColumn<Team, String> teamNameColumn;
     @FXML private TableColumn<Team, String> teamDescriptionColumn;
+    @FXML private TableColumn<Team, String> membersColumn;
 
     @FXML private TextField teamNameArea;
     @FXML private TextArea teamDescriptionArea;
@@ -28,7 +31,7 @@ public class TeamTabController {
     private ObservableList<Team> teams;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         setupTableColumns();
         setupEventHandlers();
         loadTeamData();
@@ -55,9 +58,21 @@ public class TeamTabController {
         clearButton.setOnAction(this::handleClear);
     }
 
-    private void loadTeamData() {
-        List<Team> teamList = teamDAO.getAllTeams();
+    // TODO: check if working
+    private void loadTeamData() throws SQLException {
+        // load with members
+        List<Team> teamList = teamDAO.getAllTeamsWithMembers();
         teams = FXCollections.observableArrayList(teamList);
+
+        teamIDColumn.setCellValueFactory(new PropertyValueFactory<>("teamid"));
+        teamNameColumn.setCellValueFactory(new PropertyValueFactory<>("tname"));
+        teamDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("tdesc"));
+
+        // for members column displaying using the helper method in team model
+        membersColumn.setCellValueFactory(cellData ->
+                new ReadOnlyStringWrapper(cellData.getValue().getMemberNames())
+        );
+
         teamTable.setItems(teams);
     }
 
@@ -77,13 +92,17 @@ public class TeamTabController {
         String teamDesc = teamDescriptionArea.getText().trim();
 
         if (teamTable.getSelectionModel().isEmpty()) {
-            createNewTeam(teamName, teamDesc);
+            try {
+                createNewTeam(teamName, teamDesc);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             updateExistingTeam(teamName, teamDesc);
         }
     }
 
-    private void createNewTeam(String teamName, String teamDesc) {
+    private void createNewTeam(String teamName, String teamDesc) throws SQLException {
         if (teamDAO.teamNameExists(teamName)) {
             showAlert("Error", "Team name already exists");
             return;

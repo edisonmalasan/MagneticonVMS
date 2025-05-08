@@ -84,6 +84,41 @@ public class TeamDAO {
     }
 
 
+    // get only the first name and lastname
+    public List<String> getTeamMembersName(String teamId) {
+        List<String> members = new ArrayList<>();
+        String sql = "SELECT fname, lname FROM Volunteer v " +
+                "JOIN Volunteer_Team vt ON v.volid = vt.volid " +
+                "WHERE vt.teamid = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, teamId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Volunteer volunteer = new Volunteer();
+                volunteer.setFname(rs.getString("fname"));
+                volunteer.setLname(rs.getString("lname"));
+                members.add(String.valueOf(volunteer));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return members;
+    }
+
+    public List<Team> getAllTeamsWithMembers() throws SQLException {
+        List<Team> teams = getAllTeams();
+        for (Team team : teams) {
+            team.setMembers(getTeamMembersName(team.getTeamid()));
+        }
+        return teams;
+    }
+
+
+
     public static List<Team> getAvailableTeams() throws SQLException {
         List<Team> teams = new ArrayList<>();
         String sql = "SELECT teamid, teamname, description FROM Team WHERE status = 'ACTIVE'";

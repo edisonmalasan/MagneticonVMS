@@ -13,15 +13,6 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="612.0" prefWidth="1258.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.controller.TeamTabController">
-   <center>
-      <TableView fx:id="teamTable" prefHeight="343.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="teamIDColumn" prefWidth="211.0" text="TeamID" />
-          <TableColumn fx:id="teamNameColumn" minWidth="0.0" prefWidth="506.0" text="Team Name" />
-            <TableColumn fx:id="teamDescriptionColumn" minWidth="0.0" prefWidth="540.0" text="Team Description" />
-        </columns>
-      </TableView>
-   </center>
    <bottom>
       <VBox prefHeight="174.0" prefWidth="1258.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
@@ -59,4 +50,14 @@
          </children>
       </VBox>
    </bottom>
+   <center>
+      <TableView fx:id="teamTable" prefHeight="343.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="teamIDColumn" prefWidth="156.0" text="TeamID" />
+          <TableColumn fx:id="teamNameColumn" minWidth="0.0" prefWidth="301.0" text="Team Name" />
+            <TableColumn fx:id="membersColumn" maxWidth="626.0" minWidth="0.0" prefWidth="409.0" text="Members" />
+            <TableColumn fx:id="teamDescriptionColumn" minWidth="0.0" prefWidth="391.0" text="Team Description" />
+        </columns>
+      </TableView>
+   </center>
 </BorderPane>
