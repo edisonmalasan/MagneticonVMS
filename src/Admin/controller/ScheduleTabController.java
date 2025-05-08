@@ -1,6 +1,8 @@
 package Admin.controller;
 
+import common.dao.ServiceDAO;
 import common.dao.ServiceScheduleDAO;
+import common.models.Service;
 import common.models.ServiceSchedule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ public class ScheduleTabController {
     @FXML private DatePicker startDatePicker;
 
     private final ServiceScheduleDAO serviceScheduleDAO = new ServiceScheduleDAO();
+    private final ServiceDAO serviceDAO = new ServiceDAO();
     private ObservableList<ServiceSchedule> serviceSchedules;
 
     @FXML
@@ -187,13 +190,14 @@ public class ScheduleTabController {
 
     private void loadServiceSchedules() {
         List<ServiceSchedule> schedules = serviceScheduleDAO.getAllServiceSchedule();
+        List<Service> services = serviceDAO.getAllServices();
         serviceSchedules = FXCollections.observableArrayList(schedules);
         scheduleTable.setItems(serviceSchedules);
 
         //populate combo box
         serviceComboBox.getItems().clear();
-        schedules.stream()
-                .map(ServiceSchedule::getServid)
+        services.stream()
+                .map(Service::getServid)
                 .distinct()
                 .forEach(serviceComboBox.getItems()::add);
     }
