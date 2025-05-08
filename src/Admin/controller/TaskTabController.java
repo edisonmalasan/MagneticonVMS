@@ -61,7 +61,7 @@ public class TaskTabController {
 
         serviceComboBox.getItems().addAll(
                 serviceDAO.getAllServices().stream()
-                        .map(Service::getSname)
+                        .map(Service::getServid)
                         .toList()
         );
 
@@ -113,17 +113,16 @@ public class TaskTabController {
         String description = descriptionArea.getText().trim();
 
         if (taskTable.getSelectionModel().isEmpty() || serviceComboBox.getValue().equals("New Service")) {
-            createNewTask(volunteer, status, description);
+            createNewTask(service, volunteer, status, description);
         } else {
             updateExistingTask(service, volunteer, status, description);
         }
     }
 
-    private void createNewTask(String volunteer, String status, String description) {
+    private void createNewTask(String service, String volunteer, String status, String description) {
         TaskAssignment newTask = new TaskAssignment();
-        String newID = serviceDAO.generateNewServiceId();
 
-        newTask.setServid(newID);
+        newTask.setServid(service);
         newTask.setVolid(volunteer);
         newTask.setTaskstat(status);
         newTask.setTadesc(description);

@@ -114,7 +114,7 @@ public class ServiceScheduleDAO {
     }
 
     public String generateNewScheduleID() {
-        String sql = "SELECT MAX(CAST(SUBSTRING(servid, 2) AS UNSIGNED)) FROM SERVICE";
+        String sql = "SELECT MAX(CAST(SUBSTRING(schedid, 2) AS UNSIGNED)) FROM SERVICE_SCHEDULE";
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
