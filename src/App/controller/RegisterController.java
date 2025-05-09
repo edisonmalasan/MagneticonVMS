@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class RegisterController {
@@ -43,24 +44,48 @@ public class RegisterController {
 
 //to fix
     private void handleRegister() {
-        String fName = firstNameTextField.getText();
-        String lName = lastNameTextField.getText();
-        String address = addressTextField.getText();
-        String phoneNo = phoneNumberTextField.getText();
-        String email = emailTextField.getText();
-        String pwd = passwordField.getText();
-        String sex = sexComboBox.getAccessibleText();
-        String bday = birthdateDatePicker.getAccessibleText();
+        registerButton.setOnAction(e -> {
+            String fName = firstNameTextField.getText();
+            String lName = lastNameTextField.getText();
+            String address = addressTextField.getText();
+            String phoneNo = phoneNumberTextField.getText();
+            String email = emailTextField.getText();
+            String pwd = passwordField.getText();
+            String sex = sexComboBox.getValue();
+            LocalDate bday = birthdateDatePicker.getValue();
 
-        if (fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNo.isEmpty() || email.isEmpty() || pwd.isEmpty() || sex.isEmpty() || bday.isEmpty()) {
-            showAlert("Missing Fields", "Pleas fill in all fields");
-            return;
-        }
+            if (fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNo.isEmpty() || email.isEmpty() || pwd.isEmpty() || sex == null || bday == null) {
+                showAlert("Missing Fields", "Pleas fill in all fields");
+                return;
+            }
 
-        VolunteerDAO vDAO = new VolunteerDAO();
-        Volunteer user = vDAO.createVolunteer(5123651);
+            VolunteerDAO vDAO = new VolunteerDAO();
 
+            if (vDAO.emailExists(email)) {
+                showAlert("Duplicate Email", "An account with this email already exists.");
+                return;
+            }
 
+            Volunteer vol = new Volunteer();
+            vol.setVolid(String.valueOf(System.currentTimeMillis()));
+            vol.setFname(fName);
+            vol.setLname(lName);
+            vol.setAddress(address);
+            vol.setPhone(phoneNo);
+            vol.setEmail(email);
+            vol.setPassword(pwd);
+            vol.setSex(sex);
+            vol.setBirthday(bday);
+            vol.setVolstat("Pending");
+
+            boolean created = VolunteerDAO.createVolunteer(vol);
+            if(created) {
+                showSuccess("Registration Successful.","You are now a registered volunteer!");
+                clearFields();
+            } else {
+                showAlert("Registration Failed.", "Ensure that all details are filled in :)");
+            }
+        });
     }
 
     private void showAlert(String title, String message) {
@@ -69,6 +94,25 @@ public class RegisterController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void showSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void clearFields() {
+        firstNameTextField.clear();
+        lastNameTextField.clear();
+        addressTextField.clear();
+        phoneNumberTextField.clear();
+        emailTextField.clear();
+        passwordField.clear();
+        sexComboBox.getSelectionModel().clearSelection();
+        birthdateDatePicker.setValue(null);
     }
 
     public void setStage(Stage stage) {
