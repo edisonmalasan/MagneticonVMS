@@ -1,5 +1,6 @@
 package common.dao;
 
+import common.exceptions.VolunteerNotFoundException;
 import common.models.Volunteer;
 import common.utils.DatabaseConnection;
 
@@ -36,12 +37,14 @@ public class VolunteerDAO {
         return null;
     }
 
-    public static Volunteer getVolunteerById(String volunteerId) throws SQLException {
+    public static Volunteer getVolunteerById(String volunteerId)
+            throws SQLException, VolunteerNotFoundException {
+
         if (volunteerId == null || volunteerId.trim().isEmpty()) {
             throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
         }
 
-        String sql = "SELECT v.volid, v.firstname, v.lastname, v.email, t.teamname " +
+        final String sql = "SELECT v.volid, v.fname, v.lname, v.email, t.teamname " +
                 "FROM Volunteer v " +
                 "LEFT JOIN Team t ON v.teamid = t.teamid " +
                 "WHERE v.volid = ?";
@@ -52,19 +55,21 @@ public class VolunteerDAO {
             statement.setString(1, volunteerId);
 
             try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToVolunteer(rs);
+                if (!rs.next()) {
+                    throw new VolunteerNotFoundException(
+                            "Volunteer not found with ID: " + volunteerId);
                 }
+
+                return mapResultSetToVolunteer(rs);
             }
         }
-        return null;
     }
 
     private static Volunteer mapResultSetToVolunteer(ResultSet rs) throws SQLException {
         Volunteer volunteer = new Volunteer();
         volunteer.setVolid(rs.getString("volid"));
-        volunteer.setFname(rs.getString("firstname"));
-        volunteer.setLname(rs.getString("lastname"));
+        volunteer.setFname(rs.getString("fname"));
+        volunteer.setLname(rs.getString("lname"));
         volunteer.setEmail(rs.getString("email"));
         return volunteer;
     }
@@ -108,13 +113,8 @@ public class VolunteerDAO {
                 volunteer.setVolid(rs.getString("volid"));
                 volunteer.setFname(rs.getString("fname"));
                 volunteer.setLname(rs.getString("lname"));
-                volunteer.setAddress(rs.getString("address"));
-                volunteer.setPhone(rs.getString("phone"));
                 volunteer.setEmail(rs.getString("email"));
                 volunteer.setPassword(rs.getString("password"));
-                volunteer.setBirthday(rs.getDate("bday").toLocalDate());
-                volunteer.setSex(rs.getString("sex"));
-                volunteer.setVolstat(rs.getString("volstat"));
                 volunteer.setRole(rs.getString("role"));
 
                 volunteers.add(volunteer);
@@ -170,24 +170,5 @@ public class VolunteerDAO {
             throw new RuntimeException("Error checking email: " + e.getMessage(), e);
         }
         return false;
-    }
-
-    public String generateNewVolunteerID() {
-        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM SERVICE";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery(sql)) {
-
-            if (rs.next()) {
-                int maxId = rs.getInt(1);
-
-                //for up to 999 entries
-                return String.format("V%03d", maxId + 1);
-            }
-            return "V01"; //default if no records exist
-        } catch (SQLException e) {
-            throw new RuntimeException("Error generating service ID", e);
-        }
     }
 }

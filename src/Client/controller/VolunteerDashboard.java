@@ -5,6 +5,7 @@ import common.dao.VolunteerDAO;
 import common.models.Volunteer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class VolunteerDashboard {
-    private Volunteer currentVolunteer;
+
     @FXML
     private Label volId;
     @FXML
@@ -36,13 +37,33 @@ public class VolunteerDashboard {
     @FXML
     private Button logoutButton;
 
-
+    private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
 
+    @FXML
     public void initialize() {
         setupButtonActions();
+    }
 
+    public void setVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
+        displayVolunteerInfo(volunteer);
+    }
+
+    public void setStage(Stage stage) {
+        this.currentStage = stage;
+    }
+
+    public void setCurrentVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid(); // Optional, if needed elsewhere
+        displayVolunteerInfo(volunteer);
+    }
+
+    private void displayVolunteerInfo(Volunteer volunteer) {
+        volId.setText(volunteer.getVolid());
+        volName.setText(volunteer.getFname() + " " + volunteer.getLname());
     }
 
     private void setupButtonActions() {
@@ -64,33 +85,16 @@ public class VolunteerDashboard {
 
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
-            currentStage.setScene(new Scene(root));
-            currentStage.show();
+            Stage stage = currentStage;
+            if (stage == null) {
+                stage = (Stage) ((Node) myTasksBttn).getScene().getWindow();
+                currentStage = stage;
+            }
+
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             showError("Navigation Error", "Failed to load view: " + fxmlPath);
-            e.printStackTrace();
-        }
-    }
-
-
-    public void setVolunteerData(String volunteerId) {
-        this.currentVolunteerId = volunteerId;
-        loadVolunteerDetails();
-    }
-
-    public void setStage(Stage stage) {
-        this.currentStage = stage;
-    }
-
-    private void loadVolunteerDetails() {
-        try {
-            Volunteer volunteer = VolunteerDAO.getVolunteerById(currentVolunteerId);
-            if (volunteer != null) {
-                volId.setText(volunteer.getVolid());
-                volName.setText(volunteer.getFname() + " " + volunteer.getLname());
-            }
-        } catch (Exception e) {
-            showError("Data Error", "Failed to load volunteer details");
             e.printStackTrace();
         }
     }
@@ -101,9 +105,5 @@ public class VolunteerDashboard {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public void setCurrentVolunteer(Volunteer volunteer) {
-        this.currentVolunteer = volunteer;
     }
 }
