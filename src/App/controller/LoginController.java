@@ -101,7 +101,7 @@ public class LoginController {
                     AdminDashboardController adminDashboardController = loader.getController();
                     adminDashboardController.setCurrentAdmin(user);
                 } else {
-                    loader = new FXMLLoader(getClass().getResource("/App/view/VolunteerDashboard.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
                     root = loader.load();
 
                     VolunteerDashboard volunteerDashboard = loader.getController();

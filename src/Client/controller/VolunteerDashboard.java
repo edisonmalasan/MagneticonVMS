@@ -36,11 +36,13 @@ public class VolunteerDashboard {
     @FXML
     private Button logoutButton;
 
+
     private String currentVolunteerId;
     private Stage currentStage;
 
     public void initialize() {
         setupButtonActions();
+
     }
 
     private void setupButtonActions() {
