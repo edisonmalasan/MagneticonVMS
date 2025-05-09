@@ -33,7 +33,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volId" fx:id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -41,7 +41,7 @@
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volName" fx:id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -49,7 +49,7 @@
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volTeam" fx:id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -100,13 +100,13 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label id="servTitle" layoutX="87.0" layoutY="13.0" prefHeight="27.0" prefWidth="446.0" text="Label" underline="true">
+                        <Label id="servTitle" fx:id="servTitle" layoutX="87.0" layoutY="13.0" prefHeight="27.0" prefWidth="446.0" text="Label" underline="true">
                            <font>
                               <Font name="Montserrat Bold" size="12.0" />
                            </font>
                         </Label>
                         <Separator layoutX="18.0" layoutY="99.0" prefHeight="5.0" prefWidth="688.0" />
-                        <Label id="servStat" layoutX="579.0" layoutY="13.0" prefHeight="27.0" prefWidth="127.0" style="-fx-background-color: #e2e2e2;" text="Label">
+                        <Label id="servStat" fx:id="servStat" layoutX="579.0" layoutY="13.0" prefHeight="27.0" prefWidth="127.0" style="-fx-background-color: #e2e2e2;" text="Label">
                            <padding>
                               <Insets right="5.0" />
                            </padding>
@@ -120,7 +120,7 @@
                            <padding>
                               <Insets left="5.0" />
                            </padding></Label>
-                        <Label id="servDesc" layoutX="87.0" layoutY="47.0" prefHeight="46.0" prefWidth="620.0" text="Label">
+                        <Label id="servDesc" fx:id="servDesc" layoutX="87.0" layoutY="47.0" prefHeight="46.0" prefWidth="620.0" text="Label">
                            <font>
                               <Font name="Century Gothic Italic" size="12.0" />
                            </font>
@@ -134,7 +134,7 @@
       <Separator layoutY="340.0" prefHeight="5.0" prefWidth="1000.0" />
       <Pane layoutY="348.0" prefHeight="53.0" prefWidth="1000.0">
          <children>
-            <Button id="backBttn" layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Back" textFill="WHITE">
+            <Button id="backBttn" fx:id="backBttn" layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Back" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font></Button>

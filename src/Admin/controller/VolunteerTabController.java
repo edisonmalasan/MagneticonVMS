@@ -133,7 +133,7 @@ public class VolunteerTabController {
         volunteer.setSex(sexComboBox.getValue());
         volunteer.setVolstat(statusComboBox.getValue());
         volunteer.setPassword("defaultPassword");
-        volunteer.setRole("Volunteer");
+        volunteer.setRole("Member");
 
         return volunteer;
     }

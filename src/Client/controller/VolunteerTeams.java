@@ -37,6 +37,7 @@ public class VolunteerTeams implements Initializable {
     @FXML private TableColumn<Volunteer, String> colStat;
     @FXML private Button backBttn;
 
+    private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
     private List<Team> volunteerTeams;
@@ -69,27 +70,19 @@ public class VolunteerTeams implements Initializable {
         backBttn.setOnAction(event -> handleBack());
     }
 
-    public void setVolunteerData(String volunteerId) {
-        this.currentVolunteerId = volunteerId;
-        loadVolunteerDetails();
+    public void setCurrentVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
+        displayVolunteerInfo(volunteer);
         loadVolunteerTeams();
+    }
+
+    private void displayVolunteerInfo(Volunteer volunteer) {
+        volId.setText(volunteer.getVolid());
+        volName.setText(volunteer.getFname() + " " + volunteer.getLname());
     }
 
     public void setStage(Stage stage) {
         this.currentStage = stage;
-    }
-
-    private void loadVolunteerDetails() {
-        try {
-            Volunteer volunteer = VolunteerDAO.getVolunteerById(currentVolunteerId);
-            if (volunteer != null) {
-                volId.setText(volunteer.getVolid());
-                volName.setText(volunteer.getFname() + " " + volunteer.getLname());
-            }
-        } catch (SQLException e) {
-            showError("Data Error", "Failed to load volunteer details");
-            e.printStackTrace();
-        }
     }
 
     private void loadVolunteerTeams() {
@@ -124,16 +117,19 @@ public class VolunteerTeams implements Initializable {
 
     private void handleBack() {
         try {
-            Stage currentStage = (Stage) backBttn.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
+            Stage stage = (Stage) backBttn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
-            VolunteerDashboard mainMenuController = loader.getController();
-            mainMenuController.setStage(currentStage);
-            currentStage.setScene(new Scene(root));
 
+            VolunteerDashboard dashboardController = loader.getController();
+            dashboardController.setStage(stage);
+            dashboardController.setCurrentVolunteer(currentVolunteer);
+
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load");
+            showError("Navigation Error", "Failed to load Volunteer Dashboard");
         }
     }
 

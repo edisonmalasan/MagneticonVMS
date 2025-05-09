@@ -57,6 +57,7 @@ public class ScheduleTabController {
     private void setupTableColumns() {
         serviceColumn.setCellValueFactory(new PropertyValueFactory<>("servid"));
         scheduleIdColumn.setCellValueFactory(new PropertyValueFactory<>("schedid"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         startDateColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
     }
@@ -65,6 +66,7 @@ public class ScheduleTabController {
     private void populateForm(ServiceSchedule schedule) {
         scheduleIdField.setText(schedule.getSchedid());
         serviceComboBox.setValue(schedule.getServid());
+        statusComboBox.setValue(schedule.getStatus());
         startDatePicker.setValue(schedule.getStart());
         endDatePicker.setValue(schedule.getEnd());
     }
@@ -72,6 +74,7 @@ public class ScheduleTabController {
     private void clearForm() {
         scheduleIdField.clear();
         serviceComboBox.setValue(null);
+        statusComboBox.setValue(null);
         startDatePicker.setValue(null);
         endDatePicker.setValue(null);
         resetValidationStyles();
@@ -86,6 +89,7 @@ public class ScheduleTabController {
 
         String scheduleID = scheduleIdField.getText().trim();
         String serviceID = serviceComboBox.getValue();
+        String status = statusComboBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 
@@ -95,20 +99,21 @@ public class ScheduleTabController {
         }
 
         if (scheduleTable.getSelectionModel().getSelectedItem() != null) {
-            updateExistingSchedule(scheduleID, serviceID, startDate, endDate);
+            updateExistingSchedule(scheduleID, serviceID, status, startDate, endDate);
         } else {
-            createNewSchedule(scheduleID, serviceID, startDate, endDate);
+            createNewSchedule(scheduleID, serviceID, status, startDate, endDate);
         }
     }
 
-    private void updateExistingSchedule(String scheduleID, String serviceID, LocalDate startDate, LocalDate endDate) {
+    private void updateExistingSchedule(String scheduleID, String serviceID, String status, LocalDate startDate, LocalDate endDate) {
         ServiceSchedule selected = scheduleTable.getSelectionModel().getSelectedItem();
         selected.setServid(serviceID);
         selected.setSchedid(scheduleID);
+        selected.setStatus(status);
         selected.setStart(startDate);
         selected.setEnd(endDate);
 
-        if (serviceScheduleDAO.hasScheduleConflict(serviceID, startDate, endDate, scheduleID)) {
+        if (serviceScheduleDAO.hasScheduleConflict(serviceID, status, startDate, endDate, scheduleID)) {
             showAlert("Conflict Detected", "This schedule conflicts with an existing one");
             return;
         }
@@ -122,16 +127,17 @@ public class ScheduleTabController {
         }
     }
 
-    private void createNewSchedule(String scheduleID, String serviceID, LocalDate startDate, LocalDate endDate) {
+    private void createNewSchedule(String scheduleID, String serviceID, String status, LocalDate startDate, LocalDate endDate) {
         ServiceSchedule newSchedule = new ServiceSchedule();
         String newID = serviceScheduleDAO.generateNewScheduleID();
 
         newSchedule.setServid(serviceID);
         newSchedule.setSchedid(scheduleID.isEmpty() ? newID : scheduleID);
+        newSchedule.setStatus(status);
         newSchedule.setStart(startDate);
         newSchedule.setEnd(endDate);
 
-        if (serviceScheduleDAO.hasScheduleConflict(serviceID, startDate, endDate, null)) {
+        if (serviceScheduleDAO.hasScheduleConflict(serviceID, status, startDate, endDate, null)) {
             showAlert("Conflict Detected", "This schedule conflicts with an existing one");
             return;
         }
@@ -148,11 +154,13 @@ public class ScheduleTabController {
     private void setupValidationListeners() {
         scheduleIdField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         serviceComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        statusComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         startDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         endDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
 
         scheduleIdField.setTooltip(new Tooltip("Schedule ID (leave empty to auto-generate)"));
         serviceComboBox.setTooltip(new Tooltip("Select a service"));
+        statusComboBox.setTooltip(new Tooltip("Select a status"));
         startDatePicker.setTooltip(new Tooltip("Select start date"));
         endDatePicker.setTooltip(new Tooltip("Select end date (must be after start date)"));
     }
@@ -165,6 +173,13 @@ public class ScheduleTabController {
             isValid = false;
         } else {
             serviceComboBox.setStyle("");
+        }
+
+        if (statusComboBox.getValue() == null) {
+            statusComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            isValid = false;
+        } else {
+            statusComboBox.setStyle("");
         }
 
         if (startDatePicker.getValue() == null) {
@@ -186,6 +201,7 @@ public class ScheduleTabController {
 
     private void resetValidationStyles() {
         scheduleIdField.setStyle("");
+        statusComboBox.setStyle("");
         serviceComboBox.setStyle("");
         startDatePicker.setStyle("");
         endDatePicker.setStyle("");
@@ -203,6 +219,12 @@ public class ScheduleTabController {
                 .map(Service::getServid)
                 .distinct()
                 .forEach(serviceComboBox.getItems()::add);
+
+        statusComboBox.getItems().clear();
+        schedules.stream()
+                .map(ServiceSchedule::getStatus)
+                .distinct()
+                .forEach(statusComboBox.getItems()::add);
     }
 
     @FXML

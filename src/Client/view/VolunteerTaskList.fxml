@@ -33,7 +33,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volId" fx:id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -41,7 +41,7 @@
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volName" fx:id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -49,7 +49,7 @@
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volTeam" fx:id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -88,7 +88,7 @@
                            <padding>
                               <Insets left="5.0" />
                            </padding></Label>
-                        <ComboBox id="serviceDD" layoutX="96.0" layoutY="10.0" prefHeight="27.0" prefWidth="644.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #FFF7EF;" />
+                        <ComboBox id="serviceDD" fx:id="serviceDD" layoutX="96.0" layoutY="10.0" prefHeight="27.0" prefWidth="644.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #FFF7EF;" />
                      </children></Pane>
                   <Pane id="task" layoutX="37.0" layoutY="53.0" prefHeight="89.0" prefWidth="723.0" style="-fx-background-color: #f3ebe4;">
                      <children>
@@ -100,8 +100,8 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <ComboBox id="taskStat" layoutX="572.0" layoutY="13.0" prefHeight="27.0" prefWidth="137.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
-                        <Label id="taskDesc" layoutX="135.0" layoutY="13.0" prefHeight="64.0" prefWidth="426.0" text="Label" underline="true">
+                        <ComboBox id="taskStat" fx:id="taskStat" layoutX="572.0" layoutY="13.0" prefHeight="27.0" prefWidth="137.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                        <Label id="taskDesc" fx:id="taskDesc" layoutX="135.0" layoutY="13.0" prefHeight="64.0" prefWidth="426.0" text="Label" underline="true">
                            <font>
                               <Font name="Century Gothic" size="12.0" />
                            </font>
@@ -116,11 +116,11 @@
       <Separator layoutY="340.0" prefHeight="5.0" prefWidth="1000.0" />
       <Pane layoutY="348.0" prefHeight="53.0" prefWidth="1000.0">
          <children>
-            <Button id="saveBttn" layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Save" textFill="WHITE">
+            <Button id="saveBttn" fx:id="saveBttn" layoutX="900.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #007AFF;" text="Save" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font></Button>
-            <Button id="backBttn" layoutX="815.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Back" textFill="WHITE">
+            <Button id="backBttn" fx:id="backBttn" layoutX="815.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #474747;" text="Back" textFill="WHITE">
                <font>
                   <Font name="Century Gothic Bold" size="12.0" />
                </font>
