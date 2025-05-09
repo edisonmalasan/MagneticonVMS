@@ -11,19 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeamDAO {
-    public boolean createTeam(Team team) {
-        String sql = "INSERT INTO TEAM (teamid, tname, tdesc) VALUES (?, ?, ?)";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
+    public static boolean createTeam(Team team){
+        try{
+            String query = "{ CALL addteam(?,?,?) }";
+            CallableStatement statement = DatabaseConnection.getConnection().prepareCall(query);
             statement.setString(1, team.getTeamid());
             statement.setString(2, team.getTname());
             statement.setString(3, team.getTdesc());
-
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error creating team: " + e.getMessage(), e);
+            statement.execute(); //Execute Procedure
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
 

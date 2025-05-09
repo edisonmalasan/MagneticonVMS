@@ -129,7 +129,7 @@ public class TeamTabController {
         }
 
         Team newTeam = new Team(
-                UUID.randomUUID().toString(),
+                teamDAO.generateNewTeamID(),
                 teamName,
                 teamDesc
         );

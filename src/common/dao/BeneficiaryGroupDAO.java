@@ -1,6 +1,7 @@
 package common.dao;
 
 import common.models.BeneficiaryGroup;
+import common.models.Team;
 import common.utils.DatabaseConnection;
 
 import java.sql.*;
@@ -8,20 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BeneficiaryGroupDAO {
-
-    public boolean createBeneficiaryGroup(BeneficiaryGroup group) {
-        String sql = "INSERT INTO BENEFICIARY_GROUPS (benid, bengroup, bendesc) VALUES (?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+    public static boolean createBeneficiaryGroup(BeneficiaryGroup group){
+        try{
+            String query = "{ CALL addbeneficiarygroup(?,?,?) }";
+            CallableStatement statement = DatabaseConnection.getConnection().prepareCall(query);
             statement.setString(1, group.getBenid());
             statement.setString(2, group.getBengroup());
             statement.setString(3, group.getBendesc());
-            int rowsInserted = statement.executeUpdate();
-            return rowsInserted > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            statement.execute(); //Execute Procedure
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
+
 
     public boolean updateBeneficiaryGroup(BeneficiaryGroup group) {
         String sql = "UPDATE BENEFICIARY_GROUPS SET bengroup = ?, bendesc = ? WHERE benid = ?";
