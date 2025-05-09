@@ -40,94 +40,47 @@ public class ServiceDAO {
     }
 
     public static List<String> getServicesForVolunteer(String volunteerId) throws SQLException {
-        if (volunteerId == null || volunteerId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
-        }
-
         List<String> services = new ArrayList<>();
-        String sql = "SELECT DISTINCT s.servname " +
-                "FROM Service s " +
-                "JOIN VolunteerService vs ON s.servid = vs.servid " +
-                "WHERE vs.volid = ? " +
-                "ORDER BY s.servname";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, volunteerId);
-
-            try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    services.add(rs.getString("servname"));
-                }
-            }
-        }
-        return services;
-    }
-    public static Service getServiceDetails(String serviceName, String volunteerId) throws SQLException {
-        if (serviceName == null || serviceName.trim().isEmpty() ||
-                volunteerId == null || volunteerId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Parameters cannot be null or empty");
-        }
-
-        String sql = "SELECT s.servid, s.sname, s.sdesc, s.sstat, s.teamid, " +
-                "b.bengroupname, b.bengroupdesc " +
-                "FROM Service s " +
-                "LEFT JOIN BeneficiaryGroup b ON s.bengroupid = b.bengroupid " +
-                "JOIN VolunteerService vs ON s.servid = vs.servid " +
-                "WHERE s.sname = ? AND vs.volid = ?";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, serviceName);
-            statement.setString(2, volunteerId);
-
-            try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    Service service = new Service();
-                    service.setServid(rs.getString("servid"));
-                    service.setSname(rs.getString("sname"));
-                    service.setSdesc(rs.getString("sdesc"));
-                    service.setSstat(rs.getString("sstat"));
-                    service.setTeamid(rs.getString("teamid"));
-
-                    return service;
-                }
-            }
-        }
-        return null;
-    }
-
-    public List<Service> getAllServicesForVolunteer(String volunteerId) throws SQLException {
-        if (volunteerId == null || volunteerId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
-        }
-
-        List<Service> services = new ArrayList<>();
-        String sql = "SELECT s.servid, s.sname, s.sdesc, s.sstat, s.teamid " +
+        String sql = "SELECT s.sname " +
                 "FROM Service s " +
                 "JOIN VolunteerService vs ON s.servid = vs.servid " +
                 "WHERE vs.volid = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            statement.setString(1, volunteerId);
-
-            try (ResultSet rs = statement.executeQuery()) {
+            stmt.setString(1, volunteerId);
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Service service = new Service();
-                    service.setServid(rs.getString("servid"));
-                    service.setSname(rs.getString("sname"));
-                    service.setSdesc(rs.getString("sdesc"));
-                    service.setSstat(rs.getString("sstat"));
-                    service.setTeamid(rs.getString("teamid"));
-                    services.add(service);
+                    services.add(rs.getString("sname"));
                 }
             }
         }
         return services;
+    }
+
+    public static Service getServiceDetails(String serviceName, String volunteerId) throws SQLException {
+        Service service = null;
+        String sql = "SELECT s.servid, s.sdesc " +
+                "FROM Service s " +
+                "JOIN VolunteerService vs ON s.servid = vs.servid " +
+                "WHERE s.sname = ? AND vs.volid = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, serviceName);
+            stmt.setString(2, volunteerId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    service = new Service();
+                    service.setServid(rs.getString("servid"));
+                    service.setSdesc(rs.getString("sdesc"));
+                }
+            }
+        }
+        return service;
     }
 
     public boolean updateService(Service service) {
