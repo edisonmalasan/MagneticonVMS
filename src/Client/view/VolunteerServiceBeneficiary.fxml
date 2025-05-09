@@ -33,7 +33,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volId" fx:id="volId" layoutX="11.0" layoutY="45.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -41,7 +41,7 @@
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volName" fx:id="volName" layoutX="11.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -49,7 +49,7 @@
                         <Insets left="15.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
+                  <Label id="volTeam" fx:id="volTeam" layoutX="11.0" layoutY="149.0" prefHeight="25.0" prefWidth="178.0" style="-fx-background-color: #F0F0F0; -fx-background-radius: 10;" text="Label">
                      <font>
                         <Font name="Century Gothic" size="12.0" />
                      </font>
@@ -89,7 +89,7 @@
                            <padding>
                               <Insets left="5.0" />
                            </padding></Label>
-                        <ComboBox id="choiceDD" layoutX="96.0" layoutY="10.0" prefHeight="27.0" prefWidth="644.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
+                        <ComboBox id="choiceDD" fx:id="choiceDD" layoutX="96.0" layoutY="10.0" prefHeight="27.0" prefWidth="644.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
                      </children></Pane>
                   <Pane id="service" layoutX="37.0" layoutY="53.0" prefHeight="170.0" prefWidth="723.0" style="-fx-background-color: #f3ebe4;">
                      <children>
@@ -101,7 +101,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label id="servTitle" layoutX="87.0" layoutY="13.0" prefHeight="27.0" prefWidth="620.0" text="Label" underline="true">
+                        <Label id="servTitle" fx:id="servTitle" layoutX="87.0" layoutY="13.0" prefHeight="27.0" prefWidth="620.0" text="Label" underline="true">
                            <font>
                               <Font name="Montserrat Bold" size="12.0" />
                            </font>
@@ -120,12 +120,12 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label id="benGroupTitle" layoutX="171.0" layoutY="67.0" prefHeight="27.0" prefWidth="536.0" text="Label" underline="true">
+                        <Label id="benGroupTitle" fx:id="benGroupTitle" layoutX="171.0" layoutY="67.0" prefHeight="27.0" prefWidth="536.0" text="Label" underline="true">
                            <font>
                               <Font name="Montserrat Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label id="benGroupDesc" layoutX="85.0" layoutY="92.0" prefHeight="53.0" prefWidth="620.0" text="Label">
+                        <Label id="benGroupDesc" fx:id="benGroupDesc" layoutX="85.0" layoutY="92.0" prefHeight="53.0" prefWidth="620.0" text="Label">
                            <font>
                               <Font name="Century Gothic Italic" size="12.0" />
                            </font>

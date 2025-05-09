@@ -101,7 +101,7 @@
                            </padding>
                         </Label>
                         <ComboBox id="taskStat" fx:id="taskStat" layoutX="572.0" layoutY="13.0" prefHeight="27.0" prefWidth="137.0" promptText="..." style="-fx-background-color: #FFFFFF; -fx-border-color: #474747;" />
-                        <Label id="taskDesc" layoutX="135.0" layoutY="13.0" prefHeight="64.0" prefWidth="426.0" text="Label" underline="true">
+                        <Label id="taskDesc" fx:id="taskDesc" layoutX="135.0" layoutY="13.0" prefHeight="64.0" prefWidth="426.0" text="Label" underline="true">
                            <font>
                               <Font name="Century Gothic" size="12.0" />
                            </font>
