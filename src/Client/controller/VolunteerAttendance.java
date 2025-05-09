@@ -2,6 +2,7 @@ package Client.controller;
 
 import common.dao.AttendanceDAO;
 import common.models.Attendance;
+import common.models.Volunteer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -39,6 +40,7 @@ public class VolunteerAttendance {
     @FXML
     private Button backBttn;
 
+    private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private String currentVolunteerName;
 
@@ -55,17 +57,15 @@ public class VolunteerAttendance {
         colStat.setCellValueFactory(new PropertyValueFactory<>("attendstat"));
     }
 
-    public void setVolunteerData(String volunteerId, String volunteerName) {
-        this.currentVolunteerId = volunteerId;
-        this.currentVolunteerName = volunteerName;
-
-        updateVolunteerInfo();
+    public void setCurrentVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
+        displayVolunteerInfo(volunteer);
         loadAttendanceRecords();
     }
 
-    private void updateVolunteerInfo() {
-        volId.setText(currentVolunteerId);
-        volName.setText(currentVolunteerName);
+    private void displayVolunteerInfo(Volunteer volunteer) {
+        volId.setText(volunteer.getVolid());
+        volName.setText(volunteer.getFname() + " " + volunteer.getLname());
     }
 
     private void loadAttendanceRecords() {
@@ -81,16 +81,19 @@ public class VolunteerAttendance {
 
     private void handleBack() {
         try {
-            Stage currentStage = (Stage) backBttn.getScene().getWindow();
+            Stage stage = (Stage) backBttn.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
-            VolunteerDashboard mainMenuController = loader.getController();
-            mainMenuController.setStage(currentStage);
-            currentStage.setScene(new Scene(root));
 
+            VolunteerDashboard dashboardController = loader.getController();
+            dashboardController.setStage(stage);
+            dashboardController.setCurrentVolunteer(currentVolunteer);
+
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load");
+            showErrorAlert("Navigation Error", "Failed to load Volunteer Dashboard");
         }
     }
 

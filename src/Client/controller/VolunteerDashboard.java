@@ -46,11 +46,6 @@ public class VolunteerDashboard {
         setupButtonActions();
     }
 
-    public void setVolunteer(Volunteer volunteer) {
-        this.currentVolunteer = volunteer;
-        displayVolunteerInfo(volunteer);
-    }
-
     public void setStage(Stage stage) {
         this.currentStage = stage;
     }
@@ -68,8 +63,8 @@ public class VolunteerDashboard {
 
     private void setupButtonActions() {
         myTasksBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerTaskList.fxml", VolunteerTaskList.class));
-        servicesBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerServices.fxml", VolunteerServices.class));
         myTeamBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerTeams.fxml", VolunteerTeams.class));
+        servicesBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerServices.fxml", VolunteerServices.class));
         beneficiariesBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerServiceBeneficiary.fxml", VolunteerServiceBeneficiary.class));
         attendanceBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerAttendance.fxml", VolunteerAttendance.class));
         logoutButton.setOnAction(e -> navigateTo("/App/view/Login.fxml", LoginController.class));
@@ -85,6 +80,28 @@ public class VolunteerDashboard {
 
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
+
+            T controller = loader.getController();
+
+            // Inject currentVolunteer if needed
+            if (controller instanceof VolunteerServiceBeneficiary) {
+                ((VolunteerServiceBeneficiary) controller).setCurrentVolunteer(currentVolunteer);
+                ((VolunteerServiceBeneficiary) controller).setStage(currentStage);
+            } else if (controller instanceof VolunteerServices) {
+                ((VolunteerServices) controller).setCurrentVolunteer(currentVolunteer);
+                ((VolunteerServices) controller).setStage(currentStage);
+            }else if (controller instanceof VolunteerAttendance) {
+                ((VolunteerAttendance) controller).setCurrentVolunteer(currentVolunteer);
+                ((VolunteerAttendance) controller).setStage(currentStage);
+            }else if (controller instanceof VolunteerTaskList) {
+                ((VolunteerTaskList) controller).setCurrentVolunteer(currentVolunteer);
+                ((VolunteerTaskList) controller).setStage(currentStage);
+            }else if (controller instanceof VolunteerTeams) {
+                ((VolunteerTeams) controller).setCurrentVolunteer(currentVolunteer);
+                ((VolunteerTeams) controller).setStage(currentStage);
+            }
+
+
             Stage stage = currentStage;
             if (stage == null) {
                 stage = (Stage) ((Node) myTasksBttn).getScene().getWindow();
@@ -98,6 +115,7 @@ public class VolunteerDashboard {
             e.printStackTrace();
         }
     }
+
 
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
