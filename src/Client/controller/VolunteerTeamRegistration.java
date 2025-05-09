@@ -132,7 +132,7 @@ public class VolunteerTeamRegistration implements Initializable {
     private void returnToDashboard() {
         try {
             Stage currentStage = (Stage) cancelBttn.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
             VolunteerDashboard mainMenuController = loader.getController();
             mainMenuController.setStage(currentStage);

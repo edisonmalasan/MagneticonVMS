@@ -43,7 +43,7 @@ public class VolunteerServiceBeneficiary {
     @FXML
     private Label benGroupDesc;
     @FXML
-    private ComboBox<String> serviceComboBox;
+    private ComboBox<String> choiceDD;
 
 
     @FXML
@@ -58,7 +58,7 @@ public class VolunteerServiceBeneficiary {
     }
     private void setupEventHandlers() {
         backBttn.setOnAction(event -> handleBack());
-        serviceComboBox.getSelectionModel().selectedItemProperty().addListener(
+        choiceDD.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> loadServiceDetails(newValue));
     }
 
@@ -85,9 +85,9 @@ public class VolunteerServiceBeneficiary {
     private void loadServiceOptions() {
         try {
             List<String> services = ServiceDAO.getServicesForVolunteer(currentVolunteerId);
-            serviceComboBox.setItems(FXCollections.observableArrayList(services));
+            choiceDD.setItems(FXCollections.observableArrayList(services));
             if (!services.isEmpty()) {
-                serviceComboBox.getSelectionModel().selectFirst();
+                choiceDD.getSelectionModel().selectFirst();
             }
         } catch (SQLException e) {
             showError("Data Error", "Failed to load service options");
@@ -114,7 +114,7 @@ public class VolunteerServiceBeneficiary {
     private void handleBack() {
         try {
             Stage currentStage = (Stage) backBttn.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
             VolunteerDashboard mainMenuController = loader.getController();
             mainMenuController.setStage(currentStage);
