@@ -3,6 +3,7 @@ package common.dao;
 import common.models.BeneficiaryGroup;
 import common.models.Team;
 import common.utils.DatabaseConnection;
+import common.utils.LogManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,9 +18,11 @@ public class BeneficiaryGroupDAO {
             statement.setString(2, group.getBengroup());
             statement.setString(3, group.getBendesc());
             statement.execute(); //Execute Procedure
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Created new beneficiary group: " + group);
+
             return true;
         } catch (SQLException e){
-            e.printStackTrace();
             return false;
         }
     }
@@ -34,6 +37,8 @@ public class BeneficiaryGroupDAO {
             statement.setString(1, group.getBengroup());
             statement.setString(2, group.getBendesc());
             statement.setString(3, group.getBenid());
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Updated beneficiary group: " + group);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
