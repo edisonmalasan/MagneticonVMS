@@ -36,4 +36,15 @@ public class ServiceSchedule {
     public void setStart(LocalDate start) { this.start = start; }
     public LocalDate getEnd() { return end; }
     public void setEnd(LocalDate end) { this.end = end; }
+
+    @Override
+    public String toString() {
+        return "ServiceSchedule{" +
+                "servid='" + servid + '\'' +
+                ", schedid='" + schedid + '\'' +
+                ", status='" + status + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                '}';
+    }
 }

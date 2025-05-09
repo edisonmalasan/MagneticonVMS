@@ -15,4 +15,12 @@ public class Member {
     public void setVolid(String volid) { this.volid = volid; }
     public String getAvailability() { return availability; }
     public void setAvailability(String availability) { this.availability = availability; }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "volid='" + volid + '\'' +
+                ", availability='" + availability + '\'' +
+                '}';
+    }
 }

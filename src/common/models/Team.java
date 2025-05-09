@@ -39,6 +39,15 @@ public class Team {
         this.members = members != null ? members : new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        return "Team{" +
+                "teamid='" + teamid + '\'' +
+                ", tname='" + tname + '\'' +
+                ", tdesc='" + tdesc + '\'' +
+                ", members=" + members +
+                '}';
+    }
 
     // helper method for displaying hte members
     public String getMemberNames() {
