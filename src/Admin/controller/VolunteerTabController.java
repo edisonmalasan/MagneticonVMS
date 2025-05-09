@@ -122,7 +122,7 @@ public class VolunteerTabController {
     private Volunteer createVolunteerFromForm() {
         Volunteer volunteer = new Volunteer();
         volunteer.setVolid(volunteerField.getText().isEmpty() ?
-                UUID.randomUUID().toString() : volunteerField.getText());
+                VolunteerDAO.generateNewVolunteerID() : volunteerField.getText());
         volunteer.setFname(firstNameField.getText());
         volunteer.setLname(lastNameField.getText());
         volunteer.setAddress(addressField.getText());
@@ -132,7 +132,7 @@ public class VolunteerTabController {
         volunteer.setSex(sexComboBox.getValue());
         volunteer.setVolstat(statusComboBox.getValue());
         volunteer.setPassword("defaultPassword");
-        volunteer.setRole("Volunteer");
+        volunteer.setRole("Member");
 
         return volunteer;
     }

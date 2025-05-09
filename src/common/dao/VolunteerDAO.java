@@ -113,8 +113,13 @@ public class VolunteerDAO {
                 volunteer.setVolid(rs.getString("volid"));
                 volunteer.setFname(rs.getString("fname"));
                 volunteer.setLname(rs.getString("lname"));
+                volunteer.setAddress(rs.getString("address"));
+                volunteer.setPhone(rs.getString("phone"));
                 volunteer.setEmail(rs.getString("email"));
                 volunteer.setPassword(rs.getString("password"));
+                volunteer.setBirthday(rs.getDate("bday").toLocalDate());
+                volunteer.setSex(rs.getString("sex"));
+                volunteer.setVolstat(rs.getString("volstat"));
                 volunteer.setRole(rs.getString("role"));
 
                 volunteers.add(volunteer);
@@ -171,4 +176,24 @@ public class VolunteerDAO {
         }
         return false;
     }
+
+    public static String generateNewVolunteerID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM SERVICE";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+
+                //for up to 999 entries
+                return String.format("V%03d", maxId + 1);
+            }
+            return "V01"; //default if no records exist
+        } catch (SQLException e) {
+            throw new RuntimeException("Error generating service ID", e);
+        }
+    }
+
 }
