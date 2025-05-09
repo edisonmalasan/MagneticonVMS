@@ -26,6 +26,24 @@ public class BeneficiaryDAO {
         }
     }
 
+    public static boolean hasBeneficiaryGroups(String servid) {
+        String sql = "SELECT COUNT(*) FROM beneficiary WHERE servid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, servid);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking for beneficiary groups", e);
+        }
+        return false;
+    }
+
     public boolean removeBeneficiaryFromService(String servid, String benid) {
         String sql = "DELETE FROM BENEFICIARY WHERE servid = ? AND benid = ?";
 

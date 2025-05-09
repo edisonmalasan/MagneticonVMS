@@ -27,6 +27,37 @@ public class BeneficiaryGroupDAO {
         }
     }
 
+    /**
+     * Gets beneficiary group details for a specific service and volunteer
+     */
+    public static BeneficiaryGroup getBeneficiaryGroupForService(String servid, String volid) {
+        String sql = "SELECT bg.* FROM beneficiary_groups bg " +
+                "JOIN beneficiary b ON bg.benid = b.benid " +
+                "JOIN service s ON b.servid = s.servid " +
+                "JOIN task_assignment vs ON s.servid = vs.servid " +
+                "WHERE s.servid = ? AND vs.volid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, servid);
+            statement.setString(2, volid);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    BeneficiaryGroup group = new BeneficiaryGroup();
+                    group.setBenid(rs.getString("benid"));
+                    group.setBengroup(rs.getString("bengroup"));
+                    group.setBendesc(rs.getString("bendesc"));
+                    return group;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving beneficiary group for service", e);
+        }
+        return null;
+    }
+
 
     public boolean updateBeneficiaryGroup(BeneficiaryGroup group) {
         String sql = "UPDATE BENEFICIARY_GROUPS SET bengroup = ?, bendesc = ? WHERE benid = ?";
