@@ -42,6 +42,8 @@ public class VolunteerAttendance {
     private String currentVolunteerId;
     private String currentVolunteerName;
 
+    AttendanceDAO attendanceDAO = new AttendanceDAO();
+
     public void initialize() {
         setupTableColumns();
         backBttn.setOnAction(event -> handleBack());
@@ -70,7 +72,7 @@ public class VolunteerAttendance {
 
     private void loadAttendanceRecords() {
         try {
-            List<Attendance> records = AttendanceDAO.getAttendanceForVolunteer(currentVolunteerId);
+            List<Attendance> records = attendanceDAO.getAttendanceForVolunteer(currentVolunteerId);
             ObservableList<Attendance> observableRecords = FXCollections.observableArrayList(records);
             table.setItems(observableRecords);
         } catch (Exception e) {
