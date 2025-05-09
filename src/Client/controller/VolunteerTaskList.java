@@ -29,10 +29,11 @@ public class VolunteerTaskList implements Initializable {
     @FXML private Label volTeam;
     @FXML private ComboBox<String> serviceDD;
     @FXML private ComboBox<String> taskStat;
-    @FXML private Label taskDesc;
+    @FXML private Label servid;
     @FXML private Button saveBttn;
     @FXML private Button backBttn;
 
+    String VolunteerId;
     private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
@@ -60,6 +61,7 @@ public class VolunteerTaskList implements Initializable {
     }
     public void setCurrentVolunteer(Volunteer volunteer) {
         this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid();
         displayVolunteerInfo(volunteer);
         loadServiceOptions();
         loadTasksForService();
@@ -76,7 +78,6 @@ public class VolunteerTaskList implements Initializable {
 
     private void loadServiceOptions() {
         try {
-            // Fetch the list of services assigned to the volunteer
             List<String> services = ServiceDAO.getServicesForVolunteer(currentVolunteerId);
             if (services == null || services.isEmpty()) {
                 showError("No Services", "No services found for this volunteer.");
@@ -112,7 +113,7 @@ public class VolunteerTaskList implements Initializable {
                 displayTask(currentTasks.get(0));
             } else {
                 // If no tasks are found, show an appropriate message and disable task status ComboBox
-                taskDesc.setText("No tasks assigned for this service");
+                servid.setText("No servid assigned for this service");
                 taskStat.setValue(null);
                 taskStat.setDisable(true);
             }
@@ -124,7 +125,7 @@ public class VolunteerTaskList implements Initializable {
 
     private void displayTask(TaskAssignment task) {
         // Display the task description and set the task status
-        taskDesc.setText(task.getTadesc());
+        servid.setText(task.getServid());
         taskStat.setValue(task.getTaskstat());
         taskStat.setDisable(false);  // Enable task status ComboBox
     }

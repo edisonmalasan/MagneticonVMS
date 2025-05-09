@@ -93,11 +93,10 @@ public class TaskAssignmentDAO {
 
     public static List<TaskAssignment> getTasksForVolunteerService(String volunteerId, String serviceName) throws SQLException {
         List<TaskAssignment> tasks = new ArrayList<>();
-        String sql = "SELECT t.taskid, t.description, t.status " +
-                "FROM Task t " +
-                "JOIN VolunteerService vs ON t.servid = vs.servid " +
-                "JOIN Service s ON vs.servid = s.servid " +
-                "WHERE vs.volid = ? AND s.sname = ?";
+        String sql = "SELECT ta.servid, ta.taskstat " +
+                "FROM task_assignment ta " +
+                "JOIN service s ON ta.servid = s.servid " +
+                "WHERE ta.volid = ? AND s.sname = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -108,9 +107,8 @@ public class TaskAssignmentDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     TaskAssignment task = new TaskAssignment();
-                    task.setServid(rs.getString("taskid"));
-                    task.setTadesc(rs.getString("description"));
-                    task.setTaskstat(rs.getString("status"));
+                    task.setServid(rs.getString("servid"));
+                    task.setTaskstat(rs.getString("taskstat"));
                     tasks.add(task);
                 }
             }

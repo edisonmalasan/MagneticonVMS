@@ -43,8 +43,8 @@ public class ServiceDAO {
     public static List<String> getServicesForVolunteer(String volunteerId) throws SQLException {
         List<String> services = new ArrayList<>();
         String sql = "SELECT s.sname " +
-                "FROM Service s " +
-                "JOIN VolunteerService vs ON s.servid = vs.servid " +
+                "FROM service s " +
+                "JOIN task_assignment vs ON s.servid = vs.servid " +
                 "WHERE vs.volid = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -63,8 +63,8 @@ public class ServiceDAO {
     public static Service getServiceDetails(String serviceName, String volunteerId) throws SQLException {
         Service service = null;
         String sql = "SELECT s.servid, s.sdesc " +
-                "FROM Service s " +
-                "JOIN VolunteerService vs ON s.servid = vs.servid " +
+                "FROM service s " +
+                "JOIN task_assignment vs ON s.servid = vs.servid " +
                 "WHERE s.sname = ? AND vs.volid = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
