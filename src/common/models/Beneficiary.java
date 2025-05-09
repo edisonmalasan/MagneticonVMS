@@ -15,4 +15,12 @@ public class Beneficiary {
     public void setServid(String servid) { this.servid = servid; }
     public String getBenid() { return benid; }
     public void setBenid(String benid) { this.benid = benid; }
+
+    @Override
+    public String toString() {
+        return "Beneficiary{" +
+                "servid='" + servid + '\'' +
+                ", benid='" + benid + '\'' +
+                '}';
+    }
 }

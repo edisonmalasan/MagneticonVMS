@@ -4,6 +4,7 @@ import common.models.Team;
 
 import common.models.Volunteer;
 import common.utils.DatabaseConnection;
+import common.utils.LogManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,19 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeamDAO {
-    public boolean createTeam(Team team) {
-        String sql = "INSERT INTO TEAM (teamid, tname, tdesc) VALUES (?, ?, ?)";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
+    public static boolean createTeam(Team team){
+        try{
+            String query = "{ CALL addteam(?,?,?) }";
+            CallableStatement statement = DatabaseConnection.getConnection().prepareCall(query);
             statement.setString(1, team.getTeamid());
             statement.setString(2, team.getTname());
             statement.setString(3, team.getTdesc());
+            statement.execute(); //Execute Procedure
 
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error creating team: " + e.getMessage(), e);
+            LogManager.insertToLogs("resources/adminlogs.txt", "Created new team: " + team);
+
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -160,6 +163,8 @@ public class TeamDAO {
             statement.setString(1, team.getTname());
             statement.setString(2, team.getTdesc());
             statement.setString(3, team.getTeamid());
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Updated team: " + team);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

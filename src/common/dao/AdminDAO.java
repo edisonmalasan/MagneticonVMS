@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDAO {
-    public boolean createAdmin(Admin admin) {
+    public static boolean createAdmin(Admin admin) {
         String sql = "INSERT INTO Admin (volid, certification, skills) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -28,7 +28,7 @@ public class AdminDAO {
         }
     }
 
-    public Admin getAdminByVolunteerId(String volid) {
+    public static Admin getAdminByVolunteerId(String volid) {
         String sql = "SELECT * FROM Admin WHERE volid = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -52,7 +52,7 @@ public class AdminDAO {
         return null;
     }
 
-    public boolean updateAdmin(Admin admin) {
+    public static boolean updateAdmin(Admin admin) {
         String sql = "UPDATE ADMIN SET certification = ?, skills = ? WHERE volid = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -69,7 +69,7 @@ public class AdminDAO {
         }
     }
 
-    public List<Admin> getAllAdmins() {
+    public static List<Admin> getAllAdmins() {
         List<Admin> admins = new ArrayList<>();
         String sql = "SELECT * FROM Admin";
 

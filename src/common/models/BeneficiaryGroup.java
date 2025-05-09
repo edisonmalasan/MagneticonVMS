@@ -19,4 +19,13 @@ public class BeneficiaryGroup {
     public void setBengroup(String bengroup) { this.bengroup = bengroup; }
     public String getBendesc() { return bendesc; }
     public void setBendesc(String bendesc) { this.bendesc = bendesc; }
+
+    @Override
+    public String toString() {
+        return "BeneficiaryGroup{" +
+                "benid='" + benid + '\'' +
+                ", bengroup='" + bengroup + '\'' +
+                ", bendesc='" + bendesc + '\'' +
+                '}';
+    }
 }
