@@ -4,6 +4,8 @@ import common.models.Attendance;
 import common.utils.DatabaseConnection;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,38 +116,28 @@ public class AttendanceDAO {
         }
     }
 
-    public boolean deleteAttendance(String servid, String volid, String attendid) throws SQLException {
-        if (servid == null || volid == null || attendid == null) {
-            throw new IllegalArgumentException("Parameters cannot be null");
-        }
-
-        String sql = "DELETE FROM Attendance WHERE servid = ? AND volid = ? AND attendid = ?";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, servid);
-            statement.setString(2, volid);
-            statement.setString(3, attendid);
-
-            return statement.executeUpdate() > 0;
-        }
-    }
-
     private static Attendance mapResultSetToAttendance(ResultSet rs) throws SQLException {
         Attendance attendance = new Attendance();
+        String dateFormat = "yyyy-MM-dd";
+
         attendance.setServid(rs.getString("servid"));
         attendance.setVolid(rs.getString("volid"));
         attendance.setAttendid(rs.getString("attendid"));
 
-        Date date = rs.getDate("date");
-        attendance.setDate(date != null ? date.toLocalDate() : null);
+        String date = rs.getString("date");
+        if (date.equals("0000-00-00")) {
+            attendance.setDate(null);
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+            LocalDate localDate = LocalDate.parse(date, formatter);
+            attendance.setDate(localDate);
+        }
 
-        Time timein = rs.getTime("timein");
-        attendance.setTimein(timein != null ? timein.toLocalTime() : null);
+        Time timeIn = rs.getTime("timein");
+        attendance.setTimein(timeIn != null ? timeIn.toLocalTime() : null);
 
-        Time timeout = rs.getTime("timeout");
-        attendance.setTimeout(timeout != null ? timeout.toLocalTime() : null);
+        Time timeOut = rs.getTime("timeout");
+        attendance.setTimeout(timeOut != null ? timeOut.toLocalTime() : null);
 
         attendance.setAttendstat(rs.getString("attendstat"));
         return attendance;
