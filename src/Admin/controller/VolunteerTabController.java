@@ -121,8 +121,9 @@ public class VolunteerTabController {
 
     private Volunteer createVolunteerFromForm() {
         Volunteer volunteer = new Volunteer();
+        String newID = volunteerDAO .generateNewVolunteerID();
         volunteer.setVolid(volunteerField.getText().isEmpty() ?
-                VolunteerDAO.generateNewVolunteerID() : volunteerField.getText());
+               newID : volunteerField.getText());
         volunteer.setFname(firstNameField.getText());
         volunteer.setLname(lastNameField.getText());
         volunteer.setAddress(addressField.getText());

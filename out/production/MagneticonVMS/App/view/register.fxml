@@ -25,7 +25,7 @@
             </Pane>
             <Pane layoutY="41.0" prefHeight="359.0" prefWidth="600.0">
                <children>
-                  <Label alignment="CENTER" layoutX="184.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="233.0" text="Registration Form" textFill="#d3d3d3">
+                  <Label alignment="CENTER" layoutX="184.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="233.0" text="Registration Form Client" textFill="#d3d3d3">
                      <font>
                         <Font name="Segoe UI Black" size="16.0" />
                      </font>
@@ -36,9 +36,8 @@
                   <TextField fx:id="phoneNumberTextField" layoutX="46.0" layoutY="195.0" prefWidth="215.0" promptText="Phone Number" />
                   <PasswordField fx:id="passwordField" layoutX="321.0" layoutY="115.0" prefHeight="25.0" prefWidth="215.0" promptText="Password" />
                   <DatePicker fx:id="birthdateDatePicker" layoutX="321.0" layoutY="155.0" prefHeight="25.0" prefWidth="215.0" promptText="Birthdate" />
-                  <ComboBox fx:id="sexComboBox" layoutX="321.0" layoutY="195.0" prefHeight="25.0" prefWidth="94.0" promptText="Gender" />
+                  <ComboBox fx:id="sexComboBox" layoutX="321.0" layoutY="195.0" prefHeight="25.0" prefWidth="215.0" promptText="Gender" />
                   <TextField fx:id="emailTextField" layoutX="321.0" layoutY="77.0" prefWidth="215.0" promptText="Email" />
-                  <ComboBox fx:id="roleComboBox" layoutX="442.0" layoutY="195.0" prefHeight="25.0" prefWidth="94.0" promptText="Role" />
                   <Button fx:id="registerButton" layoutX="229.0" layoutY="265.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="143.0" style="-fx-background-color: #3D90D7;" text="Register" textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI Black" size="15.0" />
