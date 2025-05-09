@@ -37,21 +37,22 @@ public class VolunteerTaskList implements Initializable {
     private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
-    private List<Task> currentTasks;
-    private Task currentTask;
+    private TaskAssignment currentTask;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupComboBoxes();
         setupButtonActions();
         serviceDD.setItems(FXCollections.observableArrayList());
+        saveBttn.setDisable(true);
     }
 
     private void setupComboBoxes() {
-        // Task status options
+
         taskStat.setItems(FXCollections.observableArrayList(
                 "Not Started", "In Progress", "Completed", "Blocked"
         ));
+        taskStat.setDisable(true);
     }
 
     private void setupButtonActions() {
@@ -105,17 +106,14 @@ public class VolunteerTaskList implements Initializable {
         }
 
         try {
-            // Fetch the list of tasks assigned to the volunteer for the selected service
-            List<TaskAssignment> currentTasks = TaskAssignmentDAO.getTasksForVolunteerService(currentVolunteerId, selectedService);
+            List<TaskAssignment> tasks = TaskAssignmentDAO.getTasksForVolunteerService(currentVolunteerId, selectedService);
 
-            if (currentTasks != null && !currentTasks.isEmpty()) {
-                // If tasks are available, display the first task's details
-                displayTask(currentTasks.get(0));
+            if (tasks != null && !tasks.isEmpty()) {
+                currentTask = tasks.get(0); // Store the current task
+                displayTask(currentTask);
+                saveBttn.setDisable(false);
             } else {
-                // If no tasks are found, show an appropriate message and disable task status ComboBox
-                servid.setText("No servid assigned for this service");
-                taskStat.setValue(null);
-                taskStat.setDisable(true);
+                showInfo("No Tasks", "No tasks found for this service.");
             }
         } catch (SQLException e) {
             showError("Data Error", "Failed to load tasks");
@@ -130,8 +128,6 @@ public class VolunteerTaskList implements Initializable {
         taskStat.setDisable(false);  // Enable task status ComboBox
     }
 
-
-
     private void handleSave() {
         String selectedTaskStatus = taskStat.getSelectionModel().getSelectedItem();
         if (selectedTaskStatus == null || selectedTaskStatus.isEmpty()) {
@@ -140,19 +136,20 @@ public class VolunteerTaskList implements Initializable {
         }
 
         try {
-            TaskAssignment taskAssignment = (TaskAssignment) currentTask.get();
-            TaskAssignmentDAO.updateTaskStatus(taskAssignment.getServid(), taskAssignment.getVolid(), selectedTaskStatus);
+            TaskAssignmentDAO.updateTaskStatus(
+                    currentTask.getServid(),
+                    currentTask.getVolid(),
+                    selectedTaskStatus
+            );
+
+            currentTask.setTaskstat(selectedTaskStatus);
             showInfo("Success", "Task status updated successfully.");
+
         } catch (SQLException e) {
-            showError("Update Error", "Failed to update task status.");
+            showError("Update Error", "Failed to update task status: " + e.getMessage());
             e.printStackTrace();
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
-
 
     private void handleBack() {
         try {

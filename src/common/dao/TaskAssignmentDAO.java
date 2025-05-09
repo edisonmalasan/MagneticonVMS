@@ -116,17 +116,18 @@ public class TaskAssignmentDAO {
         return tasks;
     }
 
-    // Update the task status (optional, if needed)
-    public static void updateTaskStatus(String taskId, String volunteerId, String status) throws SQLException {
-        String sql = "UPDATE TaskAssignment SET taskstat = ? WHERE taskid = ? AND volid = ?";
+    // In TaskAssignmentDAO
+    public static int updateTaskStatus(String servid, String volid, String status) throws SQLException {
+        String sql = "UPDATE task_assignment SET taskstat = ? WHERE servid = ? AND volid = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, status);
-            stmt.setString(2, taskId);
-            stmt.setString(3, volunteerId);
-            stmt.executeUpdate();
+            stmt.setString(2, servid);
+            stmt.setString(3, volid);
+
+            return stmt.executeUpdate(); // Returns number of rows affected
         }
     }
 
