@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class VolunteerDashboard {
     private Volunteer currentVolunteer;
@@ -43,19 +44,24 @@ public class VolunteerDashboard {
     }
 
     private void setupButtonActions() {
-        myTasksBttn.setOnAction(e -> navigateTo("Client/view/VolunteerTaskList.fxml", VolunteerTaskList.class));
-        servicesBttn.setOnAction(e -> navigateTo("Client/view/VolunteerServices.fxml", VolunteerServices.class));
-        myTeamBttn.setOnAction(e -> navigateTo("Client/view/VolunteerTeams.fxml", VolunteerTeams.class));
-        beneficiariesBttn.setOnAction(e -> navigateTo("Client/view/VolunteerServiceBeneficiary.fxml", VolunteerServiceBeneficiary.class));
-        attendanceBttn.setOnAction(e -> navigateTo("Client/view/VolunteerAttendance.fxml", VolunteerAttendance.class));
-        logoutButton.setOnAction(e -> navigateTo("App/view/Login.fxml", LoginController.class));
+        myTasksBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerTaskList.fxml", VolunteerTaskList.class));
+        servicesBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerServices.fxml", VolunteerServices.class));
+        myTeamBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerTeams.fxml", VolunteerTeams.class));
+        beneficiariesBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerServiceBeneficiary.fxml", VolunteerServiceBeneficiary.class));
+        attendanceBttn.setOnAction(e -> navigateTo("/Client/view/VolunteerAttendance.fxml", VolunteerAttendance.class));
+        logoutButton.setOnAction(e -> navigateTo("/App/view/Login.fxml", LoginController.class));
     }
 
     private <T> void navigateTo(String fxmlPath, Class<T> controllerClass) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(fxmlPath));
-            Parent root = loader.load();
+            URL fxmlUrl = getClass().getResource(fxmlPath);
+            if (fxmlUrl == null) {
+                showError("Navigation Error", "FXML file not found: " + fxmlPath);
+                return;
+            }
 
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent root = loader.load();
             currentStage.setScene(new Scene(root));
             currentStage.show();
         } catch (IOException e) {
@@ -63,6 +69,7 @@ public class VolunteerDashboard {
             e.printStackTrace();
         }
     }
+
 
     public void setVolunteerData(String volunteerId) {
         this.currentVolunteerId = volunteerId;
