@@ -55,11 +55,11 @@
    <top>
       <TableView fx:id="scheduleTable" prefHeight="309.0" prefWidth="1258.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="serviceColumn" prefWidth="393.0" text="Service" />
-          <TableColumn fx:id="scheduleIdColumn" prefWidth="258.0" text="Schedule ID" />
-            <TableColumn fx:id="startDateColumn" prefWidth="340.0" text="Start Date" />
-            <TableColumn fx:id="statusColumn" prefWidth="266.0" text="Status" />
-            <TableColumn fx:id="endDateColumn1" prefWidth="266.0" text="End Date" />
+           <TableColumn fx:id="serviceColumn" prefWidth="393.0" text="Service" />
+           <TableColumn fx:id="scheduleIdColumn" prefWidth="258.0" text="Schedule ID" />
+           <TableColumn fx:id="statusColumn" prefWidth="266.0" text="Status" />
+           <TableColumn fx:id="startDateColumn" prefWidth="340.0" text="Start Date" />
+           <TableColumn fx:id="endDateColumn" prefWidth="266.0" text="End Date" />
         </columns>
       </TableView>
    </top>

@@ -22,6 +22,7 @@ public class ServiceScheduleDAO {
                 ServiceSchedule schedule = new ServiceSchedule();
                 schedule.setServid(rs.getString("servid"));
                 schedule.setSchedid(rs.getString("schedid"));
+                schedule.setStatus(rs.getString("sstat"));
                 String startString = rs.getString("sstart");
 
                 if (startString.equals("0000-00-00")) {
@@ -31,9 +32,6 @@ public class ServiceScheduleDAO {
                     LocalDate date = LocalDate.parse(startString, formatter);
                     schedule.setStart(date);
                 }
-
-                // schedule.setStart(rs.getDate("sstart").toLocalDate());
-                // schedule.setEnd(rs.getDate("send").toLocalDate());
 
                 String endString = rs.getString("send");
 
@@ -54,13 +52,14 @@ public class ServiceScheduleDAO {
     }
 
     public boolean createServiceSchedule(ServiceSchedule schedule) {
-        String sql = "INSERT INTO SERVICE_SCHEDULE (servid, schedid, sstart, send) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO SERVICE_SCHEDULE (servid, schedid, sstat, sstart, send) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, schedule.getServid());
             statement.setString(2, schedule.getSchedid());
-            statement.setDate(3, Date.valueOf(schedule.getStart()));
-            statement.setDate(4, Date.valueOf(schedule.getEnd()));
+            statement.setString(3, schedule.getStatus());
+            statement.setDate(4, Date.valueOf(schedule.getStart()));
+            statement.setDate(5, Date.valueOf(schedule.getEnd()));
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error creating service schedule: " + e.getMessage(), e);
@@ -68,20 +67,21 @@ public class ServiceScheduleDAO {
     }
 
     public boolean updateServiceSchedule(ServiceSchedule schedule) {
-        String sql = "UPDATE SERVICE_SCHEDULE SET servid = ?, sstart = ?, send = ? WHERE schedid = ?";
+        String sql = "UPDATE SERVICE_SCHEDULE SET servid = ?, sstat = ?, sstart = ?, send = ? WHERE schedid = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, schedule.getServid());
-            statement.setDate(2, Date.valueOf(schedule.getStart()));
-            statement.setDate(3, Date.valueOf(schedule.getEnd()));
-            statement.setString(4, schedule.getSchedid());
+            statement.setString(2, schedule.getStatus());
+            statement.setDate(3, Date.valueOf(schedule.getStart()));
+            statement.setDate(4, Date.valueOf(schedule.getEnd()));
+            statement.setString(5, schedule.getSchedid());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating service schedule: " + e.getMessage(), e);
         }
     }
 
-    public boolean hasScheduleConflict(String servid, LocalDate newStart, LocalDate newEnd, String excludeSchedid) {
+    public boolean hasScheduleConflict(String servid, String status, LocalDate newStart, LocalDate newEnd, String excludeSchedid) {
         String sql = "SELECT COUNT(*) FROM SERVICE_SCHEDULE " +
                 "WHERE servid = ? " +
                 "AND ((sstart <= ? AND send >= ?) OR " +  // New event overlaps existing
