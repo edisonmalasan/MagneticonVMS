@@ -1,7 +1,10 @@
 package Client.controller;
 
+import common.dao.BeneficiaryDAO;
+import common.dao.BeneficiaryGroupDAO;
 import common.dao.ServiceDAO;
 import common.dao.VolunteerDAO;
+import common.models.BeneficiaryGroup;
 import common.models.Service;
 import common.models.Volunteer;
 import javafx.collections.FXCollections;
@@ -17,10 +20,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class VolunteerServiceBeneficiary {
-    @FXML
-    private Label headerText;
-    @FXML
-    private Label volDeets;
     @FXML
     private Label volId;
     @FXML
@@ -86,6 +85,25 @@ public class VolunteerServiceBeneficiary {
                 servTitle.setText(details.getServid());
                 servDesc.setText(details.getSdesc());
             }
+
+            if (BeneficiaryDAO.hasBeneficiaryGroups(details.getServid())) {
+                BeneficiaryGroup group = BeneficiaryGroupDAO.getBeneficiaryGroupForService(
+                        details.getServid(),
+                        currentVolunteer.getVolid()
+                );
+
+                if (group != null) {
+                    benGroupTitle.setText(group.getBengroup());
+                    benGroupDesc.setText(group.getBendesc());
+                } else {
+                    benGroupTitle.setText("No specific group assigned");
+                    benGroupDesc.setText("This service doesn't have a designated beneficiary group");
+                }
+            } else {
+                benGroupTitle.setText("General Service");
+                benGroupDesc.setText("This service benefits the general community");
+            }
+
         } catch (SQLException e) {
             showError("Data Error", "Failed to load service details");
             e.printStackTrace();
