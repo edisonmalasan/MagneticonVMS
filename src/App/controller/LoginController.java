@@ -48,8 +48,8 @@ public class LoginController {
             Stage stage = (Stage) registerAdmin.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/view/registerAsAdmin.fxml"));
             Parent root = loader.load();
-            RegisterController registerController = loader.getController();
-            registerController.setStage(stage);
+            RegisterAsAdmin regControllerAdmin = loader.getController();
+            regControllerAdmin.setStage(stage);
             stage.setScene(new Scene(root));
 
         } catch (IOException e) {
