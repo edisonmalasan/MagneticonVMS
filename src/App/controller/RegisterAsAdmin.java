@@ -110,33 +110,61 @@ public class RegisterAsAdmin {
             String certification = certificationTextField.getText();
             LocalDate bday = birthdateDatePicker.getValue();
 
-            if (fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNo.isEmpty() || email.isEmpty() || pwd.isEmpty() || sex == null || bday == null) {
-                showAlert("Missing Fields", "Pleas fill in all fields");
+            if (fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNo.isEmpty() ||
+                    email.isEmpty() || pwd.isEmpty() || sex == null || bday == null) {
+                showAlert("Missing Fields", "Please fill in all fields");
                 return;
             }
 
-            AdminDAO aDAO = new AdminDAO();
+            VolunteerDAO volunteerDAO = new VolunteerDAO();
+            if (volunteerDAO.emailExists(email)) {
+                showAlert("Registration Failed", "Email already exists.");
+                return;
+            }
+
+            Volunteer volunteer = new Volunteer();
+            String volid = volunteerDAO.generateNewVolunteerID();
+            volunteer.setVolid(volid);
+            volunteer.setFname(fName);
+            volunteer.setLname(lName);
+            volunteer.setAddress(address);
+            volunteer.setPhone(phoneNo);
+            volunteer.setEmail(email);
+            volunteer.setPassword(pwd);
+            volunteer.setBirthday(bday);
+            volunteer.setSex(sex);
+            volunteer.setVolstat("Active");
+            volunteer.setRole("Admin");
+
+            boolean volunteerCreated = VolunteerDAO.createVolunteer(volunteer);
+
+            if (!volunteerCreated) {
+                showAlert("Registration Failed", "Could not register volunteer.");
+                return;
+            }
+
             Admin admin = new Admin();
-            // insert sksksks
+            admin.setVolid(volid);
+            admin.setSkills(skills);
+            admin.setCertification(certification);
 
             boolean created = AdminDAO.createAdmin(admin);
-            if(created) {
-                showSuccess("Registration Successful.","You are now a registered volunteer!");
 
-                try{
-                    Stage stage = (Stage)registerButton.getScene().getWindow();
+            if (created) {
+                showSuccess("Registration Successful", "You are now a registered admin!");
+
+                try {
+                    Stage stage = (Stage) registerButton.getScene().getWindow();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin/view/AdminDashboard.fxml"));
                     Parent root = loader.load();
-
-                    stage.setScene( new Scene(root));
+                    stage.setScene(new Scene(root));
                     stage.show();
-
                 } catch (Exception ec) {
                     ec.printStackTrace();
-                    showAlert("Error.", "Ensure that all details are filled in :)");
+                    showAlert("Error", "Ensure that all details are filled in :)");
                 }
             } else {
-                showAlert("Registration Failed.", "Ensure that all details are filled in :)");
+                showAlert("Registration Failed", "Could not create admin record.");
             }
         });
     }

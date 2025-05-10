@@ -65,7 +65,7 @@ public class RegisterController {
             }
 
             Volunteer vol = new Volunteer();
-            vol.setVolid(String.valueOf(System.currentTimeMillis()));
+            // vol.setVolid(String.valueOf(System.currentTimeMillis()));
             vol.setFname(fName);
             vol.setLname(lName);
             vol.setAddress(address);
