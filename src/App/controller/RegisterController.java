@@ -114,7 +114,7 @@ public class RegisterController {
         alert.showAndWait();
     }
 
-
+    //
     public void setStage(Stage stage) {
         this.currentStage = stage;
     }
