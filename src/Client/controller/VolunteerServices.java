@@ -4,6 +4,7 @@ import common.dao.ServiceDAO;
 import common.dao.VolunteerDAO;
 import common.models.Service;
 import common.models.Volunteer;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,9 +37,10 @@ public class VolunteerServices implements Initializable {
     @FXML
     private Button backBttn;
 
+    private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
-    private List<Service> volunteerServices;
+    private List<String> volunteerServices;
     private int currentServiceIndex = 0;
 
     @Override
@@ -50,34 +52,28 @@ public class VolunteerServices implements Initializable {
         backBttn.setOnAction(event -> handleBack());
     }
 
-    public void setVolunteerData(String volunteerId) {
-        this.currentVolunteerId = volunteerId;
-        loadVolunteerDetails();
+    public void setCurrentVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid();
+        displayVolunteerInfo(volunteer);
         loadVolunteerServices();
+    }
+
+    private void displayVolunteerInfo(Volunteer volunteer) {
+        volId.setText(volunteer.getVolid());
+        volName.setText(volunteer.getFname() + " " + volunteer.getLname());
     }
 
     public void setStage(Stage stage) {
         this.currentStage = stage;
     }
 
-    private void loadVolunteerDetails() {
-        try {
-            Volunteer volunteer = VolunteerDAO.getVolunteerById(currentVolunteerId);
-            if (volunteer != null) {
-                volId.setText(volunteer.getVolid());
-                volName.setText(volunteer.getFname() + " " + volunteer.getLname());
-            }
-        } catch (SQLException e) {
-            showError("Data Error", "Failed to load volunteer details");
-            e.printStackTrace();
-        }
-    }
-
     private void loadVolunteerServices() {
         try {
-            Service service = (Service) ServiceDAO.getServicesForVolunteer(currentVolunteerId);
+            System.out.println(currentVolunteerId);
+            List<String> service = ServiceDAO.getServicesForVolunteer(currentVolunteerId);
             if (!service.isEmpty()) {
-                displayService(currentServiceIndex);
+                displayService((Service) service);
             } else {
                 servTitle.setText("No services assigned");
                 servDesc.setText("");
@@ -89,27 +85,28 @@ public class VolunteerServices implements Initializable {
         }
     }
 
-    private void displayService(int index) {
-        if (index >= 0 && index < volunteerServices.size()) {
-            Service service = volunteerServices.get(index);
-            servTitle.setText(service.getSname());
-            servDesc.setText(service.getSdesc() != null ? service.getSdesc() : "No description available");
-            servStat.setText(service.getSstat() != null ? service.getSstat() : "Status unknown");
-        }
+    private void displayService(Service service) {
+
+        servTitle.setText(service.getSname());
+        servDesc.setText(service.getSdesc() != null ? service.getSdesc() : "No description available");
+        servStat.setText(service.getSstat() != null ? service.getSstat() : "Status unknown");
     }
 
     private void handleBack() {
         try {
-            Stage currentStage = (Stage) backBttn.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
+            Stage stage = (Stage) backBttn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
-            VolunteerDashboard mainMenuController = loader.getController();
-            mainMenuController.setStage(currentStage);
-            currentStage.setScene(new Scene(root));
 
+            VolunteerDashboard dashboardController = loader.getController();
+            dashboardController.setStage(stage);
+            dashboardController.setCurrentVolunteer(currentVolunteer);
+
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load");
+            showError("Navigation Error", "Failed to load Volunteer Dashboard");
         }
     }
 

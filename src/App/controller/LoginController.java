@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -48,8 +49,8 @@ public class LoginController {
             Stage stage = (Stage) registerAdmin.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/view/registerAsAdmin.fxml"));
             Parent root = loader.load();
-            RegisterController registerController = loader.getController();
-            registerController.setStage(stage);
+            RegisterAsAdmin regControllerAdmin = loader.getController();
+            regControllerAdmin.setStage(stage);
             stage.setScene(new Scene(root));
 
         } catch (IOException e) {
@@ -95,13 +96,13 @@ public class LoginController {
 
 
                 if ("Admin".equalsIgnoreCase(user.getRole())) {
-                    loader = new FXMLLoader(getClass().getResource("/App/view/AdminDashboard.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("/Admin/view/AdminDashboard.fxml"));
                     root = loader.load();
 
                     AdminDashboardController adminDashboardController = loader.getController();
                     adminDashboardController.setCurrentAdmin(user);
                 } else {
-                    loader = new FXMLLoader(getClass().getResource("/App/view/VolunteerDashboard.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
                     root = loader.load();
 
                     VolunteerDashboard volunteerDashboard = loader.getController();

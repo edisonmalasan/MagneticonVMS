@@ -1,5 +1,6 @@
 package common.dao;
 
+import common.exceptions.VolunteerNotFoundException;
 import common.models.Volunteer;
 import common.utils.DatabaseConnection;
 
@@ -36,12 +37,14 @@ public class VolunteerDAO {
         return null;
     }
 
-    public static Volunteer getVolunteerById(String volunteerId) throws SQLException {
+    public static Volunteer getVolunteerById(String volunteerId)
+            throws SQLException, VolunteerNotFoundException {
+
         if (volunteerId == null || volunteerId.trim().isEmpty()) {
             throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
         }
 
-        String sql = "SELECT v.volid, v.firstname, v.lastname, v.email, t.teamname " +
+        final String sql = "SELECT v.volid, v.fname, v.lname, v.email, t.teamname " +
                 "FROM Volunteer v " +
                 "LEFT JOIN Team t ON v.teamid = t.teamid " +
                 "WHERE v.volid = ?";
@@ -52,19 +55,21 @@ public class VolunteerDAO {
             statement.setString(1, volunteerId);
 
             try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToVolunteer(rs);
+                if (!rs.next()) {
+                    throw new VolunteerNotFoundException(
+                            "Volunteer not found with ID: " + volunteerId);
                 }
+
+                return mapResultSetToVolunteer(rs);
             }
         }
-        return null;
     }
 
     private static Volunteer mapResultSetToVolunteer(ResultSet rs) throws SQLException {
         Volunteer volunteer = new Volunteer();
         volunteer.setVolid(rs.getString("volid"));
-        volunteer.setFname(rs.getString("firstname"));
-        volunteer.setLname(rs.getString("lastname"));
+        volunteer.setFname(rs.getString("fname"));
+        volunteer.setLname(rs.getString("lname"));
         volunteer.setEmail(rs.getString("email"));
         return volunteer;
     }
@@ -86,7 +91,7 @@ public class VolunteerDAO {
             statement.setDate(8, Date.valueOf(volunteer.getBirthday()));
             statement.setString(9, volunteer.getSex());
             statement.setString(10, volunteer.getVolstat());
-            statement.setString(11, "Member");
+            statement.setString(11, volunteer.getRole());
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -144,7 +149,7 @@ public class VolunteerDAO {
             statement.setDate(7, Date.valueOf(volunteer.getBirthday()));
             statement.setString(8, volunteer.getSex());
             statement.setString(9, volunteer.getVolstat());
-            statement.setString(10, "Member");
+            statement.setString(10, volunteer.getRole());
             statement.setString(11, volunteer.getVolid());
 
             return statement.executeUpdate() > 0;
@@ -172,8 +177,8 @@ public class VolunteerDAO {
         return false;
     }
 
-    public String generateNewVolunteerID() {
-        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM SERVICE";
+    public static String generateNewVolunteerID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM VOLUNTEER";
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
@@ -187,7 +192,8 @@ public class VolunteerDAO {
             }
             return "V01"; //default if no records exist
         } catch (SQLException e) {
-            throw new RuntimeException("Error generating service ID", e);
+            throw new RuntimeException("Error generating volunteer ID", e);
         }
     }
+
 }

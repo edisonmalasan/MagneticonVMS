@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.controller.LoginController">
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;">
          <children>
@@ -23,25 +19,31 @@
             </Pane>
             <Pane layoutY="41.0" prefHeight="359.0" prefWidth="600.0">
                <children>
-                  <Label alignment="CENTER" layoutX="249.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="103.0" text="LOGIN" textFill="WHITE">
+                  <Label alignment="CENTER" layoutX="242.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="103.0" text="LOGIN" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Black" size="18.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="142.0" layoutY="56.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="120.0" text="Email Address" textFill="#18c36d">
+                  <Label alignment="CENTER" layoutX="140.0" layoutY="43.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="120.0" text="Email Address" textFill="#18c36d">
                      <font>
                         <Font name="Segoe UI Black" size="15.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="loginEmail" layoutX="186.0" layoutY="98.0" prefWidth="215.0" promptText="example@domain.com" />
-                  <Label alignment="CENTER" layoutX="142.0" layoutY="138.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="88.0" text="Password" textFill="#18c96e">
+                  <TextField fx:id="loginEmail" layoutX="184.0" layoutY="85.0" prefWidth="215.0" promptText="example@domain.com" />
+                  <Label alignment="CENTER" layoutX="140.0" layoutY="125.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="88.0" text="Password" textFill="#18c96e">
                      <font>
                         <Font name="Segoe UI Black" size="15.0" />
                      </font>
                   </Label>
-                  <PasswordField fx:id="loginPassword" layoutX="186.0" layoutY="180.0" prefHeight="25.0" prefWidth="215.0" />
-                  <Label layoutX="237.0" layoutY="250.0" prefHeight="17.0" prefWidth="128.0" text="Don't have an account?" textFill="WHITE" />
-                  <Hyperlink fx:id="registerLink" layoutX="261.0" layoutY="274.0" text="Register Here" />
+                  <PasswordField fx:id="loginPassword" layoutX="184.0" layoutY="167.0" prefHeight="25.0" prefWidth="215.0" />
+                  <Label layoutX="237.0" layoutY="275.0" prefHeight="17.0" prefWidth="128.0" text="Don't have an account?" textFill="WHITE" />
+                  <Hyperlink fx:id="registerVolunteer" layoutX="240.0" layoutY="292.0" onAction="#handleVolunteerLink" text="Register As Volunteer" />
+                  <Hyperlink fx:id="registerAdmin" layoutX="247.0" layoutY="315.0" onAction="#handleAdminLink" text="Register As Admin" />
+                  <Button fx:id="loginButton" layoutX="237.0" layoutY="219.0" mnemonicParsing="false" onAction="#handleLogin" onMouseClicked="#handleClick" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #3D90D7;" text="Login" textAlignment="CENTER">
+                     <font>
+                        <Font name="Segoe UI Black" size="15.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
          </children>

@@ -3,6 +3,7 @@ package common.dao;
 import common.models.Service;
 import common.models.TaskAssignment;
 import common.utils.DatabaseConnection;
+import common.utils.LogManager;
 import javafx.concurrent.Task;
 
 import java.sql.*;
@@ -22,6 +23,8 @@ public class TaskAssignmentDAO {
             statement.setString(3, task.getTadesc());
             statement.setString(4, task.getTaskstat());
 
+            LogManager.insertToLogs("resources/adminlogs.txt", "Created new task assignment: " + task);
+
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error creating task assignment: " + e.getMessage(), e);
@@ -38,6 +41,8 @@ public class TaskAssignmentDAO {
             statement.setString(2, task.getTaskstat());
             statement.setString(3, task.getServid());
             statement.setString(4, task.getVolid());
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Updated task assignment: " + task);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -88,11 +93,10 @@ public class TaskAssignmentDAO {
 
     public static List<TaskAssignment> getTasksForVolunteerService(String volunteerId, String serviceName) throws SQLException {
         List<TaskAssignment> tasks = new ArrayList<>();
-        String sql = "SELECT t.taskid, t.description, t.status " +
-                "FROM Task t " +
-                "JOIN VolunteerService vs ON t.servid = vs.servid " +
-                "JOIN Service s ON vs.servid = s.servid " +
-                "WHERE vs.volid = ? AND s.sname = ?";
+        String sql = "SELECT ta.servid, ta.taskstat " +
+                "FROM task_assignment ta " +
+                "JOIN service s ON ta.servid = s.servid " +
+                "WHERE ta.volid = ? AND s.sname = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -103,9 +107,8 @@ public class TaskAssignmentDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     TaskAssignment task = new TaskAssignment();
-                    task.setServid(rs.getString("taskid"));
-                    task.setTadesc(rs.getString("description"));
-                    task.setTaskstat(rs.getString("status"));
+                    task.setServid(rs.getString("servid"));
+                    task.setTaskstat(rs.getString("taskstat"));
                     tasks.add(task);
                 }
             }
@@ -113,16 +116,18 @@ public class TaskAssignmentDAO {
         return tasks;
     }
 
-    public boolean updateTaskStatus(TaskAssignment task) throws SQLException {
-        String sql = "UPDATE Task SET status = ? WHERE taskid = ?";
+    // In TaskAssignmentDAO
+    public static int updateTaskStatus(String servid, String volid, String status) throws SQLException {
+        String sql = "UPDATE task_assignment SET taskstat = ? WHERE servid = ? AND volid = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, task.getTaskstat());
-            stmt.setString(2, task.getServid());
+            stmt.setString(1, status);
+            stmt.setString(2, servid);
+            stmt.setString(3, volid);
 
-            return stmt.executeUpdate() > 0;
+            return stmt.executeUpdate(); // Returns number of rows affected
         }
     }
 

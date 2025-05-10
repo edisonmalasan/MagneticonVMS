@@ -29,7 +29,6 @@ public class VolunteerTabController {
     @FXML private TableColumn<Volunteer, String> sexColumn;
     @FXML private TableColumn<Volunteer, String> statusColumn;
 
-    @FXML private TextField volunteerField;
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
     @FXML private TextField addressField;
@@ -92,7 +91,6 @@ public class VolunteerTabController {
     }
 
     private void populateForm(Volunteer volunteer) {
-        volunteerField.setText(volunteer.getVolid());
         firstNameField.setText(volunteer.getFname());
         lastNameField.setText(volunteer.getLname());
         addressField.setText(volunteer.getAddress());
@@ -121,8 +119,6 @@ public class VolunteerTabController {
 
     private Volunteer createVolunteerFromForm() {
         Volunteer volunteer = new Volunteer();
-        volunteer.setVolid(volunteerField.getText().isEmpty() ?
-                UUID.randomUUID().toString() : volunteerField.getText());
         volunteer.setFname(firstNameField.getText());
         volunteer.setLname(lastNameField.getText());
         volunteer.setAddress(addressField.getText());
@@ -132,12 +128,15 @@ public class VolunteerTabController {
         volunteer.setSex(sexComboBox.getValue());
         volunteer.setVolstat(statusComboBox.getValue());
         volunteer.setPassword("defaultPassword");
-        volunteer.setRole("Volunteer");
+        volunteer.setRole("Member");
 
         return volunteer;
     }
 
     private void createNewVolunteer(Volunteer volunteer) {
+        String newID = volunteerDAO.generateNewVolunteerID();
+        volunteer.setVolid(newID);
+
         if (volunteerDAO.emailExists(volunteer.getEmail())) {
             showAlert("Error", "Email already exists");
             return;
@@ -171,7 +170,6 @@ public class VolunteerTabController {
     }
 
     private void clearForm() {
-        volunteerField.clear();
         firstNameField.clear();
         lastNameField.clear();
         addressField.clear();

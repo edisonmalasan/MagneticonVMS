@@ -4,6 +4,7 @@ import common.models.Team;
 
 import common.models.Volunteer;
 import common.utils.DatabaseConnection;
+import common.utils.LogManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,27 +12,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeamDAO {
-    public boolean createTeam(Team team) {
-        String sql = "INSERT INTO TEAM (teamid, tname, tdesc) VALUES (?, ?, ?)";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
+    public static boolean createTeam(Team team){
+        try{
+            String query = "{ CALL addteam(?,?,?) }";
+            CallableStatement statement = DatabaseConnection.getConnection().prepareCall(query);
             statement.setString(1, team.getTeamid());
             statement.setString(2, team.getTname());
             statement.setString(3, team.getTdesc());
+            statement.execute(); //Execute Procedure
 
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error creating team: " + e.getMessage(), e);
+            LogManager.insertToLogs("resources/adminlogs.txt", "Created new team: " + team);
+
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
 
     public static List<Team> getTeamsForVolunteer(String volunteerId) throws SQLException {
         List<Team> teams = new ArrayList<>();
-        String sql = "SELECT t.teamid, t.teamname, t.description " +
-                "FROM Team t " +
-                "JOIN Volunteer v ON t.teamid = v.teamid " +
+
+        // Corrected SQL with proper spacing and formatting
+        String sql = "SELECT t.teamid, t.tname, t.tdesc " +
+                "FROM team t " +
+                "JOIN volunteer_team vt ON t.teamid = vt.teamid " +
+                "JOIN volunteer v ON vt.volid = v.volid " +
                 "WHERE v.volid = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -43,21 +49,29 @@ public class TeamDAO {
                 while (rs.next()) {
                     Team team = new Team();
                     team.setTeamid(rs.getString("teamid"));
-                    team.setTname(rs.getString("teamname"));
-                    team.setTdesc(rs.getString("description"));
+                    team.setTname(rs.getString("tname"));
+                    team.setTdesc(rs.getString("tdesc"));
                     teams.add(team);
                 }
             }
+        } catch (SQLException e) {
+            // Log the error before rethrowing
+            System.err.println("Error fetching teams for volunteer " + volunteerId + ": " + e.getMessage());
+            throw e;
         }
+
         return teams;
     }
 
     public static List<Volunteer> getTeamMembers(String teamName) throws SQLException {
         List<Volunteer> members = new ArrayList<>();
-        String sql = "SELECT volid, firstname, lastname, address, phonenumber, " +
-                "email, birthdate, gender, status " +
-                "FROM Volunteer " +
-                "WHERE teamid = (SELECT teamid FROM Team WHERE teamname = ?)";
+
+        String sql = "SELECT v.volid, v.fname, v.lname, v.address, v.phone, " +
+                "v.email, v.bday, v.sex, v.volstat " +
+                "FROM volunteer v " +
+                "JOIN volunteer_team vt ON v.volid = vt.volid " +
+                "JOIN team t ON vt.teamid = t.teamid " +
+                "WHERE t.tname = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -67,15 +81,22 @@ public class TeamDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Volunteer volunteer = new Volunteer();
+
                     volunteer.setVolid(rs.getString("volid"));
-                    volunteer.setFname(rs.getString("firstname"));
-                    volunteer.setLname(rs.getString("lastname"));
+                    volunteer.setFname(rs.getString("fname"));
+                    volunteer.setLname(rs.getString("lname"));
                     volunteer.setAddress(rs.getString("address"));
-                    volunteer.setPhone(rs.getString("phonenumber"));
+                    volunteer.setPhone(rs.getString("phone"));
                     volunteer.setEmail(rs.getString("email"));
-                    volunteer.setBirthday(LocalDate.parse(rs.getString("birthdate")));
-                    volunteer.setSex(rs.getString("gender"));
-                    volunteer.setVolstat(rs.getString("status"));
+
+                    String bday = rs.getString("bday");
+                    if (bday != null) {
+                        volunteer.setBirthday(LocalDate.parse(bday));
+                    }
+
+                    volunteer.setSex(rs.getString("sex"));
+                    volunteer.setVolstat(rs.getString("volstat"));
+
                     members.add(volunteer);
                 }
             }
@@ -83,8 +104,6 @@ public class TeamDAO {
         return members;
     }
 
-
-    // get only the first name and lastname
     public List<String> getTeamMembersName(String teamId) {
         List<String> members = new ArrayList<>();
         String sql = "SELECT v.volid, v.fname, v.lname FROM Volunteer v " +
@@ -160,6 +179,8 @@ public class TeamDAO {
             statement.setString(1, team.getTname());
             statement.setString(2, team.getTdesc());
             statement.setString(3, team.getTeamid());
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Updated team: " + team);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

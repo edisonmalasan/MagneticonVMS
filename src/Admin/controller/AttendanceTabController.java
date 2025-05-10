@@ -1,72 +1,305 @@
 package Admin.controller;
 
+import common.dao.AttendanceDAO;
+import common.dao.ServiceDAO;
+import common.dao.VolunteerDAO;
+import common.models.Attendance;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class AttendanceTabController {
 
-    @FXML
-    private TableColumn<?, ?> attendanceIdColumn;
+    @FXML private TableColumn<Attendance, String> attendanceIdColumn;
+    @FXML private TableView<Attendance> attendanceTable;
+    @FXML private Button clearButton;
+    @FXML private TableColumn<Attendance, LocalDate> dateColumn;
+    @FXML private DatePicker datePicker;
+    @FXML private Button saveButton;
+    @FXML private TableColumn<Attendance, String> serviceColumn;
+    @FXML private ComboBox<String> serviceComboBox;
+    @FXML private TableColumn<Attendance, String> statusColumn;
+    @FXML private ComboBox<String> statusComboBox;
+    @FXML private TableColumn<Attendance, LocalTime> timeInColumn;
+    @FXML private TextField timeInField;
+    @FXML private TableColumn<Attendance, LocalTime> timeOutColumn;
+    @FXML private TextField timeOutField;
+    @FXML private TableColumn<Attendance, String> volunteerColumn;
+    @FXML private ComboBox<String> volunteerComboBox;
+
+    private final AttendanceDAO attendanceDAO = new AttendanceDAO();
+    private final ServiceDAO serviceDAO = new ServiceDAO();
+    private final VolunteerDAO volunteerDAO = new VolunteerDAO();
+    private ObservableList<Attendance> attendances;
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     @FXML
-    private TableView<?> attendanceTable;
+    public void initialize() throws SQLException {
+        setupTableColumns();
+        setupEventHandlers();
+        setupValidationListeners();
+        loadAttendances();
+        populateComboBoxes();
+    }
 
-    @FXML
-    private Button clearButton;
+    private void setupTableColumns() {
+        attendanceIdColumn.setCellValueFactory(new PropertyValueFactory<>("attendid"));
+        serviceColumn.setCellValueFactory(new PropertyValueFactory<>("servid"));
+        volunteerColumn.setCellValueFactory(new PropertyValueFactory<>("volid"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-    @FXML
-    private TableColumn<?, ?> dateColumn;
+        timeInColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalTime item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : timeFormatter.format(item));
+            }
+        });
 
-    @FXML
-    private DatePicker datePicker;
+        timeOutColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalTime item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : timeFormatter.format(item));
+            }
+        });
 
-    @FXML
-    private Button saveButton;
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("attendstat"));
+    }
 
-    @FXML
-    private TableColumn<?, ?> serviceColumn;
+    private void setupEventHandlers() {
+        attendanceTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                populateForm(newSelection);
+                saveButton.setText("Update");
+            } else {
+                clearForm();
+                saveButton.setText("Create");
+            }
+        });
+    }
 
-    @FXML
-    private ComboBox<?> serviceComboBox;
+    private void populateForm(Attendance attendance) {
+        serviceComboBox.setValue(attendance.getServid());
+        volunteerComboBox.setValue(attendance.getVolid());
+        datePicker.setValue(attendance.getDate());
+        timeInField.setText(attendance.getTimein() != null ? attendance.getTimein().format(timeFormatter) : "");
+        timeOutField.setText(attendance.getTimeout() != null ? attendance.getTimeout().format(timeFormatter) : "");
+        statusComboBox.setValue(attendance.getAttendstat() != null ? attendance.getAttendstat() : "Absent");    }
 
-    @FXML
-    private TableColumn<?, ?> statusColumn;
-
-    @FXML
-    private ComboBox<?> statusComboBox;
-
-    @FXML
-    private TableColumn<?, ?> timeInColumn;
-
-    @FXML
-    private TextField timeInField;
-
-    @FXML
-    private TableColumn<?, ?> timeOutColumn;
-
-    @FXML
-    private TextField timeOutField;
-
-    @FXML
-    private TableColumn<?, ?> volunteerColumn;
-
-    @FXML
-    private ComboBox<?> volunteerComboBox;
-
-    @FXML
-    void handleClear(ActionEvent event) {
-
+    private void clearForm() {
+        serviceComboBox.setValue(null);
+        volunteerComboBox.setValue(null);
+        datePicker.setValue(null);
+        timeInField.clear();
+        timeOutField.clear();
+        statusComboBox.setValue(null);
+        resetValidationStyles();
     }
 
     @FXML
-    void handleSave(ActionEvent event) {
+    private void handleSave(ActionEvent event) {
+        if (!validateInputs()) {
+            showAlert("Validation Error", "Please fill in all required fields");
+            return;
+        }
+
+        try {
+            String serviceId = serviceComboBox.getValue();
+            String volunteerId = volunteerComboBox.getValue();
+            LocalDate date = datePicker.getValue();
+
+            LocalTime timeIn = null;
+            if (!timeInField.getText().isEmpty()) {
+                timeIn = parseTime(timeInField.getText());
+            }
+
+            LocalTime timeOut = null;
+            if (!timeOutField.getText().isEmpty()) {
+                timeOut = parseTime(timeOutField.getText());
+            }
+
+            String status = statusComboBox.getValue() != null ? statusComboBox.getValue() : "Absent";
+
+            if (timeOut != null && timeIn != null && timeOut.isBefore(timeIn)) {
+                showAlert("Validation Error", "Time out must be after time in");
+                return;
+            }
+
+            if (attendanceTable.getSelectionModel().getSelectedItem() != null) {
+                updateExistingAttendance(serviceId, volunteerId, date, timeIn, timeOut, status);
+            } else {
+                createNewAttendance(serviceId, volunteerId, date, timeIn, timeOut, status);
+            }
+        } catch (DateTimeParseException e) {
+            showAlert("Validation Error", "Please enter time in HH:mm format (e.g., 09:00)");
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to save attendance: " + e.getMessage());
+        }
+    }
+
+    private LocalTime parseTime(String timeString) throws DateTimeParseException {
+        if (timeString == null || timeString.trim().isEmpty()) {
+            return null;
+        }
+        return LocalTime.parse(timeString.trim(), timeFormatter);
+    }
+
+    private void updateExistingAttendance(String serviceId, String volunteerId, LocalDate date,
+                                          LocalTime timeIn, LocalTime timeOut, String status) throws SQLException {
+        Attendance selected = attendanceTable.getSelectionModel().getSelectedItem();
+        selected.setServid(serviceId);
+        selected.setVolid(volunteerId);
+        selected.setDate(date);
+        selected.setTimein(timeIn);
+        selected.setTimeout(timeOut);
+        selected.setAttendstat(status);
+
+        if (attendanceDAO.updateAttendance(selected)) {
+            showAlert("Success", "Attendance updated successfully");
+            attendanceTable.refresh();
+            clearForm();
+        } else {
+            showAlert("Error", "Failed to update attendance");
+        }
+    }
+
+    private void createNewAttendance(String serviceId, String volunteerId, LocalDate date,
+                                     LocalTime timeIn, LocalTime timeOut, String status) throws SQLException {
+        Attendance newAttendance = new Attendance();
+        String newID = attendanceDAO.generateNewAttendId();
+
+        newAttendance.setServid(serviceId);
+        newAttendance.setVolid(volunteerId);
+        newAttendance.setAttendid(newID);
+        newAttendance.setDate(date);
+        newAttendance.setTimein(timeIn);
+        newAttendance.setTimeout(timeOut);
+        newAttendance.setAttendstat(status);
+
+        if (attendanceDAO.createAttendance(newAttendance)) {
+            showAlert("Success", "New attendance record created successfully");
+            loadAttendances();
+            clearForm();
+        } else {
+            showAlert("Error", "Failed to create attendance record");
+        }
+    }
+
+    private void setupValidationListeners() {
+        serviceComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        volunteerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        datePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+
+        //validate time fields if entered
+        timeInField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                try {
+                    parseTime(newVal);
+                    timeInField.setStyle("");
+                } catch (DateTimeParseException e) {
+                    timeInField.setStyle("-fx-border-color: red;");
+                }
+            } else {
+                timeInField.setStyle("");
+            }
+        });
+
+        timeOutField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                try {
+                    parseTime(newVal);
+                    timeOutField.setStyle("");
+                } catch (DateTimeParseException e) {
+                    timeOutField.setStyle("-fx-border-color: red;");
+                }
+            } else {
+                timeOutField.setStyle("");
+            }
+        });
+
+        serviceComboBox.setTooltip(new Tooltip("Select a service"));
+        volunteerComboBox.setTooltip(new Tooltip("Select a volunteer"));
 
     }
 
+    private boolean validateInputs() {
+        boolean isValid = true;
+
+        if (serviceComboBox.getValue() == null) {
+            serviceComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            isValid = false;
+        } else {
+            serviceComboBox.setStyle("");
+        }
+
+        if (volunteerComboBox.getValue() == null) {
+            volunteerComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            isValid = false;
+        } else {
+            volunteerComboBox.setStyle("");
+        }
+
+        if (datePicker.getValue() == null) {
+            datePicker.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            isValid = false;
+        } else {
+            datePicker.setStyle("");
+        }
+
+        return isValid;
+    }
+
+    private void resetValidationStyles() {
+        serviceComboBox.setStyle("");
+        volunteerComboBox.setStyle("");
+        datePicker.setStyle("");
+        timeInField.setStyle("");
+        timeOutField.setStyle("");
+        statusComboBox.setStyle("");
+    }
+
+    private void loadAttendances() throws SQLException {
+        List<Attendance> attendanceList = attendanceDAO.getAllAttendances();
+        attendances = FXCollections.observableArrayList(attendanceList);
+        attendanceTable.setItems(attendances);
+    }
+
+    private void populateComboBoxes() {
+        serviceDAO.getAllServices().stream()
+                .map(service -> service.getServid())
+                .distinct()
+                .forEach(serviceComboBox.getItems()::add);
+
+        volunteerDAO.getAllVolunteers().stream()
+                .map(volunteer -> volunteer.getVolid())
+                .distinct()
+                .forEach(volunteerComboBox.getItems()::add);
+
+        statusComboBox.getItems().addAll("Present", "Absent", "Late");
+    }
+
+    @FXML
+    private void handleClear(ActionEvent event) {
+        attendanceTable.getSelectionModel().clearSelection();
+        clearForm();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

@@ -19,4 +19,13 @@ public class Admin {
     public void setCertification(String certification) { this.certification = certification; }
     public String getSkills() { return skills; }
     public void setSkills(String skills) { this.skills = skills; }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "volid='" + volid + '\'' +
+                ", certification='" + certification + '\'' +
+                ", skills='" + skills + '\'' +
+                '}';
+    }
 }

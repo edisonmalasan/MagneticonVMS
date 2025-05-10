@@ -37,6 +37,7 @@ public class VolunteerTeams implements Initializable {
     @FXML private TableColumn<Volunteer, String> colStat;
     @FXML private Button backBttn;
 
+    private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
     private List<Team> volunteerTeams;
@@ -49,15 +50,15 @@ public class VolunteerTeams implements Initializable {
     }
 
     private void setupTableColumns() {
-        colVolId.setCellValueFactory(new PropertyValueFactory<>("volunteerId"));
-        colLName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        colFName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        colVolId.setCellValueFactory(new PropertyValueFactory<>("volid"));
+        colLName.setCellValueFactory(new PropertyValueFactory<>("lname"));
+        colFName.setCellValueFactory(new PropertyValueFactory<>("fname"));
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        colPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colBday.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
-        colSex.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        colStat.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colBday.setCellValueFactory(new PropertyValueFactory<>("bday"));
+        colSex.setCellValueFactory(new PropertyValueFactory<>("sex"));
+        colStat.setCellValueFactory(new PropertyValueFactory<>("volstat"));
     }
 
     private void setupComboBox() {
@@ -69,27 +70,20 @@ public class VolunteerTeams implements Initializable {
         backBttn.setOnAction(event -> handleBack());
     }
 
-    public void setVolunteerData(String volunteerId) {
-        this.currentVolunteerId = volunteerId;
-        loadVolunteerDetails();
+    public void setCurrentVolunteer(Volunteer volunteer) {
+        this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid();
+        displayVolunteerInfo(volunteer);
         loadVolunteerTeams();
+    }
+
+    private void displayVolunteerInfo(Volunteer volunteer) {
+        volId.setText(volunteer.getVolid());
+        volName.setText(volunteer.getFname() + " " + volunteer.getLname());
     }
 
     public void setStage(Stage stage) {
         this.currentStage = stage;
-    }
-
-    private void loadVolunteerDetails() {
-        try {
-            Volunteer volunteer = VolunteerDAO.getVolunteerById(currentVolunteerId);
-            if (volunteer != null) {
-                volId.setText(volunteer.getVolid());
-                volName.setText(volunteer.getFname() + " " + volunteer.getLname());
-            }
-        } catch (SQLException e) {
-            showError("Data Error", "Failed to load volunteer details");
-            e.printStackTrace();
-        }
     }
 
     private void loadVolunteerTeams() {
@@ -111,29 +105,47 @@ public class VolunteerTeams implements Initializable {
     }
 
     private void loadTeamMembers(String teamName) {
-        if (teamName == null || teamName.isEmpty()) return;
+        if (teamName == null || teamName.isEmpty()) {
+            table.setPlaceholder(new Label("Please select a team"));
+            return;
+        }
+
+        // Show loading state
+        table.setPlaceholder(new Label("Loading team members..."));
 
         try {
             List<Volunteer> members = TeamDAO.getTeamMembers(teamName);
-            table.setItems(FXCollections.observableArrayList(members));
+
+            if (members.isEmpty()) {
+                table.setPlaceholder(new Label("No members found in this team"));
+            } else {
+                table.setItems(FXCollections.observableArrayList(members));
+            }
+
         } catch (SQLException e) {
-            showError("Data Error", "Failed to load team members");
-            e.printStackTrace();
+            showError("Error Failed " , "Failed to load team members for team" );
+            table.setPlaceholder(new Label("Error loading team members"));
+            showError("Load Error",
+                    "Failed to load team members.\n" +
+                            "Error: " + e.getMessage());
         }
     }
 
     private void handleBack() {
         try {
-            Stage currentStage = (Stage) backBttn.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerDashboard.fxml"));
+            Stage stage = (Stage) backBttn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerDashboard.fxml"));
             Parent root = loader.load();
-            VolunteerDashboard mainMenuController = loader.getController();
-            mainMenuController.setStage(currentStage);
-            currentStage.setScene(new Scene(root));
 
+            VolunteerDashboard dashboardController = loader.getController();
+            dashboardController.setStage(stage);
+            dashboardController.setCurrentVolunteer(currentVolunteer);
+
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load");
+            showError("Navigation Error", "Failed to load Volunteer Dashboard");
         }
     }
 
