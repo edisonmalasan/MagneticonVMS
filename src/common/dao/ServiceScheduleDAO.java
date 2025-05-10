@@ -50,14 +50,12 @@ public class ServiceScheduleDAO {
             statement.setString(1, schedule.getServid());
             statement.setString(2, schedule.getSchedid());
 
-            // Handle null status
             if (schedule.getStatus() != null) {
                 statement.setString(3, schedule.getStatus());
             } else {
                 statement.setNull(3, Types.VARCHAR);
             }
 
-            // Handle null dates
             if (schedule.getStart() != null) {
                 statement.setDate(4, Date.valueOf(schedule.getStart()));
             } else {
@@ -84,14 +82,12 @@ public class ServiceScheduleDAO {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, schedule.getServid());
 
-            // Handle null status
             if (schedule.getStatus() != null) {
                 statement.setString(2, schedule.getStatus());
             } else {
                 statement.setNull(2, Types.VARCHAR);
             }
 
-            // Handle null dates
             if (schedule.getStart() != null) {
                 statement.setDate(3, Date.valueOf(schedule.getStart()));
             } else {
@@ -115,7 +111,6 @@ public class ServiceScheduleDAO {
     }
 
     public boolean hasScheduleConflict(String servid, String status, LocalDate newStart, LocalDate newEnd, String excludeSchedid) {
-        // Only check for conflicts if both dates are provided
         if (newStart == null || newEnd == null) {
             return false;
         }

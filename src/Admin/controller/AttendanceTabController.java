@@ -57,8 +57,23 @@ public class AttendanceTabController {
         serviceColumn.setCellValueFactory(new PropertyValueFactory<>("servid"));
         volunteerColumn.setCellValueFactory(new PropertyValueFactory<>("volid"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        timeInColumn.setCellValueFactory(new PropertyValueFactory<>("timein"));
-        timeOutColumn.setCellValueFactory(new PropertyValueFactory<>("timeout"));
+
+        timeInColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalTime item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : timeFormatter.format(item));
+            }
+        });
+
+        timeOutColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalTime item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : timeFormatter.format(item));
+            }
+        });
+
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("attendstat"));
     }
 
@@ -80,8 +95,7 @@ public class AttendanceTabController {
         datePicker.setValue(attendance.getDate());
         timeInField.setText(attendance.getTimein() != null ? attendance.getTimein().format(timeFormatter) : "");
         timeOutField.setText(attendance.getTimeout() != null ? attendance.getTimeout().format(timeFormatter) : "");
-        statusComboBox.setValue(attendance.getAttendstat());
-    }
+        statusComboBox.setValue(attendance.getAttendstat() != null ? attendance.getAttendstat() : "Absent");    }
 
     private void clearForm() {
         serviceComboBox.setValue(null);
@@ -104,9 +118,18 @@ public class AttendanceTabController {
             String serviceId = serviceComboBox.getValue();
             String volunteerId = volunteerComboBox.getValue();
             LocalDate date = datePicker.getValue();
-            LocalTime timeIn = parseTime(timeInField.getText());
-            LocalTime timeOut = parseTime(timeOutField.getText());
-            String status = statusComboBox.getValue();
+
+            LocalTime timeIn = null;
+            if (!timeInField.getText().isEmpty()) {
+                timeIn = parseTime(timeInField.getText());
+            }
+
+            LocalTime timeOut = null;
+            if (!timeOutField.getText().isEmpty()) {
+                timeOut = parseTime(timeOutField.getText());
+            }
+
+            String status = statusComboBox.getValue() != null ? statusComboBox.getValue() : "Absent";
 
             if (timeOut != null && timeIn != null && timeOut.isBefore(timeIn)) {
                 showAlert("Validation Error", "Time out must be after time in");
@@ -118,8 +141,10 @@ public class AttendanceTabController {
             } else {
                 createNewAttendance(serviceId, volunteerId, date, timeIn, timeOut, status);
             }
-        } catch (DateTimeParseException | SQLException e) {
+        } catch (DateTimeParseException e) {
             showAlert("Validation Error", "Please enter time in HH:mm format (e.g., 09:00)");
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to save attendance: " + e.getMessage());
         }
     }
 
@@ -152,8 +177,11 @@ public class AttendanceTabController {
     private void createNewAttendance(String serviceId, String volunteerId, LocalDate date,
                                      LocalTime timeIn, LocalTime timeOut, String status) throws SQLException {
         Attendance newAttendance = new Attendance();
+        String newID = attendanceDAO.generateNewAttendId();
+
         newAttendance.setServid(serviceId);
         newAttendance.setVolid(volunteerId);
+        newAttendance.setAttendid(newID);
         newAttendance.setDate(date);
         newAttendance.setTimein(timeIn);
         newAttendance.setTimeout(timeOut);
@@ -172,15 +200,37 @@ public class AttendanceTabController {
         serviceComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         volunteerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         datePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
-        timeInField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
-        statusComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+
+        //validate time fields if entered
+        timeInField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                try {
+                    parseTime(newVal);
+                    timeInField.setStyle("");
+                } catch (DateTimeParseException e) {
+                    timeInField.setStyle("-fx-border-color: red;");
+                }
+            } else {
+                timeInField.setStyle("");
+            }
+        });
+
+        timeOutField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                try {
+                    parseTime(newVal);
+                    timeOutField.setStyle("");
+                } catch (DateTimeParseException e) {
+                    timeOutField.setStyle("-fx-border-color: red;");
+                }
+            } else {
+                timeOutField.setStyle("");
+            }
+        });
 
         serviceComboBox.setTooltip(new Tooltip("Select a service"));
         volunteerComboBox.setTooltip(new Tooltip("Select a volunteer"));
-        datePicker.setTooltip(new Tooltip("Select attendance date"));
-        timeInField.setTooltip(new Tooltip("Enter time in HH:mm format (e.g., 09:00)"));
-        timeOutField.setTooltip(new Tooltip("Enter time in HH:mm format (e.g., 17:00)"));
-        statusComboBox.setTooltip(new Tooltip("Select attendance status"));
+
     }
 
     private boolean validateInputs() {
