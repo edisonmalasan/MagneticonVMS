@@ -1,9 +1,7 @@
 package common.dao;
 
-import common.models.Admin;
 import common.models.Service;
 import common.utils.DatabaseConnection;
-import common.utils.LogManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -96,8 +94,6 @@ public class ServiceDAO {
             statement.setString(4, service.getSstat());
             statement.setString(5, service.getServid());
 
-            LogManager.insertToLogs("resources/adminlogs.txt", "Updated service: " + service);
-
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -116,8 +112,6 @@ public class ServiceDAO {
             statement.setString(3, service.getSdesc());
             statement.setString(4, service.getSstat());
             statement.setString(5, service.getTeamid());
-
-            LogManager.insertToLogs("resources/adminlogs.txt", "Created new service: " + service);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

@@ -1,3 +1,0 @@
-
-Created new service schedule: ServiceSchedule{servid='S015', schedid='', status='Not Assigned', start=null, end=null}
-Created new attendance: Attendance{servid='S007', volid='V005', attendid='A027', date=2025-05-06, timein=null, timeout=null, attendstat='Absent'}

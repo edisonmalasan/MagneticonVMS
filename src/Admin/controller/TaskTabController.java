@@ -57,8 +57,6 @@ public class TaskTabController {
     private void setupComboBoxes() {
         statusComboBox.getItems().addAll(TASK_STATUSES);
 
-        serviceComboBox.getItems().addAll("New Service");
-
         serviceComboBox.getItems().addAll(
                 serviceDAO.getAllServices().stream()
                         .map(Service::getServid)
@@ -79,7 +77,7 @@ public class TaskTabController {
                 saveButton.setText("Update");
             } else {
                 clearForm();
-                saveButton.setText("Save");
+                saveButton.setText("Create");
             }
         });
 
@@ -112,7 +110,7 @@ public class TaskTabController {
         String status = statusComboBox.getValue();
         String description = descriptionArea.getText().trim();
 
-        if (taskTable.getSelectionModel().isEmpty() || serviceComboBox.getValue().equals("New Service")) {
+        if (taskTable.getSelectionModel().isEmpty()) {
             createNewTask(service, volunteer, status, description);
         } else {
             updateExistingTask(service, volunteer, status, description);

@@ -91,7 +91,7 @@ public class VolunteerDAO {
             statement.setDate(8, Date.valueOf(volunteer.getBirthday()));
             statement.setString(9, volunteer.getSex());
             statement.setString(10, volunteer.getVolstat());
-            statement.setString(11, "Member");
+            statement.setString(11, volunteer.getRole());
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -149,7 +149,7 @@ public class VolunteerDAO {
             statement.setDate(7, Date.valueOf(volunteer.getBirthday()));
             statement.setString(8, volunteer.getSex());
             statement.setString(9, volunteer.getVolstat());
-            statement.setString(10, "Member");
+            statement.setString(10, volunteer.getRole());
             statement.setString(11, volunteer.getVolid());
 
             return statement.executeUpdate() > 0;
@@ -192,7 +192,7 @@ public class VolunteerDAO {
             }
             return "V01"; //default if no records exist
         } catch (SQLException e) {
-            throw new RuntimeException("Error generating service ID", e);
+            throw new RuntimeException("Error generating volunteer ID", e);
         }
     }
 

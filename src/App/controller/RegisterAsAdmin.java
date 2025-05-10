@@ -155,7 +155,7 @@ public class RegisterAsAdmin {
 
                 try {
                     Stage stage = (Stage) registerButton.getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin/view/AdminDashboard.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Admin/view/AdminDashboard.fxml"));
                     Parent root = loader.load();
                     stage.setScene(new Scene(root));
                     stage.show();
