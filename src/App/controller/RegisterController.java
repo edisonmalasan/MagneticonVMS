@@ -128,7 +128,7 @@ public class RegisterController {
             Stage currentStage = (Stage) backBttn.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/view/login.fxml"));
             Parent root = loader.load();
-            VolunteerDashboard mainMenuController = loader.getController();
+            LoginController mainMenuController = loader.getController();
             mainMenuController.setStage(currentStage);
             currentStage.setScene(new Scene(root));
 
