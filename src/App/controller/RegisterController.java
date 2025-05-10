@@ -40,7 +40,6 @@ public class RegisterController {
         backBttn.setOnAction(e -> handleBackBttn());
     }
 
-//to fix
     private void handleRegister() {
         registerButton.setOnAction(e -> {
             String fName = firstNameTextField.getText();
@@ -65,7 +64,7 @@ public class RegisterController {
             }
 
             Volunteer vol = new Volunteer();
-            // vol.setVolid(String.valueOf(System.currentTimeMillis()));
+            vol.setVolid(VolunteerDAO.generateNewVolunteerID());
             vol.setFname(fName);
             vol.setLname(lName);
             vol.setAddress(address);
@@ -74,7 +73,7 @@ public class RegisterController {
             vol.setPassword(pwd);
             vol.setSex(sex);
             vol.setBirthday(bday);
-            vol.setVolstat("Pending");
+            vol.setVolstat("Active");
 
             boolean created = VolunteerDAO.createVolunteer(vol);
             if(created) {
@@ -82,13 +81,13 @@ public class RegisterController {
 
                 try{
                     Stage stage = (Stage)registerButton.getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerTeamRegistration.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/view/VolunteerTeamRegistration.fxml"));
                     Parent root = loader.load();
 
                     stage.setScene( new Scene(root));
                     stage.show();
 
-                } catch (Exception ec) {
+                } catch (IOException  ec) {
                     ec.printStackTrace();
                     showAlert("Error.", "Ensure that all details are filled in :)");
                 }
@@ -96,6 +95,21 @@ public class RegisterController {
                 showAlert("Registration Failed.", "Ensure that all details are filled in :)");
             }
         });
+    }
+
+    private void handleBackBttn() {
+        try {
+            Stage currentStage = (Stage) backBttn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/view/login.fxml"));
+            Parent root = loader.load();
+            LoginController mainMenuController = loader.getController();
+            mainMenuController.setStage(currentStage);
+            currentStage.setScene(new Scene(root));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load");
+        }
     }
 
     private void showAlert(String title, String message) {
@@ -114,27 +128,11 @@ public class RegisterController {
         alert.showAndWait();
     }
 
-    //
     public void setStage(Stage stage) {
         this.currentStage = stage;
     }
 
     private void setSexComboBox() {
         sexComboBox.getItems().addAll("Male", "Female");
-    }
-
-    private void handleBackBttn() {
-        try {
-            Stage currentStage = (Stage) backBttn.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/view/login.fxml"));
-            Parent root = loader.load();
-            LoginController mainMenuController = loader.getController();
-            mainMenuController.setStage(currentStage);
-            currentStage.setScene(new Scene(root));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load");
-        }
     }
 }

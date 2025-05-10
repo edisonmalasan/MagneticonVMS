@@ -3,7 +3,6 @@ package common.dao;
 
 import common.models.Beneficiary;
 import common.utils.DatabaseConnection;
-import common.utils.LogManager;
 
 import java.sql.*;
 
@@ -17,8 +16,6 @@ public class BeneficiaryDAO {
 
             statement.setString(1, servid);
             statement.setString(2, benid);
-
-            LogManager.insertToLogs("resources/adminlogs.txt", "Created new beneficiary: " + beneficiary);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

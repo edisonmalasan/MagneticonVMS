@@ -2,7 +2,6 @@ package common.dao;
 
 import common.models.Attendance;
 import common.utils.DatabaseConnection;
-import common.utils.LogManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -85,7 +84,6 @@ public class AttendanceDAO {
                 statement.setNull(7, Types.VARCHAR);
             }
 
-            LogManager.insertToLogs("resources/adminlogs.txt", "Created new attendance: " + attendance);
             return statement.executeUpdate() > 0;
         }
     }
@@ -125,7 +123,6 @@ public class AttendanceDAO {
             statement.setString(6, attendance.getVolid());
             statement.setString(7, attendance.getAttendid());
 
-            LogManager.insertToLogs("resources/adminlogs.txt", "Updated attendance: " + attendance);
             return statement.executeUpdate() > 0;
         }
     }

@@ -4,7 +4,6 @@ import common.models.Team;
 
 import common.models.Volunteer;
 import common.utils.DatabaseConnection;
-import common.utils.LogManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -20,8 +19,6 @@ public class TeamDAO {
             statement.setString(2, team.getTname());
             statement.setString(3, team.getTdesc());
             statement.execute(); //Execute Procedure
-
-            LogManager.insertToLogs("resources/adminlogs.txt", "Created new team: " + team);
 
             return true;
         } catch (SQLException e){
@@ -179,8 +176,6 @@ public class TeamDAO {
             statement.setString(1, team.getTname());
             statement.setString(2, team.getTdesc());
             statement.setString(3, team.getTeamid());
-
-            LogManager.insertToLogs("resources/adminlogs.txt", "Updated team: " + team);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

@@ -1,10 +1,7 @@
 package common.dao;
 
-import common.models.Service;
 import common.models.TaskAssignment;
 import common.utils.DatabaseConnection;
-import common.utils.LogManager;
-import javafx.concurrent.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,8 +20,6 @@ public class TaskAssignmentDAO {
             statement.setString(3, task.getTadesc());
             statement.setString(4, task.getTaskstat());
 
-            LogManager.insertToLogs("resources/adminlogs.txt", "Created new task assignment: " + task);
-
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error creating task assignment: " + e.getMessage(), e);
@@ -41,8 +36,6 @@ public class TaskAssignmentDAO {
             statement.setString(2, task.getTaskstat());
             statement.setString(3, task.getServid());
             statement.setString(4, task.getVolid());
-
-            LogManager.insertToLogs("resources/adminlogs.txt", "Updated task assignment: " + task);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

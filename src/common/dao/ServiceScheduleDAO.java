@@ -2,7 +2,6 @@ package common.dao;
 
 import common.models.ServiceSchedule;
 import common.utils.DatabaseConnection;
-import common.utils.LogManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -68,8 +67,6 @@ public class ServiceScheduleDAO {
                 statement.setNull(5, Types.DATE);
             }
 
-            LogManager.insertToLogs("resources/adminlogs.txt", "Created new service schedule: " + schedule);
-
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error creating service schedule: " + e.getMessage(), e);
@@ -101,8 +98,6 @@ public class ServiceScheduleDAO {
             }
 
             statement.setString(5, schedule.getSchedid());
-
-            LogManager.insertToLogs("resources/adminlogs.txt", "Updated service schedule: " + schedule);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
