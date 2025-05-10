@@ -149,7 +149,7 @@ public class VolunteerDAO {
             statement.setDate(7, Date.valueOf(volunteer.getBirthday()));
             statement.setString(8, volunteer.getSex());
             statement.setString(9, volunteer.getVolstat());
-            statement.setString(10, "Member");
+            statement.setString(10, volunteer.getRole());
             statement.setString(11, volunteer.getVolid());
 
             return statement.executeUpdate() > 0;
@@ -177,8 +177,8 @@ public class VolunteerDAO {
         return false;
     }
 
-    public String generateNewVolunteerID() {
-        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM Volunteer";
+    public static String generateNewVolunteerID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM VOLUNTEER";
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
@@ -192,7 +192,7 @@ public class VolunteerDAO {
             }
             return "V01"; //default if no records exist
         } catch (SQLException e) {
-            throw new RuntimeException("Error generating service ID", e);
+            throw new RuntimeException("Error generating volunteer ID", e);
         }
     }
 

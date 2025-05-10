@@ -9,7 +9,7 @@
    <center>
       <TableView fx:id="volunteerTable" prefHeight="368.0" prefWidth="1258.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="volidColumn" prefWidth="75.0" text="volid" />
+          <TableColumn fx:id="volidColumn" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="firstNameColumn" prefWidth="90.0" text="First Name" />
             <TableColumn fx:id="lastNameColumn" prefWidth="111.0" text="Last Name" />
             <TableColumn fx:id="addressColumn" prefWidth="157.0" text="Address" />
