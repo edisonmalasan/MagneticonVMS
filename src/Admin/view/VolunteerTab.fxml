@@ -38,8 +38,6 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="29.0" prefWidth="1254.0" spacing="10.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="76.0" text="Volunteer ID:" />
-                  <TextField fx:id="volunteerField" />
                   <Label alignment="CENTER" layoutX="525.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="First Name:" />
                   <TextField fx:id="firstNameField" layoutX="563.0" layoutY="12.0" />
                   <Label alignment="CENTER" layoutX="642.0" layoutY="10.0" prefHeight="43.0" prefWidth="76.0" text="Last Name:" />

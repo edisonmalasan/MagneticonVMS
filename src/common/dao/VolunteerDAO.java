@@ -177,8 +177,8 @@ public class VolunteerDAO {
         return false;
     }
 
-    public static String generateNewVolunteerID() {
-        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM SERVICE";
+    public String generateNewVolunteerID() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(volid, 2) AS UNSIGNED)) FROM Volunteer";
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
