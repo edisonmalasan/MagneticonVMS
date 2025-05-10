@@ -207,26 +207,6 @@ public class AttendanceTabController {
             datePicker.setStyle("");
         }
 
-        if (timeInField.getText() == null || timeInField.getText().trim().isEmpty()) {
-            timeInField.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            try {
-                parseTime(timeInField.getText());
-                timeInField.setStyle("");
-            } catch (DateTimeParseException e) {
-                timeInField.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-                isValid = false;
-            }
-        }
-
-        if (statusComboBox.getValue() == null) {
-            statusComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            statusComboBox.setStyle("");
-        }
-
         return isValid;
     }
 

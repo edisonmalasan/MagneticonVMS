@@ -60,6 +60,23 @@ public class ScheduleTabController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         startDateColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+
+        //to handle null values for dates
+        startDateColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.toString());
+            }
+        });
+
+        endDateColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.toString());
+            }
+        });
     }
 
 
@@ -93,7 +110,12 @@ public class ScheduleTabController {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 
-        if (startDate.isAfter(endDate)) {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            showAlert("Validation Error", "End date must be after start date");
+            return;
+        }
+
+        if (startDate!=null && startDate.isAfter(endDate)) {
             showAlert("Validation Error", "End date must be after start date");
             return;
         }
@@ -132,15 +154,10 @@ public class ScheduleTabController {
         String newID = serviceScheduleDAO.generateNewScheduleID();
 
         newSchedule.setServid(serviceID);
-        newSchedule.setSchedid(scheduleID.isEmpty() ? newID : scheduleID);
-        newSchedule.setStatus(status);
+        newSchedule.setSchedid(scheduleID!=null ? scheduleID : newID);
+        newSchedule.setStatus(status!=null ? status : "Not Assigned");
         newSchedule.setStart(startDate);
         newSchedule.setEnd(endDate);
-
-        if (serviceScheduleDAO.hasScheduleConflict(serviceID, status, startDate, endDate, null)) {
-            showAlert("Conflict Detected", "This schedule conflicts with an existing one");
-            return;
-        }
 
         if (serviceScheduleDAO.createServiceSchedule(newSchedule)) {
             showAlert("Success", "New schedule created successfully");
@@ -152,17 +169,36 @@ public class ScheduleTabController {
     }
 
     private void setupValidationListeners() {
-        scheduleIdField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         serviceComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
-        statusComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
-        startDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
-        endDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        startDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && endDatePicker.getValue() != null) {
+                validateDateOrder();
+            }
+        });
+
+        endDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && startDatePicker.getValue() != null) {
+                validateDateOrder();
+            }
+        });
 
         scheduleIdField.setTooltip(new Tooltip("Schedule ID (leave empty to auto-generate)"));
         serviceComboBox.setTooltip(new Tooltip("Select a service"));
-        statusComboBox.setTooltip(new Tooltip("Select a status"));
-        startDatePicker.setTooltip(new Tooltip("Select start date"));
-        endDatePicker.setTooltip(new Tooltip("Select end date (must be after start date)"));
+    }
+
+    private boolean validateDateOrder() {
+        LocalDate start = startDatePicker.getValue();
+        LocalDate end = endDatePicker.getValue();
+
+        if (start != null && end != null && start.isAfter(end)) {
+            startDatePicker.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            endDatePicker.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            return false;
+        } else {
+            startDatePicker.setStyle("");
+            endDatePicker.setStyle("");
+            return true;
+        }
     }
 
     private boolean validateInputs() {
@@ -173,27 +209,6 @@ public class ScheduleTabController {
             isValid = false;
         } else {
             serviceComboBox.setStyle("");
-        }
-
-        if (statusComboBox.getValue() == null) {
-            statusComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            statusComboBox.setStyle("");
-        }
-
-        if (startDatePicker.getValue() == null) {
-            startDatePicker.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            startDatePicker.setStyle("");
-        }
-
-        if (endDatePicker.getValue() == null) {
-            endDatePicker.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-            isValid = false;
-        } else {
-            endDatePicker.setStyle("");
         }
 
         return isValid;
@@ -221,10 +236,8 @@ public class ScheduleTabController {
                 .forEach(serviceComboBox.getItems()::add);
 
         statusComboBox.getItems().clear();
-        schedules.stream()
-                .map(ServiceSchedule::getStatus)
-                .distinct()
-                .forEach(statusComboBox.getItems()::add);
+        statusComboBox.getItems().addAll("Not Assigned", "Completed", "Cancelled");
+        statusComboBox.setValue("Not Assigned");
     }
 
     @FXML

@@ -95,7 +95,7 @@ public class LoginController {
 
 
                 if ("Admin".equalsIgnoreCase(user.getRole())) {
-                    loader = new FXMLLoader(getClass().getResource("/App/view/AdminDashboard.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("/Admin/view/AdminDashboard.fxml"));
                     root = loader.load();
 
                     AdminDashboardController adminDashboardController = loader.getController();
