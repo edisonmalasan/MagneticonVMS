@@ -91,7 +91,7 @@ public class VolunteerDAO {
             statement.setDate(8, Date.valueOf(volunteer.getBirthday()));
             statement.setString(9, volunteer.getSex());
             statement.setString(10, volunteer.getVolstat());
-            statement.setString(11, "Member");
+            statement.setString(11, volunteer.getRole());
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
