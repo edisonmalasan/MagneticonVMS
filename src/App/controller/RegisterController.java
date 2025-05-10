@@ -38,8 +38,6 @@ public class RegisterController {
         setSexComboBox();
         handleRegister();
         backBttn.setOnAction(e -> handleBackBttn());
-
-
     }
 
 //to fix
@@ -81,7 +79,19 @@ public class RegisterController {
             boolean created = VolunteerDAO.createVolunteer(vol);
             if(created) {
                 showSuccess("Registration Successful.","You are now a registered volunteer!");
-                clearFields();
+
+                try{
+                    Stage stage = (Stage)registerButton.getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/view/VolunteerTeamRegistration.fxml"));
+                    Parent root = loader.load();
+
+                    stage.setScene( new Scene(root));
+                    stage.show();
+
+                } catch (Exception ec) {
+                    ec.printStackTrace();
+                    showAlert("Error.", "Ensure that all details are filled in :)");
+                }
             } else {
                 showAlert("Registration Failed.", "Ensure that all details are filled in :)");
             }
@@ -104,17 +114,7 @@ public class RegisterController {
         alert.showAndWait();
     }
 
-    private void clearFields() {
-        firstNameTextField.clear();
-        lastNameTextField.clear();
-        addressTextField.clear();
-        phoneNumberTextField.clear();
-        emailTextField.clear();
-        passwordField.clear();
-        sexComboBox.getSelectionModel().clearSelection();
-        birthdateDatePicker.setValue(null);
-    }
-
+    //
     public void setStage(Stage stage) {
         this.currentStage = stage;
     }
