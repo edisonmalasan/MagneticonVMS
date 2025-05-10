@@ -40,4 +40,17 @@ public class Attendance {
     public void setTimeout(LocalTime timeout) { this.timeout = timeout; }
     public String getAttendstat() { return attendstat; }
     public void setAttendstat(String attendstat) { this.attendstat = attendstat; }
+
+    @Override
+    public String toString() {
+        return "Attendance{" +
+                "servid='" + servid + '\'' +
+                ", volid='" + volid + '\'' +
+                ", attendid='" + attendid + '\'' +
+                ", date=" + date +
+                ", timein=" + timein +
+                ", timeout=" + timeout +
+                ", attendstat='" + attendstat + '\'' +
+                '}';
+    }
 }

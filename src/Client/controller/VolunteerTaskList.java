@@ -5,7 +5,6 @@ import common.dao.TaskAssignmentDAO;
 import common.dao.TaskAssignmentDAO;
 import common.dao.VolunteerDAO;
 import common.models.TaskAssignment;
-import common.models.TaskAssignment;
 import common.models.Volunteer;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -22,6 +21,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 public class VolunteerTaskList implements Initializable {
     @FXML private Label volId;
@@ -29,27 +29,30 @@ public class VolunteerTaskList implements Initializable {
     @FXML private Label volTeam;
     @FXML private ComboBox<String> serviceDD;
     @FXML private ComboBox<String> taskStat;
-    @FXML private Label taskDesc;
+    @FXML private Label servid;
     @FXML private Button saveBttn;
     @FXML private Button backBttn;
 
+    String VolunteerId;
     private Volunteer currentVolunteer;
     private String currentVolunteerId;
     private Stage currentStage;
-    private List<Task> currentTasks;
-    private Task currentTask;
+    private TaskAssignment currentTask;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupComboBoxes();
         setupButtonActions();
+        serviceDD.setItems(FXCollections.observableArrayList());
+        saveBttn.setDisable(true);
     }
 
     private void setupComboBoxes() {
-        // Task status options
+
         taskStat.setItems(FXCollections.observableArrayList(
                 "Not Started", "In Progress", "Completed", "Blocked"
         ));
+        taskStat.setDisable(true);
     }
 
     private void setupButtonActions() {
@@ -59,6 +62,7 @@ public class VolunteerTaskList implements Initializable {
     }
     public void setCurrentVolunteer(Volunteer volunteer) {
         this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid();
         displayVolunteerInfo(volunteer);
         loadServiceOptions();
         loadTasksForService();
@@ -75,11 +79,15 @@ public class VolunteerTaskList implements Initializable {
 
     private void loadServiceOptions() {
         try {
-            List<String> services = new ServiceDAO().getServicesForVolunteer(currentVolunteerId);
-            serviceDD.setItems(FXCollections.observableArrayList(services));
-            if (!services.isEmpty()) {
-                serviceDD.getSelectionModel().selectFirst();
-                loadTasksForService();
+            List<String> services = ServiceDAO.getServicesForVolunteer(currentVolunteerId);
+            if (services == null || services.isEmpty()) {
+                showError("No Services", "No services found for this volunteer.");
+            } else {
+                serviceDD.setItems(FXCollections.observableArrayList(services));
+                if (!services.isEmpty()) {
+                    serviceDD.getSelectionModel().selectFirst();  // Select the first service
+                    loadTasksForService();  // Load tasks for the selected service
+                }
             }
         } catch (SQLException e) {
             showError("Data Error", "Failed to load service options");
@@ -88,17 +96,24 @@ public class VolunteerTaskList implements Initializable {
     }
 
     private void loadTasksForService() {
+        // Get the selected service from the ComboBox
         String selectedService = serviceDD.getSelectionModel().getSelectedItem();
-        if (selectedService == null || selectedService.isEmpty()) return;
+
+        // Check if the selected service is valid
+        if (selectedService == null || selectedService.isEmpty()) {
+            showError("No Service Selected", "Please select a service.");
+            return;
+        }
 
         try {
-            List<TaskAssignment> currentTasks = TaskAssignmentDAO.getTasksForVolunteerService(currentVolunteerId, selectedService);
-            if (!currentTasks.isEmpty()) {
-                displayTask(currentTasks.get(0));
+            List<TaskAssignment> tasks = TaskAssignmentDAO.getTasksForVolunteerService(currentVolunteerId, selectedService);
+
+            if (tasks != null && !tasks.isEmpty()) {
+                currentTask = tasks.get(0); // Store the current task
+                displayTask(currentTask);
+                saveBttn.setDisable(false);
             } else {
-                taskDesc.setText("No tasks assigned for this service");
-                taskStat.setValue(null);
-                taskStat.setDisable(true);
+                showInfo("No Tasks", "No tasks found for this service.");
             }
         } catch (SQLException e) {
             showError("Data Error", "Failed to load tasks");
@@ -107,13 +122,33 @@ public class VolunteerTaskList implements Initializable {
     }
 
     private void displayTask(TaskAssignment task) {
-        taskDesc.setText(task.getTadesc());
+        // Display the task description and set the task status
+        servid.setText(task.getServid());
         taskStat.setValue(task.getTaskstat());
-        taskStat.setDisable(false);
+        taskStat.setDisable(false);  // Enable task status ComboBox
     }
 
     private void handleSave() {
+        String selectedTaskStatus = taskStat.getSelectionModel().getSelectedItem();
+        if (selectedTaskStatus == null || selectedTaskStatus.isEmpty()) {
+            showError("Invalid Status", "Please select a valid task status.");
+            return;
+        }
 
+        try {
+            TaskAssignmentDAO.updateTaskStatus(
+                    currentTask.getServid(),
+                    currentTask.getVolid(),
+                    selectedTaskStatus
+            );
+
+            currentTask.setTaskstat(selectedTaskStatus);
+            showInfo("Success", "Task status updated successfully.");
+
+        } catch (SQLException e) {
+            showError("Update Error", "Failed to update task status: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handleBack() {

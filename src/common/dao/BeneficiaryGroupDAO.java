@@ -1,27 +1,63 @@
 package common.dao;
 
 import common.models.BeneficiaryGroup;
+import common.models.Team;
 import common.utils.DatabaseConnection;
+import common.utils.LogManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BeneficiaryGroupDAO {
-
-    public boolean createBeneficiaryGroup(BeneficiaryGroup group) {
-        String sql = "INSERT INTO BENEFICIARY_GROUPS (benid, bengroup, bendesc) VALUES (?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+    public static boolean createBeneficiaryGroup(BeneficiaryGroup group){
+        try{
+            String query = "{ CALL addbeneficiarygroup(?,?,?) }";
+            CallableStatement statement = DatabaseConnection.getConnection().prepareCall(query);
             statement.setString(1, group.getBenid());
             statement.setString(2, group.getBengroup());
             statement.setString(3, group.getBendesc());
-            int rowsInserted = statement.executeUpdate();
-            return rowsInserted > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            statement.execute(); //Execute Procedure
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Created new beneficiary group: " + group);
+
+            return true;
+        } catch (SQLException e){
+            return false;
         }
     }
+
+    /**
+     * Gets beneficiary group details for a specific service and volunteer
+     */
+    public static BeneficiaryGroup getBeneficiaryGroupForService(String servid, String volid) {
+        String sql = "SELECT bg.* FROM beneficiary_groups bg " +
+                "JOIN beneficiary b ON bg.benid = b.benid " +
+                "JOIN service s ON b.servid = s.servid " +
+                "JOIN task_assignment vs ON s.servid = vs.servid " +
+                "WHERE s.servid = ? AND vs.volid = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, servid);
+            statement.setString(2, volid);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    BeneficiaryGroup group = new BeneficiaryGroup();
+                    group.setBenid(rs.getString("benid"));
+                    group.setBengroup(rs.getString("bengroup"));
+                    group.setBendesc(rs.getString("bendesc"));
+                    return group;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving beneficiary group for service", e);
+        }
+        return null;
+    }
+
 
     public boolean updateBeneficiaryGroup(BeneficiaryGroup group) {
         String sql = "UPDATE BENEFICIARY_GROUPS SET bengroup = ?, bendesc = ? WHERE benid = ?";
@@ -32,6 +68,8 @@ public class BeneficiaryGroupDAO {
             statement.setString(1, group.getBengroup());
             statement.setString(2, group.getBendesc());
             statement.setString(3, group.getBenid());
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Updated beneficiary group: " + group);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

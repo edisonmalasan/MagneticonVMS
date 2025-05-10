@@ -61,6 +61,7 @@ public class VolunteerAttendance {
 
     public void setCurrentVolunteer(Volunteer volunteer) {
         this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid();
         displayVolunteerInfo(volunteer);
         loadAttendanceRecords();
     }

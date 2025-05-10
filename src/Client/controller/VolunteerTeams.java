@@ -50,15 +50,15 @@ public class VolunteerTeams implements Initializable {
     }
 
     private void setupTableColumns() {
-        colVolId.setCellValueFactory(new PropertyValueFactory<>("volunteerId"));
-        colLName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        colFName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        colVolId.setCellValueFactory(new PropertyValueFactory<>("volid"));
+        colLName.setCellValueFactory(new PropertyValueFactory<>("lname"));
+        colFName.setCellValueFactory(new PropertyValueFactory<>("fname"));
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        colPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colBday.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
-        colSex.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        colStat.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colBday.setCellValueFactory(new PropertyValueFactory<>("bday"));
+        colSex.setCellValueFactory(new PropertyValueFactory<>("sex"));
+        colStat.setCellValueFactory(new PropertyValueFactory<>("volstat"));
     }
 
     private void setupComboBox() {
@@ -72,6 +72,7 @@ public class VolunteerTeams implements Initializable {
 
     public void setCurrentVolunteer(Volunteer volunteer) {
         this.currentVolunteer = volunteer;
+        this.currentVolunteerId = volunteer.getVolid();
         displayVolunteerInfo(volunteer);
         loadVolunteerTeams();
     }
@@ -104,14 +105,29 @@ public class VolunteerTeams implements Initializable {
     }
 
     private void loadTeamMembers(String teamName) {
-        if (teamName == null || teamName.isEmpty()) return;
+        if (teamName == null || teamName.isEmpty()) {
+            table.setPlaceholder(new Label("Please select a team"));
+            return;
+        }
+
+        // Show loading state
+        table.setPlaceholder(new Label("Loading team members..."));
 
         try {
             List<Volunteer> members = TeamDAO.getTeamMembers(teamName);
-            table.setItems(FXCollections.observableArrayList(members));
+
+            if (members.isEmpty()) {
+                table.setPlaceholder(new Label("No members found in this team"));
+            } else {
+                table.setItems(FXCollections.observableArrayList(members));
+            }
+
         } catch (SQLException e) {
-            showError("Data Error", "Failed to load team members");
-            e.printStackTrace();
+            showError("Error Failed " , "Failed to load team members for team" );
+            table.setPlaceholder(new Label("Error loading team members"));
+            showError("Load Error",
+                    "Failed to load team members.\n" +
+                            "Error: " + e.getMessage());
         }
     }
 

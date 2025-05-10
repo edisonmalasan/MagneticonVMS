@@ -2,6 +2,7 @@ package common.dao;
 
 import common.models.Attendance;
 import common.utils.DatabaseConnection;
+import common.utils.LogManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -48,13 +49,14 @@ public class AttendanceDAO {
         return null;
     }
 
+    // In AttendanceDAO.java
     public List<Attendance> getAttendanceForVolunteer(String volid) throws SQLException {
-        if (volid == null) {
-            throw new IllegalArgumentException("Volunteer ID cannot be null");
+        if (volid == null || volid.trim().isEmpty()) {
+            throw new IllegalArgumentException("Volunteer ID cannot be null or empty");
         }
 
         List<Attendance> attendances = new ArrayList<>();
-        String sql = "SELECT * FROM Attendance WHERE volid = ? ORDER BY date DESC, timein DESC";
+        String sql = "SELECT * FROM attendance WHERE volid = ? ORDER BY date DESC, timein DESC";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -63,7 +65,10 @@ public class AttendanceDAO {
 
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
-                    attendances.add(mapResultSetToAttendance(rs));
+                    Attendance attendance = mapResultSetToAttendance(rs);
+                    if (attendance != null) {
+                        attendances.add(attendance);
+                    }
                 }
             }
         }
@@ -89,6 +94,8 @@ public class AttendanceDAO {
             statement.setTime(6, attendance.getTimeout() != null ? Time.valueOf(attendance.getTimeout()) : null);
             statement.setString(7, attendance.getAttendstat());
 
+            LogManager.insertToLogs("resources/adminlogs.txt", "Created new attendance: " + attendance);
+
             return statement.executeUpdate() > 0;
         }
     }
@@ -111,6 +118,8 @@ public class AttendanceDAO {
             statement.setString(5, attendance.getServid());
             statement.setString(6, attendance.getVolid());
             statement.setString(7, attendance.getAttendid());
+
+            LogManager.insertToLogs("resources/adminlogs.txt", "Updated attendance: " + attendance);
 
             return statement.executeUpdate() > 0;
         }

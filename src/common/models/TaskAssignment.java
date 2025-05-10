@@ -28,4 +28,14 @@ public class TaskAssignment {
     public boolean isEmpty() {return false;}
 
     public int get(int i) {return i;}
+
+    @Override
+    public String toString() {
+        return "TaskAssignment{" +
+                "servid='" + servid + '\'' +
+                ", volid='" + volid + '\'' +
+                ", taskstat='" + taskstat + '\'' +
+                ", tadesc='" + tadesc + '\'' +
+                '}';
+    }
 }
