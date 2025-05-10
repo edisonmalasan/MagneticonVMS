@@ -121,13 +121,6 @@ public class LoginController {
 
     }
 
-    @FXML
-    void handleClick(ActionEvent event){
-        loginButton = (Button) event.getSource();
-        loginButton.setTextFill(Color.WHITE);
-    }
-
-
     private void showAlert(String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle(title);

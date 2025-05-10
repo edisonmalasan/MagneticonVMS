@@ -39,7 +39,7 @@
                   <Label layoutX="237.0" layoutY="275.0" prefHeight="17.0" prefWidth="128.0" text="Don't have an account?" textFill="WHITE" />
                   <Hyperlink fx:id="registerVolunteer" layoutX="240.0" layoutY="292.0" onAction="#handleVolunteerLink" text="Register As Volunteer" />
                   <Hyperlink fx:id="registerAdmin" layoutX="247.0" layoutY="315.0" onAction="#handleAdminLink" text="Register As Admin" />
-                  <Button fx:id="loginButton" layoutX="237.0" layoutY="219.0" mnemonicParsing="false" onAction="#handleLogin" onMouseClicked="#handleClick" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #3D90D7;" text="Login" textAlignment="CENTER">
+                  <Button fx:id="loginButton" layoutX="237.0" layoutY="219.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #3D90D7;" text="Login" textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI Black" size="15.0" />
                      </font>
